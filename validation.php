@@ -68,32 +68,49 @@ if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 }
 
-/*
-//username 
-function validateUsername($username)
+//email
+function validateEmail($email)
 {
-    //check if ady exists in db  
-    
-    //Establish connection
-    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    
-    $sql = "SELECT username from citizens"; 
-    
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+    {
+        return "Invalid <strong>email</strong>";
+    }
+    //check if ady exists in db 
+    //establish connection 
+    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+    $sql = "SELECT email from players";
+
     $result = $con -> query($sql); 
-    
+
     while($row = $result -> fetch_object())
     {
-        $compareUsername = $row -> username; 
-        
-        if(strcmp($compareUsername, $username) == 0)
+        $compareEmail = $row -> email; 
+
+        if(strcmp($compareEmail, $email) == 0)
         {
-            return "<strong>Username</strong> already taken";
+            return "<strong>Email</strong> already taken";
         }
     }
+
 }
 
 //password 
-function validatePassword($password, $confirmPassword)
+function validatePassword($password)
+{
+    $uppercase = preg_match('@[A-Z]@', $password);
+    $lowercase = preg_match('@[a-z]@', $password);
+    $number    = preg_match('@[0-9]@', $password);
+    $specialChars = preg_match('@[^\w]@', $password);
+
+    if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) 
+    {
+        return "<strong>Password</strong> should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.";
+    }
+}
+
+//confirmPassword 
+function validateConfirmPassword($password, $confirmPassword)
 {
     //check if both are the same 
     if($password != $confirmPassword)
@@ -102,67 +119,4 @@ function validatePassword($password, $confirmPassword)
     }
 }
 
-//fullName 
-function validateFullName($fullName)
-{
-    //check to make sure only alpha, space and dot 
-    if(!preg_match("/^[a-zA-Z ]+$/",$fullName))
-    {
-        return "<strong>Full name</strong> should only contain alphabet, space and dot."; 
-    }
-}
-
-//address
-function validateAddress($address)
-{
-    
-}
-
-//dateOfBirth
-function validateDateOfBirth($dateOfBirth)
-{
-}
-
-//phoneNumber
-function validatephoneNumber($phoneNumber)
-{
-    //check to make sure only 10 dig with 0 at first 
-    if(!preg_match("/^[0][0-9]{9}+$/",$phoneNumber))
-    {
-        return "<strong>Phone Number</strong> should only contain 10 digit with 0 as the first digit"; 
-    } 
-}
-
-//img 
-
-//closeContactFullName
-function validateCloseContactFullName($closeContactFullName)
-{
-    if(empty($closeContactFullName))
-    {
-        return 'Please enter "-" for <strong>Close Contact Full Name</strong> if you do not have close contact with anyone';
-    }
-    //check to make sure only alpha, space
-    else if(!preg_match("/^[a-zA-Z ]+$/",$closeContactFullName) && $closeContactFullName != '-')
-    {
-        return "<strong>Close Contact Full Name</strong> should only contain alphabet and space"; 
-    } 
-}
-
-
-//closeContactPhoneNumber
-function validateCloseContactPhoneNumber($closeContactPhoneNumber)
-{
-    if(empty($closeContactPhoneNumber))
-    {
-        return 'Please enter "-" for <strong>Close Contact Phone Number</strong> if you do not have close contact with anyone';
-    }
-    //check to make sure only 10 dig with 0 at first  
-    else if(!preg_match("/^[0][0-9]{9}+$/",$closeContactPhoneNumber) && $closeContactPhoneNumber != '-')
-    {
-        return "<strong>Close Contact Phone Number</strong> should only contain 10 digit with 0 as the first digit"; 
-    } 
-}
-
-*/ 
 ?>
