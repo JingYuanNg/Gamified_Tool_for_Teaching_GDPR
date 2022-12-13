@@ -90,9 +90,9 @@
                         //leader_position
                         $leader_position = 0; 
                         //encrypted_leaderboard_position
-                        //$encrypted_leaderboard_position = openssl_encrypt($leader_position, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_leaderboard_position = openssl_encrypt($leader_position, $cipher, $key, OPENSSL_RAW_DATA, $iv);
                         //encrypted_leaderboard_position_hex 
-                        //$encrypted_leaderboard_position_hex = bin2hex($encrypted_leaderboard_position);
+                        $encrypted_leaderboard_position_hex = bin2hex($encrypted_leaderboard_position);
 
                         //streak
                         $streak = 0; 
@@ -155,7 +155,7 @@
                             $stmt = $con -> prepare($sql); 
                             $playerID = NULL; 
                     
-                            $stmt -> bind_param('issssssssssss', $playerID, $iv_hex, $email, $hashed_password_hex, $encrypted_points_hex, $leader_position, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex); 
+                            $stmt -> bind_param('issssssssssss', $playerID, $iv_hex, $email, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex); 
                     
                             $stmt -> execute(); 
 

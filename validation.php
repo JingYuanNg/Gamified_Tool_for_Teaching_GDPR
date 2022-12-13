@@ -39,7 +39,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS players (
     email varchar(256) NOT NULL,
     password varchar(256) NOT NULL,
     points varchar(256) NOT NULL,
-    leaderboard_position int(11) NOT NULL,
+    leaderboard_position varchar(256) NOT NULL,
     streak varchar(256) NOT NULL,
     last_login_time varchar(256) NOT NULL,
     badge varchar(256) NOT NULL,

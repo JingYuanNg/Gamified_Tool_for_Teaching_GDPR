@@ -27,12 +27,12 @@
 </head>
 <style>     
 
-    /* html body
+    html body
     {
         background-color: #FFFDE7; 
     }
 
-    .logo
+    /* .logo
     {
         height : 100px;
     }
@@ -109,8 +109,15 @@
     .txt-sidebar
     {
         font-family: "Strait";
-        font-size: 25px;
+        font-size: 20px !important;
+        color: #000000;
     } 
+
+    .itm-btm 
+    {
+        padding-left: 10px;
+        padding-bottom: 10px;
+    }
 </style>
 
   
@@ -180,6 +187,21 @@
         </a>
     </li>
 
+    <!-- Nav Item - Admin Name -->  
+    <li class="fixed-bottom itm-btm">
+        <?php  
+            if(isset($_SESSION["pName"]))
+            {
+                echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar"> Hello, ' . $_SESSION["pName"]. '</span></a>';
+            }
+            else
+            {
+                $location = "login.php";
+                //echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
+               //echo '<a href="login.php" class="nav-link"><span class="navlink txt-sidebar">Login </span></a>';
+            } 
+        ?> 
+    </li> 
 </ul>
 <!-- End of Sidebar -->
 <!-- 
