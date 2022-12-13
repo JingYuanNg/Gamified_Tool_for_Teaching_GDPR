@@ -83,7 +83,7 @@
                             }
                             else
                             {
-                                echo '<a href="#" class="nav-link js-scroll-trigger signin"><span><i class="fa fa-user" aria-hidden="true"></i> Login </span></a>';
+                                echo '<a href="login.php" class="nav-link js-scroll-trigger signin"><span><i class="fa fa-user" aria-hidden="true"></i> Login </span></a>';
                             } 
                         ?></li>
                     </ul>

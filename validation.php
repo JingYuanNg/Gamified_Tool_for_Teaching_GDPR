@@ -23,9 +23,9 @@ if (!$conn->query($sql) === TRUE) {
 /*admin*/ 
 $sql = 'CREATE TABLE IF NOT EXISTS admin (
     adminID int NOT NULL AUTO_INCREMENT,
+    iv varchar(32) NOT NULL,
     email varchar(256) NOT NULL,
     password varchar(256) NOT NULL,
-    iv varchar(32) NOT NULL,
     PRIMARY KEY (adminID)
   );';
 if (!$conn->query($sql) === TRUE) {

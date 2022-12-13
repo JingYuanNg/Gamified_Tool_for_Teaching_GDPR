@@ -1,7 +1,92 @@
 <!DOCTYPE html>
 
 <?php
+    //start session 
     session_start(); 
+    include './headerFooterClient.php'; 
+
+    //check whether login btn is pressed 
+    if(isset($_POST['login']))
+    {
+        //retrieve user input 
+        $email = trim($_POST['email']); 
+        $password = trim($_POST['password']); 
+
+        //hashedPassword 
+        $hashedPassword = hash('sha3-256', $password, true); 
+        //hashedPassword_hex 
+        $hashedPassword_hex = bin2hex($hashedPassword); 
+
+        //check existence 
+        $exist = 0; 
+
+        //connect db 
+        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+        //SQL statement players
+        $sql = "SELECT email, password from players"; 
+
+        //get result from sql 
+        $result = $con -> query($sql); 
+
+        //get data from both side 
+        while($row = $result -> fetch_object())
+        {
+            $pEmail = $row -> email;
+            $pPassword = $row -> password; 
+            $pName = $row -> email; 
+
+            //compare email with pass 
+            if(strcmp($pEmail, $email) == 0 && strcmp($pPassword, $hashedPassword_hex) == 0)
+            {
+                //If both data are correct then exist = 1, show msg login successful
+                $location = "home.php"; 
+                $exist = 1; 
+                $successMsg = "Successfully login!"; 
+                echo "<script type='type/javascript'>alert('$successMsg'); window.location = '$location'</script>";
+                //store the email into session 
+                $_SESSION["pName"] = $pName; 
+            }
+        }
+
+        //if no exists check admin site 
+        if($exist == 0)
+        {
+            //admin SQL statement 
+            $sql = "SELECT email, password FROM admin"; 
+
+            //Get the result 
+            $result = $con -> query($sql); 
+
+            while($row = $result->fetch_object())
+            {
+                $aEmail = $row -> email; 
+                $aPassword = $row -> password; 
+                $aEmail = $row -> email; 
+
+                if(strcmp($aEmail, $email) == 0 && strcmp($aPassword, $hashedPassword_hex) == 0)
+                {
+                    //just for testing, change to dashboard afterwards 
+                    $location = "addAdmin.php";
+                    $exist = 1; 
+                    $successMsg = "Successfully login !"; 
+                    echo "<script type='type/javascript'>alert('$successMsg'); window.location = '$location'</script>";
+                    //store email into session 
+                    $_SESSION["aEmail"] = $aEmail; 
+                }
+            }
+        }
+
+        //check whether exists or not 
+        if($exist === 1)
+        {
+            echo "<script type='type/javascript'>alert('$successMsg'); window.location = '$location'</script>";
+        }
+        else 
+        {
+            $msg = "Your email and password are not match !";
+        }
+    }
 ?> 
 <html>
 <meta charset="utf-8">
@@ -17,7 +102,7 @@
 
     .display-top
     {
-        padding-top: 80px;
+        padding-top: 90px;
     }
 
     .display-inside
@@ -47,24 +132,28 @@
 
 <body>
     <?php 
-        include './headerFooterClient.php'; 
+       if(!empty($msg))
+       {
+            echo "<script>alert('$msg')</script>";
+       }
     ?>
 
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h1 class="text-center txt">Login</h1>
-                <form>
+                
+                <form method="post">
                     <div class="mb-3 form-floating">
-                        <input type="text" class="form-control txt" id="loginEmail" placeholder="Email">
+                        <input type="text" class="form-control txt" id="loginEmail" placeholder="Email" name="email" required="required">
                         <label for="loginEmail" class="txt">Email</label>
                     </div>
                     <div class="mb-3 form-floating">
-                        <input type="password" class="form-control txt" id="loginPassword" placeholder="Password">
+                        <input type="password" class="form-control txt" id="loginPassword" placeholder="Password"  name="password" required="required">
                         <label for="loginPassword" class="txt">Password</label>
                     </div>
                     <div class="mb-3"> 
-                        <button type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="login">Login</button>
+                        <button type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="login" name="login">Login</button>
                     </div>
                 </form> 
 

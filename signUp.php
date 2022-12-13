@@ -2,6 +2,7 @@
 
 <?php
     session_start(); 
+    require_once './validation.php'; 
 ?> 
 <html>
 <meta charset="utf-8">
@@ -17,7 +18,7 @@
 
     .display-top
     {
-        padding-top: 80px;
+        padding-top: 90px;
     }
 
     .display-inside
@@ -48,7 +49,7 @@
 <body>
     <?php 
         include './headerFooterClient.php';
-        require_once './validation.php'; 
+
     ?>
 
     <div class="container mt-5 display-top">

@@ -32,46 +32,6 @@
         background-color: #FFFDE7; 
     }
 
-    /* .logo
-    {
-        height : 100px;
-    }
-
-    .navbar-inverse
-    {
-        background: #F5F5DC;
-    }
-
-    .nav li a
-    {
-        font-family: "Strait";
-        color: black;
-        font-size: 20px; 
-        padding: 13px 0;
-        margin-right: 80px;
-    }
-
-    .nav li a:hover
-    {
-        cursor: pointer;
-        border-bottom: 2px solid #365194;
-        padding-bottom: 11px;
-        color: #365194;    
-    }
-
-    .nav-box
-    {
-        margin-top: 0px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-bottom: 0px
-    }
-             
-    .navbar
-    {
-        margin-top:0px;
-    }  */
-
     .bg-gradient-primary
     {
         background: #F5F5DC;
@@ -115,40 +75,13 @@
 
     .itm-btm 
     {
-        padding-left: 10px;
+        padding-left: 5px;
         padding-bottom: 10px;
     }
 </style>
 
-  
-        <!-- <nav role="navigation" class="navbar navbar-expand-lg navbar-inverse fixed-top">
-
-            <div class="container nav-box">
-                <a class="navbar-brand js-scroll-trigger" href="home.php"><img src="img/logo.png" class="logo"></a>
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span><i class="fas fa-bars ml-1"></i></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item home-active"><a class="nav-link js-scroll-trigger" href="#">Quiz</a></li>
-                        <li class="nav-item product-active"><a class="nav-link js-scroll-trigger" href="#">Leaderboard</a></li>    
-                        <li class="nav-item"> 
-                        <?php  
-                            /* if(isset($_SESSION["pName"]))
-                            {
-                                echo '<a href="#" class="nav-link js-scroll-trigger signin"><span><i class="fa fa-user" aria-hidden="true"></i> Hello, ' . $_SESSION["pName"]. '</span></a>';
-                            }
-                            else
-                            {
-                                echo '<a href="login.php" class="nav-link js-scroll-trigger signin"><span><i class="fa fa-user" aria-hidden="true"></i> Login </span></a>';
-                            } */ 
-                        ?> </li>
-                    </ul>
-                </div>
-            </div>      
-        </nav>  -->
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion navbar-admin" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion navbar-admin sticky-top" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center nav-link" href="#">
@@ -190,7 +123,7 @@
     <!-- Nav Item - Admin Name -->  
     <li class="fixed-bottom itm-btm">
         <?php  
-            if(isset($_SESSION["pName"]))
+            if(isset($_SESSION["aName"]))
             {
                 echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar"> Hello, ' . $_SESSION["pName"]. '</span></a>';
             }
@@ -198,71 +131,11 @@
             {
                 $location = "login.php";
                 //echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
-               //echo '<a href="login.php" class="nav-link"><span class="navlink txt-sidebar">Login </span></a>';
+                echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar">Login</span></a>';
             } 
         ?> 
     </li> 
 </ul>
-<!-- End of Sidebar -->
-<!-- 
-<!-- Content Wrapper 
-<div id="content-wrapper" class="d-flex flex-column">
-    <!-- Main Content  
-    <div id="content">
-        <!-- Topbar 
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">       
-            
-            <!-- Topbar Navbar  
-            <ul class="navbar-nav ml-auto">
-                
-                <div class="topbar-divider d-none d-sm-block"></div>
-                <!-- Nav Item - User Information 
-                <li class="nav-item dropdown no-arrow">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline small header-name" style="color: #03045e;">
-                            <?php 
-                                if(isset($_SESSION['name']))
-                                {
-                                    echo "Hello, " . $_SESSION['name'];
-                                }
-                                else
-                                {
-                                    echo 'Clothable';
-                                }
-                                
-                            ?>&nbsp;
-                        </span>
-                    </a>
-                    
-                    <!-- Dropdown - User Information  
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="login.php" data-toggle="modal" data-target="#logoutModal">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Logout
-                        </a>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-        
-<!--logout model 
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.php">Logout</a>
-        </div>
-      </div>
-    </div>
-</div> -->
         
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
