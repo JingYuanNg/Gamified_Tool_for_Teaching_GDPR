@@ -3,14 +3,17 @@
 <?php
     //start session 
     session_start(); 
-    include './headerFooterClient.php'; 
+    require_once './validation.php';
 
     //check whether login btn is pressed 
     if(isset($_POST['login']))
     {
+        /* unset($_SESSION["pName"]);
+        session_destroy();  */
+       
         //retrieve user input 
         $email = trim($_POST['email']); 
-        $password = trim($_POST['password']); 
+        $password = trim($_POST['password']);  
 
         //hashedPassword 
         $hashedPassword = hash('sha3-256', $password, true); 
@@ -24,10 +27,12 @@
         $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
         //SQL statement players
-        $sql = "SELECT email, password from players"; 
+        $sql = "SELECT * from players"; 
 
         //get result from sql 
         $result = $con -> query($sql); 
+
+        
 
         //get data from both side 
         while($row = $result -> fetch_object())
@@ -36,14 +41,16 @@
             $pPassword = $row -> password; 
             $pName = $row -> email; 
 
+           
             //compare email with pass 
             if(strcmp($pEmail, $email) == 0 && strcmp($pPassword, $hashedPassword_hex) == 0)
             {
-                //If both data are correct then exist = 1, show msg login successful
-                $location = "home.php"; 
+                //If both data are correct then exist = 1 
                 $exist = 1; 
-                $successMsg = "Successfully login!"; 
-                echo "<script type='type/javascript'>alert('$successMsg'); window.location = '$location'</script>";
+                
+                $location = "home.php"; 
+                echo "<script type='text/javascript'>alert('Login successfully');window.location='$location'</script>";
+                
                 //store the email into session 
                 $_SESSION["pName"] = $pName; 
             }
@@ -53,7 +60,7 @@
         if($exist == 0)
         {
             //admin SQL statement 
-            $sql = "SELECT email, password FROM admin"; 
+            $sql = "SELECT * FROM admin"; 
 
             //Get the result 
             $result = $con -> query($sql); 
@@ -62,17 +69,18 @@
             {
                 $aEmail = $row -> email; 
                 $aPassword = $row -> password; 
-                $aEmail = $row -> email; 
+                $aName = $row -> email; 
 
                 if(strcmp($aEmail, $email) == 0 && strcmp($aPassword, $hashedPassword_hex) == 0)
                 {
-                    //just for testing, change to dashboard afterwards 
-                    $location = "addAdmin.php";
+                    //If both data are correct then exist = 1 
                     $exist = 1; 
-                    $successMsg = "Successfully login !"; 
-                    echo "<script type='type/javascript'>alert('$successMsg'); window.location = '$location'</script>";
-                    //store email into session 
-                    $_SESSION["aEmail"] = $aEmail; 
+                
+                    $location = "#"; 
+                    echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
+                
+                    //store the email into session 
+                    $_SESSION["aName"] = $aName; 
                 }
             }
         }
@@ -132,6 +140,8 @@
 
 <body>
     <?php 
+        
+    include './headerFooterClient.php'; 
        if(!empty($msg))
        {
             echo "<script>alert('$msg')</script>";
@@ -143,17 +153,17 @@
             <div class="col-md-6">
                 <h1 class="text-center txt">Login</h1>
                 
-                <form method="post">
+                <form id="loginForm" method="post" action="">
                     <div class="mb-3 form-floating">
-                        <input type="text" class="form-control txt" id="loginEmail" placeholder="Email" name="email" required="required">
-                        <label for="loginEmail" class="txt">Email</label>
+                        <input type="text" class="form-control txt" id="email" placeholder="Email" name="email" required="required">
+                        <label for="email" class="txt">Email</label>
                     </div>
                     <div class="mb-3 form-floating">
-                        <input type="password" class="form-control txt" id="loginPassword" placeholder="Password"  name="password" required="required">
-                        <label for="loginPassword" class="txt">Password</label>
+                        <input type="password" class="form-control txt" id="password" placeholder="Password"  name="password" required="required">
+                        <label for="password" class="txt">Password</label>
                     </div>
                     <div class="mb-3"> 
-                        <button type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="login" name="login">Login</button>
+                        <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="login" name="login" value="Login"/>
                     </div>
                 </form> 
 
@@ -169,7 +179,7 @@
             </div>
         </div> 
     </div>
-  
+    <!-- <input type="button" value="Logout" name="logout" class="profile-btn" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>

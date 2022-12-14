@@ -125,13 +125,13 @@
         <?php  
             if(isset($_SESSION["aName"]))
             {
-                echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar"> Hello, ' . $_SESSION["pName"]. '</span></a>';
+                echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar">' . $_SESSION["aName"]. '</span></a>';
             }
             else
             {
                 $location = "login.php";
-                //echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
-                echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar">Login</span></a>';
+                echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
+                //echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar">Login</span></a>';
             } 
         ?> 
     </li> 
