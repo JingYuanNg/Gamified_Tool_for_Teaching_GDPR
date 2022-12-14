@@ -1,6 +1,6 @@
 
 <?php
-    require_once './validation.php';
+
     session_start();
 ?> 
 <head>
@@ -79,7 +79,7 @@
                         <?php  
                             if(isset($_SESSION["pName"]))
                             {
-                                echo '<a href="#" class="nav-link js-scroll-trigger signin"><span><i class="fa fa-user" aria-hidden="true"></i> Hello, ' . $_SESSION["pName"]. '</span></a>';
+                                echo '<a href="playerProfile.php" class="nav-link js-scroll-trigger signin"><span><i class="fa fa-user" aria-hidden="true"></i> ' . $_SESSION["pName"]. '</span></a>';
                             }
                             else
                             {
