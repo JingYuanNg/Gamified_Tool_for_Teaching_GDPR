@@ -56,6 +56,7 @@ if (!$conn->query($sql) === TRUE) {
 /*questions*/
 $sql = 'CREATE TABLE IF NOT EXISTS questions (
     questionID int NOT NULL AUTO_INCREMENT,
+    question varchar(256) NOT NULL,
     category varchar(256) NOT NULL,
     optionA varchar(256) NOT NULL,
     optionB varchar(256) NOT NULL,
@@ -66,6 +67,16 @@ $sql = 'CREATE TABLE IF NOT EXISTS questions (
   );';
 if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
+}
+
+/*question_category*/
+$sql = 'CREATE TABLE IF NOT EXISTS question_category (
+  question_categoryID int NOT NULL AUTO_INCREMENT,
+  question_categoryName varchar(256) NOT NULL,
+  PRIMARY KEY (question_categoryID)
+);';
+if (!$conn->query($sql) === TRUE) {
+die('Error creating table: ' . $conn->error);
 }
 
 //email

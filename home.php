@@ -41,6 +41,7 @@
 <body>
     <?php 
         include './headerFooterClient.php'; 
+        require_once 'validation.php'; 
     ?>
 
     <div class="container mt-5 display-top">

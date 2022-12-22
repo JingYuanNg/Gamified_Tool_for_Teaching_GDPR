@@ -121,11 +121,11 @@
     </li>
 
     <!-- Nav Item - Admin Name -->  
-    <li class="fixed-bottom itm-btm">
+    <li class="fixed-bottom itm-btm text-wrap">
         <?php  
             if(isset($_SESSION["aName"]))
             {
-                echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar">' . $_SESSION["aName"]. '</span></a>';
+                echo '<a href="#" class="nav-link "><span class="navlink txt-sidebar">' . $_SESSION["aName"]. '</span></a>';
             }
             else
             {
