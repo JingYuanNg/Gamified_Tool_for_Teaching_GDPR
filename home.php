@@ -56,8 +56,8 @@
             </div>
         </div> 
         <div class="row display-inside">
-            <div class="col-md-12">
-                <button type="button" class="btn btn-block btn-design position-absolute top-100 start-50 translate-middle mt-1 font-weight-bold txt" aria-pressed="true">Start Quiz</button>
+            <div class="col-md-12"> 
+                <a href="quiz.php" class="btn btn-block btn-design position-absolute top-100 start-50 translate-middle mt-1 font-weight-bold txt" role="button"  aria-pressed="true">Start Quiz</a>
             </div>
         </div>
     </div>    

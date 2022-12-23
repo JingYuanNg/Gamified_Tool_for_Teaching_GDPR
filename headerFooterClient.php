@@ -73,7 +73,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item home-active"><a class="nav-link js-scroll-trigger" href="#">Quiz</a></li>
+                        <li class="nav-item home-active"><a class="nav-link js-scroll-trigger" href="quiz.php">Quiz</a></li>
                         <li class="nav-item product-active"><a class="nav-link js-scroll-trigger" href="#">Leaderboard</a></li>    
                         <li class="nav-item"> 
                         <?php  
