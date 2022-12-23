@@ -104,6 +104,11 @@
                         {
                           $score++;
                         } */
+
+                        $rating1 = 0; 
+                        $rating2 = 0; 
+                        $rating3 = 0; 
+                        $rating4 = 0;
                      
                         $id = $_POST['quesID'][$i]; 
                         
@@ -119,15 +124,37 @@
                         {
                             $questionID = $row ->questionID;
                             $answer = $row ->answer; 
+                            $category = $row ->category;
                             
                             echo 'questionID from db: ' . $questionID . '<br />'; 
                             echo 'answer: ' . $answer . '<br />'; 
                             
                             if ($_POST['answer'][$i] == $answer) 
                             {
-                             $score++;
+                                $score++;
+                                if($category == 1)
+                                {
+                                    $rating1++; 
+                                    echo 'rating1: ' . $rating1 . '<br /><br />'; 
+                                }
+                                elseif($category == 2)
+                                {
+                                    $rating2++; 
+                                    echo 'rating2: ' . $rating2 . '<br /><br />'; 
+                                }
+                                elseif($category == 3)
+                                {
+                                    $rating1++; 
+                                    echo 'rating3: ' . $rating3 . '<br /><br />'; 
+                                }
+                                elseif($category == 4)
+                                {
+                                    $rating4++; 
+                                    echo 'rating4: ' . $rating4 . '<br /><br />'; 
+                                }
                             } 
 
+ 
                         }
                      }
                      echo "Score: " . $score;

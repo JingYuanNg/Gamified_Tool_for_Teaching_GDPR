@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 23, 2022 at 12:08 AM
+-- Generation Time: Dec 23, 2022 at 10:54 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -68,7 +68,8 @@ CREATE TABLE `players` (
 --
 
 INSERT INTO `players` (`playerID`, `iv`, `email`, `password`, `points`, `leaderboard_position`, `streak`, `last_login_time`, `badge`, `ranking_category1`, `ranking_category2`, `ranking_category3`, `ranking_category4`) VALUES
-(1, '3f36ca1a97a6157ad3ec7a8c77c92e74', 'thanosDaTitan1234@gmail.com', 'ed09024decdd54035d7e68699d6d71d46049deb04c16dc94c3d0e8c2057c69fb', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', '749277d6708e4b81ae545a2f44971a44d2ddd54f5cac12a1ed60b7af8fb111df', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c');
+(1, '3f36ca1a97a6157ad3ec7a8c77c92e74', 'thanosDaTitan1234@gmail.com', 'ed09024decdd54035d7e68699d6d71d46049deb04c16dc94c3d0e8c2057c69fb', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', '749277d6708e4b81ae545a2f44971a44d2ddd54f5cac12a1ed60b7af8fb111df', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c', 'fc959bb4500712b97a051a4ec5a6be1c'),
+(2, 'fc519f02b9f298bec9057a402033102e', 'pikachuInAPokeball1234@gmail.com', '3b329ff7c9051584eed1b3923685e63a09d754c10520f3833f052b1ffec67d67', '11aaba669d08294b955e6387eb89d27b', '11aaba669d08294b955e6387eb89d27b', '11aaba669d08294b955e6387eb89d27b', '087ac32b908a6c441b72a086fb9a61923f1ce69f8b55fb7cfad3e2c71da1799b', '11aaba669d08294b955e6387eb89d27b', '11aaba669d08294b955e6387eb89d27b', '11aaba669d08294b955e6387eb89d27b', '11aaba669d08294b955e6387eb89d27b', '11aaba669d08294b955e6387eb89d27b');
 
 -- --------------------------------------------------------
 
@@ -190,7 +191,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `playerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `playerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `questions`
