@@ -162,30 +162,83 @@
                     }
 
                     
+                    
+                    
                 ?>
                   
-                    <form method="post">
+                    <form method="post" action="">
                     <?php 
-                    for ($i = 0; $i < count($questions); $i++) 
-                    {
-                      /* echo '<p>' . $questions[$i] . '</p>';
-                      echo '<input type="radio" name="answer[' . $i . ']" value="1">Answer 1<br>';
-                      echo '<input type="radio" name="answer[' . $i . ']" value="2">Answer 2<br>';
-                      echo '<input type="radio" name="answer[' . $i . ']" value="3">Answer 3<br>'; */
 
-                      echo '<p>' . $questions[$i] . '</p>'; 
-                      echo '<label><input type="radio" name="answer[' . $i . ']" value="a">' . $optionA[$i] . '</label><br>';
-                      echo '<label><input type="radio" name="answer[' . $i . ']" value="b">' . $optionB[$i] . '</label><br>';
-                      echo '<label><input type="radio" name="answer[' . $i . ']" value="c">' . $optionC[$i] . '</label><br>';
-                      echo '<label><input type="radio" name="answer[' . $i . ']" value="d">' . $optionD[$i] . '</label><br>';
-                      echo '<label><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></label><br>';
-                      echo 'Answer(system): ' . $answers[$i] . '<br/>'; 
-                      echo 'questionID: ' . $quesID[$i] . '<br />'; 
+                    //declare array for pagination 
+                    $items = array();
+                    
+                    //loop to store all questions into $items array 
+                    for ($i = 0; $i < count($questions); $i++) 
+                    { 
+                      //$item to store all everything to display a question
+                      $item = array(
+                        'value1' => '<p>' . $questions[$i] . '</p>', 
+                        'value2' => '<label><input type="radio" name="answer[' . $i . ']" value="a">' . $optionA[$i] . '</label><br>', 
+                        'value3' => '<label><input type="radio" name="answer[' . $i . ']" value="b">' . $optionB[$i] . '</label><br>', 
+                        'value4' => '<label><input type="radio" name="answer[' . $i . ']" value="c">' . $optionC[$i] . '</label><br>', 
+                        'value5' => '<label><input type="radio" name="answer[' . $i . ']" value="d">' . $optionD[$i] . '</label><br>', 
+                        'value6' => '<label><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></label><br>', 
+                        'value7' => 'Answer(system): ' . $answers[$i] . '<br/>', 
+                        'value8' => 'questionID: ' . $quesID[$i] . '<br />', 
+                        'value9' => '<br/><br/><hr/>', 
+                      );  
+
+                      //store $item into $items 
+                      $items[] = $item; 
                       
-                      echo '<br/><br/><hr/>';
                     }
+                      //pagination 
+                      //calculate total num of pg 
+                      //count num of items in loop 
+                      $totalItems = count($items); 
+                      //set num of items per pg 
+                      $itemsPerPage = 1; 
+                      //calc the total num of pg 
+                      $totalPages = ceil($totalItems/ $itemsPerPage); 
+
+                      //get current pg num 
+                      if(isset($_GET['page'])) 
+                      {
+                        $currentPage = $_GET['page']; 
+                      }
+                      else 
+                      {
+                        $currentPage = 1; 
+                      }
+
+                      //calculate offset for loop 
+                      $offset = ($currentPage - 1) * $itemsPerPage;
+
+                      //display 1 item per pg 
+                      for($i = $offset; $i < $offset + $itemsPerPage; $i++)
+                      {
+                        foreach($items[$i] as $item) 
+                        {
+                            echo $item;
+                        }
+                      }
+
+                      //add links to previous and next pg
+                      if($currentPage > 1)
+                      {
+                        echo '<a href="?page=' . ($currentPage - 1). '">Previous</a>';
+                      } 
+                      if($currentPage < $totalPages)
+                      {
+                        echo '<a href="?page=' . ($currentPage + 1). '">Next</a>';
+                      }
+                      else 
+                      {
+                        //display btn 
+                        echo '<input type="submit" name="submit" value="Submit">';
+                      }
                     ?>
-                    <input type="submit" name="submit" value="Submit">
+                    
                     </form>
  
                     
