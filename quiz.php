@@ -52,6 +52,15 @@
         color: #365194;
     }
 
+    .txt-ques
+    {
+        font-size: 20px;
+    }
+
+    .txt-ans
+    {
+        font-size: 15px;
+    }
 </style>
 
 <body>
@@ -68,6 +77,11 @@
                 
                 <?php
                 $categoryLimit = 4; 
+
+                $rating1 = 0; 
+                $rating2 = 0; 
+                $rating3 = 0; 
+                $rating4 = 0;
 
                 for($i=1 ; $i<=$categoryLimit; $i++)
                 {
@@ -98,17 +112,13 @@
                       $score = 0;
                       for ($i = 0; $i < count($questions); $i++) 
                       {
-                        echo 'questionID from POST :' .$_POST['quesID'][$i]. '<br/>'; 
-                        echo 'answer from POST :' .$_POST['answer'][$i]. '<br/>'; 
+                        /* echo 'questionID from POST :' .$_POST['quesID'][$i]. '<br/>'; 
+                        echo 'answer from POST :' .$_POST['answer'][$i]. '<br/>';  */
                         /* if ($_POST['answer'][$i] == $answers[$i]) 
                         {
                           $score++;
                         } */
 
-                        $rating1 = 0; 
-                        $rating2 = 0; 
-                        $rating3 = 0; 
-                        $rating4 = 0;
                      
                         $id = $_POST['quesID'][$i]; 
                         
@@ -126,8 +136,8 @@
                             $answer = $row ->answer; 
                             $category = $row ->category;
                             
-                            echo 'questionID from db: ' . $questionID . '<br />'; 
-                            echo 'answer: ' . $answer . '<br />'; 
+                            /* echo 'questionID from db: ' . $questionID . '<br />'; 
+                            echo 'answer: ' . $answer . '<br />';  */
                             
                             if ($_POST['answer'][$i] == $answer) 
                             {
@@ -144,7 +154,7 @@
                                 }
                                 elseif($category == 3)
                                 {
-                                    $rating1++; 
+                                    $rating3++; 
                                     echo 'rating3: ' . $rating3 . '<br /><br />'; 
                                 }
                                 elseif($category == 4)
@@ -157,7 +167,7 @@
  
                         }
                      }
-                     echo "Score: " . $score;
+                     echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Score: ' . $score . '</div>';
                      exit;
                     }
 
@@ -168,24 +178,58 @@
                     <?php 
                     for ($i = 0; $i < count($questions); $i++) 
                     {
-                      /* echo '<p>' . $questions[$i] . '</p>';
-                      echo '<input type="radio" name="answer[' . $i . ']" value="1">Answer 1<br>';
-                      echo '<input type="radio" name="answer[' . $i . ']" value="2">Answer 2<br>';
-                      echo '<input type="radio" name="answer[' . $i . ']" value="3">Answer 3<br>'; */
+                      /* echo '<p>' . $questions[$i] . '</p>'; */
 
-                      echo '<p>' . $questions[$i] . '</p>'; 
-                      echo '<label><input type="radio" name="answer[' . $i . ']" value="a">' . $optionA[$i] . '</label><br>';
-                      echo '<label><input type="radio" name="answer[' . $i . ']" value="b">' . $optionB[$i] . '</label><br>';
-                      echo '<label><input type="radio" name="answer[' . $i . ']" value="c">' . $optionC[$i] . '</label><br>';
-                      echo '<label><input type="radio" name="answer[' . $i . ']" value="d">' . $optionD[$i] . '</label><br>';
-                      echo '<label><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></label><br>';
-                      echo 'Answer(system): ' . $answers[$i] . '<br/>'; 
-                      echo 'questionID: ' . $quesID[$i] . '<br />'; 
+                      $quesNum = $i + 1; 
+                      echo '<div class="shadow p-3 mb-5 bg-body rounded bg-white txt"><div class="p-2 mb-2 bg-body rounded txt-ques">' . $quesNum . '. ' . $questions[$i] . '</div>'; 
+                    
+                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_a_' . $i . '\').checked = true;">
+                            <label for="answerRadio_a_' . $i . '">
+                            <input type="radio" name="answer[' . $i . ']" id="answerRadio_a_' . $i . '" value="a">
+                            ' . $optionA[$i] . '
+                            </label>
+
+                            </div><br>';
+
+                       echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_b_' . $i . '\').checked = true;">
+                            <label for="answerRadio_b_' . $i . '">
+                            <input type="radio" name="answer[' . $i . ']" id="answerRadio_b_' . $i . '" value="b">
+                            ' . $optionB[$i] . '
+                            </label>
+                            
+                            </div><br>';
+
+                       echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_c_' . $i . '\').checked = true;">
+                            <label for="answerRadio_c_' . $i . '">
+                            <input type="radio" name="answer[' . $i . ']" id="answerRadio_c_' . $i . '" value="c">
+                            ' . $optionC[$i] . '
+                            </label>
+
+                            </div><br>';
+
+                        echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_d_' . $i . '\').checked = true;">
+                            <label for="answerRadio_d_' . $i . '">
+                            <input type="radio" name="answer[' . $i . ']" id="answerRadio_d_' . $i . '" value="d">
+                            ' . $optionD[$i] . '
+                            </label>
+
+                            </div><br>';
+
+                      /* 
+                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="a">' . $optionA[$i] . '</div><br>';
+                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="b">' . $optionB[$i] . '</div><br>';
+                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="c">' . $optionC[$i] . '</div><br>';
+                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="d">' . $optionD[$i] . '</div><br>'; 
+                      */
+
+                      echo '<div><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></div><br>';
                       
-                      echo '<br/><br/><hr/>';
+                      echo 'Answer(system): ' . $answers[$i] . '<br/>'; 
+                      /*echo 'questionID: ' . $quesID[$i] . '<br />';  */
+                      echo '</div>';
                     }
                     ?>
-                    <input type="submit" name="submit" value="Submit">
+                    <input type="submit" class="btn btn-block btn-design font-weight-bold txt mb-5" aria-pressed="true" name="submit" value="Submit">
                     </form>
  
                     
