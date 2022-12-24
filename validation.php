@@ -47,6 +47,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS players (
     ranking_category2 varchar(256) NOT NULL,
     ranking_category3 varchar(256) NOT NULL,
     ranking_category4 varchar(256) NOT NULL,
+    levels varchar(256) NOT NULL,
     PRIMARY KEY (playerID)
   );';
 if (!$conn->query($sql) === TRUE) {

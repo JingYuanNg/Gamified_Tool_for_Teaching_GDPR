@@ -78,10 +78,10 @@
                 <?php
                 $categoryLimit = 4; 
 
-                $rating1 = 0; 
-                $rating2 = 0; 
-                $rating3 = 0; 
-                $rating4 = 0;
+                $ranking1 = 0; 
+                $ranking2 = 0; 
+                $ranking3 = 0; 
+                $ranking4 = 0;
 
                 for($i=1 ; $i<=$categoryLimit; $i++)
                 {
@@ -118,57 +118,163 @@
                         {
                           $score++;
                         } */
-
-                     
-                        $id = $_POST['quesID'][$i]; 
                         
-                        //connect db 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-
-                        //SQL stat 
-                        $sql = "SELECT * from questions WHERE questionID = '$id'"; 
-
-                        $result = $con -> query($sql); 
-
-                        if($row = $result -> fetch_object())
+                        if(empty($_POST['answer'][$i]))
                         {
-                            $questionID = $row ->questionID;
-                            $answer = $row ->answer; 
-                            $category = $row ->category;
+                            $location = "quiz.php";
+                            echo "<script type='text/JavaScript'>alert('Please make sure all questions are selected with answer !');window.location='$location'</script>"; 
+                        }
+                        else
+                        {
                             
-                            /* echo 'questionID from db: ' . $questionID . '<br />'; 
-                            echo 'answer: ' . $answer . '<br />';  */
-                            
-                            if ($_POST['answer'][$i] == $answer) 
+                            $id = $_POST['quesID'][$i]; 
+                        
+                            //connect db 
+                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+                            //SQL stat 
+                            $sql = "SELECT * from questions WHERE questionID = '$id'"; 
+
+                            $result = $con -> query($sql); 
+
+                            if($row = $result -> fetch_object())
                             {
-                                $score++;
-                                if($category == 1)
+                                $questionID = $row ->questionID;
+                                $answer = $row ->answer; 
+                                $category = $row ->category;
+                            
+                                /* echo 'questionID from db: ' . $questionID . '<br />'; 
+                                echo 'answer: ' . $answer . '<br />';  */
+                            
+                                if ($_POST['answer'][$i] == $answer) 
                                 {
-                                    $rating1++; 
-                                    echo 'rating1: ' . $rating1 . '<br /><br />'; 
-                                }
-                                elseif($category == 2)
-                                {
-                                    $rating2++; 
-                                    echo 'rating2: ' . $rating2 . '<br /><br />'; 
-                                }
-                                elseif($category == 3)
-                                {
-                                    $rating3++; 
-                                    echo 'rating3: ' . $rating3 . '<br /><br />'; 
-                                }
-                                elseif($category == 4)
-                                {
-                                    $rating4++; 
-                                    echo 'rating4: ' . $rating4 . '<br /><br />'; 
-                                }
-                            } 
+                                    $score++;
+                                    if($category == 1)
+                                    {
+                                        $ranking1++; 
+                                        echo 'ranking1: ' . $ranking1 . '<br /><br />'; 
+                                    }
+                                    elseif($category == 2)
+                                    {
+                                        $ranking2++; 
+                                        echo 'ranking2: ' . $ranking2 . '<br /><br />'; 
+                                    }
+                                    elseif($category == 3)
+                                    {
+                                        $ranking3++; 
+                                        echo 'ranking3: ' . $ranking3 . '<br /><br />'; 
+                                    }
+                                    elseif($category == 4)
+                                    {
+                                        $ranking4++; 
+                                        echo 'ranking4: ' . $ranking4 . '<br /><br />'; 
+                                    }
+                                } 
 
  
+                            }
+                        
                         }
                      }
-                     echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Score: ' . $score . '</div>';
-                     exit;
+                     
+                    //  echo $_SESSION["pName"];
+
+                     $email = $_SESSION["pName"]; 
+
+                     $cipher = 'AES-128-CBC';
+                     $key = 'thebestsecretkey';
+
+                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                     $sql = "SELECT * FROM players WHERE email = '$email'";
+                     $result = $con -> query($sql); 
+
+                     if($row = $result -> fetch_object())
+                     {
+ 
+                        //get playerID 
+                        $playerID = $row -> playerID; 
+
+                        //get iv 
+                        $iv = hex2bin($row -> iv); 
+ 
+                        //points 
+                        $points_bin = hex2bin($row -> points); 
+                        $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                        $points_new = $points + $score; 
+                        $encrypted_points_new = openssl_encrypt($points_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_points_new_hex = bin2hex($encrypted_points_new);
+
+                        //time
+                        date_default_timezone_set('Europe/Dublin');
+                        $date_now = date('d-F-Y H:i'); 
+                        $encrypted_date_now = openssl_encrypt($date_now, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_date_now_hex = bin2hex($encrypted_date_now);
+
+                        //ranking_category1 
+                        $ranking_category1_bin = hex2bin($row -> ranking_category1); 
+                        $ranking_category1 = openssl_decrypt($ranking_category1_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                        $ranking_category1_new = $ranking_category1 + $ranking1; 
+                        $encrypted_ranking_category1_new = openssl_encrypt($ranking_category1_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_ranking_category1_new_hex = bin2hex($encrypted_ranking_category1_new);
+
+                        //ranking_category2
+                        $ranking_category2_bin = hex2bin($row -> ranking_category2); 
+                        $ranking_category2 = openssl_decrypt($ranking_category2_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                        $ranking_category2_new = $ranking_category2 + $ranking2;
+                        $encrypted_ranking_category2_new = openssl_encrypt($ranking_category2_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_ranking_category2_new_hex = bin2hex($encrypted_ranking_category2_new);
+
+                        //ranking_category3
+                        $ranking_category3_bin = hex2bin($row -> ranking_category3); 
+                        $ranking_category3 = openssl_decrypt($ranking_category3_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                        $ranking_category3_new = $ranking_category3 + $ranking3;
+                        $encrypted_ranking_category3_new = openssl_encrypt($ranking_category3_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_ranking_category3_new_hex = bin2hex($encrypted_ranking_category3_new);
+
+                        //ranking_category4
+                        $ranking_category4_bin = hex2bin($row -> ranking_category4); 
+                        $ranking_category4 = openssl_decrypt($ranking_category4_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                        $ranking_category4_new = $ranking_category4 + $ranking4;
+                        $encrypted_ranking_category4_new = openssl_encrypt($ranking_category4_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_ranking_category4_new_hex = bin2hex($encrypted_ranking_category4_new);
+                        
+                        //levels 
+                        $addLevel = 1;
+                        $levels_bin = hex2bin($row -> levels); 
+                        $levels = openssl_decrypt($levels_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        echo 'levels' . $levels . '<br/>';
+                        $levels_new = $levels + $addLevel; 
+                        echo 'levels_new' . $levels_new . '<br/>';
+                        $encrypted_levels_new = openssl_encrypt($levels_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_levels_new_hex = bin2hex($encrypted_levels_new);
+                     }
+
+                     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                     $sql = "UPDATE players SET points = ?, last_login_time = ?, ranking_category1 = ?, ranking_category2 = ?, ranking_category3 = ?, ranking_category4 = ? , levels = ? WHERE email = ?";
+                     $stmt = $con ->prepare($sql);
+                     $stmt -> bind_param('ssssssss', $encrypted_points_new_hex, 
+                                                     $encrypted_date_now_hex,
+                                                     $encrypted_ranking_category1_new_hex,
+                                                     $encrypted_ranking_category2_new_hex,
+                                                     $encrypted_ranking_category3_new_hex,
+                                                     $encrypted_ranking_category4_new_hex,
+                                                     $encrypted_levels_new_hex,
+                                                     $email);
+
+                    if($stmt -> execute())
+                    {
+                        //update successful 
+                        echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Score: ' . $score . '</div>';
+                    }
+                    else 
+                    {
+                        echo 'Uh-oh'. '<br/>'; 
+                    } 
+
+                    $stmt -> close();
+                    $con -> close();
+                    exit;
+                     
                     }
 
                     
