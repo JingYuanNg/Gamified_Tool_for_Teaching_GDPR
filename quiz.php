@@ -86,7 +86,7 @@
                 for($i=1 ; $i<=$categoryLimit; $i++)
                 {
                     $con = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
-                    $result = mysqli_query($con, "SELECT * FROM questions WHERE category = '$i' ORDER BY RAND() LIMIT 2;");
+                    $result = mysqli_query($con, "SELECT * FROM questions WHERE category = $i ORDER BY RAND() LIMIT 2;");
                     
                     while ($row = mysqli_fetch_assoc($result)) 
                     {                
@@ -105,7 +105,167 @@
                     mysqli_close($con);
                 }
                 
+                //check player lvl 
+                $email = $_SESSION["pName"]; 
 
+                $cipher = 'AES-128-CBC';
+                $key = 'thebestsecretkey';
+
+                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                $sql = "SELECT * FROM players WHERE email = '$email'";
+                $result = $con -> query($sql); 
+
+                if($row = $result -> fetch_object())
+                {
+                    //get playerID 
+                    $playerID = $row -> playerID; 
+
+                    //get iv 
+                    $iv = hex2bin($row -> iv); 
+
+                    //levels 
+                    $levels_bin = hex2bin($row -> levels); 
+                    $levels = openssl_decrypt($levels_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                    
+                
+                    //ranking_category1 
+                    $ranking_category1_bin = hex2bin($row -> ranking_category1); 
+                    $ranking_category1 = openssl_decrypt($ranking_category1_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                    // echo 'ranking_category1: ' . $ranking_category1 . '<br />'; 
+
+                    //ranking_category2
+                    $ranking_category2_bin = hex2bin($row -> ranking_category2); 
+                    $ranking_category2 = openssl_decrypt($ranking_category2_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                    // echo 'ranking_category2: ' . $ranking_category2 . '<br />'; 
+                
+                    //ranking_category3
+                    $ranking_category3_bin = hex2bin($row -> ranking_category3); 
+                    $ranking_category3 = openssl_decrypt($ranking_category3_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                    // echo 'ranking_category3: ' . $ranking_category3 . '<br />';
+
+                    //ranking_category4
+                    $ranking_category4_bin = hex2bin($row -> ranking_category4); 
+                    $ranking_category4 = openssl_decrypt($ranking_category4_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                    // echo 'ranking_category4: ' . $ranking_category4 . '<br />';
+                }
+
+                //get the smallest ranking_category(weakest) 
+                $min = min($ranking_category1, $ranking_category2, $ranking_category3, $ranking_category4); 
+                
+                //to store variables with smallest value 
+                $vars = array(); 
+
+                //check which variables have the smallest value 
+                if($ranking_category1 == $min)
+                {
+                    $vars[] = 1; 
+                }
+                elseif($ranking_category2 == $min)
+                {
+                    $vars[] = 2;
+                }
+                elseif($ranking_category3 == $min)
+                {
+                    $vars[] = 3;
+                }
+                elseif($ranking_category4 == $min)
+                {
+                    $vars[] = 4;
+                }
+
+                //if there are multiple variables with same value, pick one randomly 
+                if(count($vars) > 1)
+                {
+                    $randomIndex = array_rand($vars); 
+                    $weakestCategory = $vars[$randomIndex]; 
+                }
+                else 
+                {
+                    $weakestCategory = $vars[0];
+                }
+                 
+                $con -> close();
+/* 
+                echo '$min: ' . $min . '<br/>'; 
+                echo 'weakest category: ' . $weakestCategory . '<br/>';
+                     
+                echo 'levels for players with email - ' . $email . ': ' . $levels . '<br/>';
+ */
+                
+                if($levels > 9)//highest lvl is 9 because only have 10 ques per category
+                { 
+                    $cipher = 'AES-128-CBC';
+                    $key = 'thebestsecretkey';
+
+                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                    $sql = "SELECT * FROM players WHERE email = '$email'";
+                    $result = $con -> query($sql); 
+
+                    if($row = $result -> fetch_object())
+                    {
+ 
+                       //get playerID 
+                       $playerID = $row -> playerID; 
+
+                       //get iv 
+                       $iv = hex2bin($row -> iv); 
+                       
+                    }
+
+                    
+                    //level 
+                    $levels_reset = 1; 
+                    //encrypted_levels
+                    $encrypted_levels_reset = openssl_encrypt($levels_reset, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                    //encrypted_levels_hex
+                    $encrypted_levels_reset_hex = bin2hex($encrypted_levels_reset);
+
+
+                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                    $sql = "UPDATE players SET levels = ? WHERE email = ?";
+                    $stmt = $con -> prepare($sql); 
+                    $stmt -> bind_param('ss', $encrypted_levels_reset_hex, $email);
+
+                    echo 'encryped_levels_hex: ' . $encrypted_levels_reset_hex . '<br/>';
+                    if($stmt -> execute())
+                    { 
+                        echo 'executed'. '<br/>';   
+                        $location = "quiz.php";
+                        echo "<script type='text/JavaScript'>alert('You have reached the highest level. Restarting level...');window.location='$location'</script>";
+                         
+                    }
+                    else 
+                    {
+                        echo 'Uh-oh'. '<br/>'; 
+                    } 
+
+                    $stmt -> close();
+                    $con -> close();
+                    exit;
+
+                }
+                elseif($levels > 1 && $levels <= 9)
+                {
+                    $quesNumToTake = $levels - 1;  
+                    $con = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
+                    $result = mysqli_query($con, "SELECT * FROM questions WHERE category = $weakestCategory ORDER BY RAND() LIMIT $quesNumToTake;"); 
+                    
+                    while ($row = mysqli_fetch_assoc($result)) 
+                    {                
+                        $quesID[] = $row['questionID'];    
+                        $questions[] = $row['question'];
+                        $optionA[] = $row['optionA'];
+                        $optionB[] = $row['optionB'];
+                        $optionC[] = $row['optionC'];
+                        $optionD[] = $row['optionD'];
+                        $answers[] = $row['answer'];
+                    
+                        
+                    }
+                    
+                    mysqli_free_result($result);
+                    mysqli_close($con);
+                } 
                     // If the form has been submitted, check the answers
                     if (isset($_POST['submit'])) 
                     { 
@@ -151,23 +311,19 @@
                                     $score++;
                                     if($category == 1)
                                     {
-                                        $ranking1++; 
-                                        echo 'ranking1: ' . $ranking1 . '<br /><br />'; 
+                                        $ranking1++;  
                                     }
                                     elseif($category == 2)
                                     {
-                                        $ranking2++; 
-                                        echo 'ranking2: ' . $ranking2 . '<br /><br />'; 
+                                        $ranking2++;  
                                     }
                                     elseif($category == 3)
                                     {
-                                        $ranking3++; 
-                                        echo 'ranking3: ' . $ranking3 . '<br /><br />'; 
+                                        $ranking3++;  
                                     }
                                     elseif($category == 4)
                                     {
-                                        $ranking4++; 
-                                        echo 'ranking4: ' . $ranking4 . '<br /><br />'; 
+                                        $ranking4++;  
                                     }
                                 } 
 
@@ -280,6 +436,7 @@
                     
                 ?>
                   
+                    <div class="txt text-center fs-3 fw-semibold p-3">Level <?php echo $levels ?></div>
                     <form method="post">
                     <?php 
                     for ($i = 0; $i < count($questions); $i++) 
@@ -289,7 +446,7 @@
                       $quesNum = $i + 1; 
                       echo '<div class="shadow p-3 mb-5 bg-body rounded bg-white txt"><div class="p-2 mb-2 bg-body rounded txt-ques">' . $quesNum . '. ' . $questions[$i] . '</div>'; 
                     
-                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_a_' . $i . '\').checked = true;">
+                      echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_a_' . $i . '\').checked = true;">
                             <label for="answerRadio_a_' . $i . '">
                             <input type="radio" name="answer[' . $i . ']" id="answerRadio_a_' . $i . '" value="a">
                             ' . $optionA[$i] . '
@@ -297,7 +454,7 @@
 
                             </div><br>';
 
-                       echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_b_' . $i . '\').checked = true;">
+                       echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_b_' . $i . '\').checked = true;">
                             <label for="answerRadio_b_' . $i . '">
                             <input type="radio" name="answer[' . $i . ']" id="answerRadio_b_' . $i . '" value="b">
                             ' . $optionB[$i] . '
@@ -305,7 +462,7 @@
                             
                             </div><br>';
 
-                       echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_c_' . $i . '\').checked = true;">
+                       echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_c_' . $i . '\').checked = true;">
                             <label for="answerRadio_c_' . $i . '">
                             <input type="radio" name="answer[' . $i . ']" id="answerRadio_c_' . $i . '" value="c">
                             ' . $optionC[$i] . '
@@ -313,7 +470,7 @@
 
                             </div><br>';
 
-                        echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_d_' . $i . '\').checked = true;">
+                        echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_d_' . $i . '\').checked = true;">
                             <label for="answerRadio_d_' . $i . '">
                             <input type="radio" name="answer[' . $i . ']" id="answerRadio_d_' . $i . '" value="d">
                             ' . $optionD[$i] . '
@@ -330,7 +487,7 @@
 
                       echo '<div><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></div><br>';
                       
-                      echo 'Answer(system): ' . $answers[$i] . '<br/>'; 
+                    //echo 'Answer(system): ' . $answers[$i] . '<br/>'; 
                       /*echo 'questionID: ' . $quesID[$i] . '<br />';  */
                       echo '</div>';
                     }
@@ -341,13 +498,6 @@
                     
             </div>
         </div> 
-    </div>
-    <!-- <input type="button" value="Logout" name="logout" class="profile-btn" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script> -->
+    </div> 
 </body>
 </html> 
