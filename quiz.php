@@ -406,10 +406,9 @@
                      }
 
                      $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                     $sql = "UPDATE players SET points = ?, last_login_time = ?, ranking_category1 = ?, ranking_category2 = ?, ranking_category3 = ?, ranking_category4 = ? , levels = ? WHERE email = ?";
+                     $sql = "UPDATE players SET points = ?, ranking_category1 = ?, ranking_category2 = ?, ranking_category3 = ?, ranking_category4 = ? , levels = ? WHERE email = ?";
                      $stmt = $con ->prepare($sql);
-                     $stmt -> bind_param('ssssssss', $encrypted_points_new_hex, 
-                                                     $encrypted_date_now_hex,
+                     $stmt -> bind_param('sssssss', $encrypted_points_new_hex, 
                                                      $encrypted_ranking_category1_new_hex,
                                                      $encrypted_ranking_category2_new_hex,
                                                      $encrypted_ranking_category3_new_hex,

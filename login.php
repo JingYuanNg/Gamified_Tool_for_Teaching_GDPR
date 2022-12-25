@@ -48,11 +48,49 @@
                 //If both data are correct then exist = 1 
                 $exist = 1; 
                 
+                //store the email into session 
+                $_SESSION["pName"] = $pName; 
+
+                $email = $_SESSION["pName"]; 
+
+                $cipher = 'AES-128-CBC';
+                $key = 'thebestsecretkey';
+
+                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                $sql = "SELECT * FROM players WHERE email = '$email'";
+                $result = $con -> query($sql); 
+
+                if($row = $result -> fetch_object())
+                {
+                    //get iv 
+                    $iv = hex2bin($row -> iv); 
+
+                    //time
+                    date_default_timezone_set('Europe/Dublin');
+                    $date_now = date('d-F-Y H:i'); 
+                    $encrypted_date_now = openssl_encrypt($date_now, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                    $encrypted_date_now_hex = bin2hex($encrypted_date_now);
+
+                    $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                    $sql = "UPDATE players SET last_login_time = ? WHERE email = ?";
+                    $stmt = $con ->prepare($sql);
+                    $stmt -> bind_param('ss', $encrypted_date_now_hex, $email);
+                    if($stmt -> execute())
+                    {
+                        //echo $date_now . '<br/>' . $encrypted_date_now_hex; 
+                    }
+                    else
+                    {
+                        
+                    }  
+
+                    $stmt -> close();
+                    $con -> close();
+                }
+
                 $location = "home.php"; 
                 echo "<script type='text/javascript'>alert('Login successfully');window.location='$location'</script>";
                 
-                //store the email into session 
-                $_SESSION["pName"] = $pName; 
             }
         }
 
@@ -88,6 +126,7 @@
         //check whether exists or not 
         if($exist === 1)
         {
+            $successMsg = "Login successfully";
             echo "<script type='type/javascript'>alert('$successMsg'); window.location = '$location'</script>";
         }
         else 

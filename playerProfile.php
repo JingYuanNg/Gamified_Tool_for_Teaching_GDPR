@@ -5,6 +5,11 @@
     session_start(); 
     require_once './validation.php';
  
+    if(empty($_SESSION["pName"]))
+    {
+        $location = "login.php";
+        echo "<script type='text/JavaScript'>alert('Please log in to continue');window.location='$location'</script>"; 
+    } 
 ?> 
 <html>
 <meta charset="utf-8">
@@ -51,10 +56,88 @@
     <?php 
         
     include './headerFooterClient.php'; 
-       if(!empty($msg))
-       {
-            echo "<script>alert('$msg')</script>";
-       }
+    //badge 
+    //streak 
+
+    $email = $_SESSION["pName"]; 
+
+    $cipher = 'AES-128-CBC';
+    $key = 'thebestsecretkey';
+
+    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+    $sql = "SELECT * FROM players WHERE email = '$email'";
+    $result = $con -> query($sql); 
+
+    if($row = $result -> fetch_object())
+    {
+ 
+      //get playerID 
+      $playerID = $row -> playerID; 
+
+      //get iv 
+      $iv = hex2bin($row -> iv); 
+ 
+      //points 
+      $points_bin = hex2bin($row -> points); 
+      $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+    
+    }
+
+    //badge  
+    //bronze (90 - 99) badgeVal = 1 
+    //silver (100 - 199) badgeVal = 2 
+    //gold (200 and above) badgeVal = 3  
+    if($points < 90)
+    {
+        $badgeVal = 0; 
+        $imgVar = "img/sad.png";
+        $badgeTxt = "At least 90 points to get a badge";
+    }
+    elseif($points >= 90 && $points <= 100)
+    {
+        //bronze 
+        $badgeVal = 1; 
+        $imgVar = "img/BadgeBronze.png"; 
+        $badgeTxt = "Bronze";
+    }
+    elseif($points >= 100 & $points<= 199)
+    {
+        //silver 
+        $badgeVal = 2; 
+        $imgVar = "img/BadgeSilver.png"; 
+        $badgeTxt = "Silver";
+    }
+    elseif($points >= 500)
+    {
+        //gold 
+        $badgeVal = 3; 
+        $imgVar = "img/BadgeGold.png"; 
+        $badgeTxt = "Gold";
+    }
+
+    echo '$badgeVal: ' . $badgeVal . '<br/>';
+    //encrypted_badge
+    $encrypted_badgeVal = openssl_encrypt($badgeVal, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+    //encrypted_badge_hex 
+    $encrypted_badgeVal_hex = bin2hex($encrypted_badgeVal);
+
+    $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $sql = "UPDATE players SET badge = ? WHERE email = ?";
+    $stmt = $con ->prepare($sql);
+    $stmt -> bind_param('ss', $encrypted_badgeVal_hex, $email);
+
+    if($stmt -> execute())
+    {
+        //update successful 
+        //echo '$encrypted_badgeVal_hex: ' . $encrypted_badgeVal_hex . '<br/>';
+    }
+    else 
+    {
+        echo 'Uh-oh'. '<br/>'; 
+    }
+
+    $con -> close();
+    
     ?>
 
     <div class="container mt-5 display-top">
@@ -68,24 +151,24 @@
                     </tr>
                     <tr>
                         <td><label for="email" class="txt">Email</label></td>
-                        <td style="height:100px;"><input type="email" class="form-control" id="email" value="test@gmail.com" disabled/></td>
+                        <td style="height:100px;"><input type="email" class="form-control" id="email" value="<?php echo $email ?>" disabled/></td>
                     </tr>
                     <tr>
                         <td><label for="points" class="txt">Points</label></td>
-                        <td style="height:100px;"><input type="points" class="form-control" id="points" value="testPoints" disabled/></td>
+                        <td style="height:100px;"><input type="points" class="form-control" id="points" value="<?php echo $points ?>" disabled/></td>
                     </tr> 
                     <tr>
                         <td><label for="badge" class="txt">Badge</label></td>
                         <td class="text-center" style="height:100px;">
-                        <img src="img/Celebrate.png" class="img-size"/>
-                        <label for="badge" class="txt"><?php echo 'Streak'; ?></label>
+                        <div class="shadow p-3 mb-5 bg-body rounded bg-white"><img src="<?php echo $imgVar ?>" class="img-size p-3"/><br/> 
+                        <label for="badge" class="txt"><?php echo $badgeTxt ?></label></div>
                         </td>
                     </tr> 
                     <tr>
                         <td><label for="streak" class="txt">Streak</label></td>
                         <td class="text-center" style="height:100px;">
-                        <img src="img/Celebrate.png" class="img-size"/>
-                        <label for="streak" class="txt"><?php echo 'Streak'; ?></label>
+                        <div class="shadow p-3 mb-5 bg-body rounded bg-white"><img src="img/Celebrate.png" class="img-size"/>
+                        <label for="streak" class="txt"><?php echo 'Streak'; ?></label></div>
                         </td>
                     </tr>
                 </table> 
