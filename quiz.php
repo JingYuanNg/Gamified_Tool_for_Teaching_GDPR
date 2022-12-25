@@ -398,9 +398,9 @@
                         $addLevel = 1;
                         $levels_bin = hex2bin($row -> levels); 
                         $levels = openssl_decrypt($levels_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        echo 'levels' . $levels . '<br/>';
+                        // echo 'levels' . $levels . '<br/>';
                         $levels_new = $levels + $addLevel; 
-                        echo 'levels_new' . $levels_new . '<br/>';
+                        // echo 'levels_new' . $levels_new . '<br/>';
                         $encrypted_levels_new = openssl_encrypt($levels_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
                         $encrypted_levels_new_hex = bin2hex($encrypted_levels_new);
                      }
@@ -420,7 +420,9 @@
                     if($stmt -> execute())
                     {
                         //update successful 
+                        echo '<div class="txt text-center fs-3 fw-semibold p-3">Congratulations !</div>';
                         echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Score: ' . $score . '</div>';
+                        echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Points: ' . $points_new . '</div>';
                     }
                     else 
                     {
