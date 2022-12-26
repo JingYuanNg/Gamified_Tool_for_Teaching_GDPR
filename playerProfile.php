@@ -81,6 +81,13 @@
       $points_bin = hex2bin($row -> points); 
       $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
     
+      //last_login_time 
+      $last_login_time_bin = hex2bin($row -> last_login_time); 
+      $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
+
+      //streak 
+      $streak_bin = hex2bin($row -> streak);
+      $streak = openssl_decrypt($streak_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
     }
 
     //badge  
@@ -90,32 +97,70 @@
     if($points < 90)
     {
         $badgeVal = 0; 
-        $imgVar = "img/sad.png";
+        // $badgeImgVar = "img/sad.png";
         $badgeTxt = "At least 90 points to get a badge";
     }
     elseif($points >= 90 && $points <= 100)
     {
         //bronze 
         $badgeVal = 1; 
-        $imgVar = "img/BadgeBronze.png"; 
+        // $badgeImgVar = "img/BadgeBronze.png"; 
         $badgeTxt = "Bronze";
     }
     elseif($points >= 100 & $points<= 199)
     {
         //silver 
         $badgeVal = 2; 
-        $imgVar = "img/BadgeSilver.png"; 
+        // $badgeImgVar = "img/BadgeSilver.png"; 
         $badgeTxt = "Silver";
     }
     elseif($points >= 500)
     {
         //gold 
         $badgeVal = 3; 
-        $imgVar = "img/BadgeGold.png"; 
+        // $badgeImgVar = "img/BadgeGold.png"; 
         $badgeTxt = "Gold";
     }
 
-    echo '$badgeVal: ' . $badgeVal . '<br/>';
+    
+    //track number of consecutive login days
+    $consecutive_login_days = 0; 
+
+    //get the last_login_time, convert to unix timestamp 
+    $previous_timestamp = $last_login_time; 
+    $unix_previous_timestamp = strtotime($previous_timestamp); 
+
+    //get the current date time, convert to unix timestamp 
+    $current_timestamp = date('d-F-Y H:i'); 
+    $unix_current_timestamp = strtotime($current_timestamp); 
+
+    //compare current timestamp to the previous login timestamp 
+     //if the difference is less than or equal to 24 hours 
+    if(isset($unix_previous_timestamp) && ($unix_current_timestamp - $unix_previous_timestamp) <= 86400)
+    {
+        $consecutive_login_days++; 
+    }
+    else 
+    {
+        $consecutive_login_days = 0; 
+    }
+
+    if($consecutive_login_days == 0)
+    {
+        $streakImgVar = "img/sad.png";
+        $streakTxt = "Login everyday to keep the streak";
+    }
+    else 
+    {
+        $streakTxt = $consecutive_login_days;
+    }
+
+    //encrypted_streak 
+    $encrypted_streak = openssl_encrypt($consecutive_login_days, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+    //encrypted_streak_hex 
+    $encrypted_streak_hex = bin2hex($encrypted_streak);
+
+    // echo '$badgeVal: ' . $badgeVal . '<br/>';
     //encrypted_badge
     $encrypted_badgeVal = openssl_encrypt($badgeVal, $cipher, $key, OPENSSL_RAW_DATA, $iv);
     //encrypted_badge_hex 
@@ -159,16 +204,38 @@
                     </tr> 
                     <tr>
                         <td><label for="badge" class="txt">Badge</label></td>
-                        <td class="text-center" style="height:100px;">
-                        <div class="shadow p-3 mb-5 bg-body rounded bg-white"><img src="<?php echo $imgVar ?>" class="img-size p-3"/><br/> 
+                        <td class="text-center" style="height:100px;"> 
+                        <div class="shadow p-3 mb-5 bg-body rounded bg-white">
+                            <img src="<?php 
+                                        if($points < 90)
+                                        {
+                                            echo "img/sad.png";
+                                        }
+                                        elseif($points >= 90 && $points <= 100)
+                                        {
+                                            //bronze 
+                                            echo "img/BadgeBronze.png";
+                                        }
+                                        elseif($points >= 100 & $points<= 199)
+                                        {
+                                            //silver 
+                                            echo "img/BadgeSilver.png";
+                                        }
+                                        elseif($points >= 500)
+                                        {
+                                            //gold  
+                                            echo "img/BadgeGold.png";  
+                                        }
+                                        ?>" 
+                                        class="img-size p-3"/><br/> 
                         <label for="badge" class="txt"><?php echo $badgeTxt ?></label></div>
                         </td>
                     </tr> 
                     <tr>
                         <td><label for="streak" class="txt">Streak</label></td>
                         <td class="text-center" style="height:100px;">
-                        <div class="shadow p-3 mb-5 bg-body rounded bg-white"><img src="img/Celebrate.png" class="img-size"/>
-                        <label for="streak" class="txt"><?php echo 'Streak'; ?></label></div>
+                        <div class="shadow p-3 mb-5 bg-body rounded bg-white"><img src="<?php echo $streakImgVar?>" class="img-size"/><br/>
+                        <label for="streak" class="txt"><?php echo $streakTxt ?></label></div>
                         </td>
                     </tr>
                 </table> 
