@@ -118,7 +118,7 @@
         $badgeImgVar = "img/BadgeSilver.png"; 
         $badgeTxt = "Silver";
     }
-    elseif($points >= 500)
+    elseif($points >= 200)
     {
         //gold 
         $badgeVal = 3; 
@@ -226,7 +226,7 @@
                                             //silver 
                                             echo "img/BadgeSilver.png";
                                         }
-                                        elseif($points >= 500)
+                                        elseif($points >= 200)
                                         {
                                             //gold  
                                             echo "img/BadgeGold.png";  
