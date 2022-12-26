@@ -102,6 +102,22 @@
                         //encrypted_streak_hex 
                         $encrypted_streak_hex = bin2hex($encrypted_streak);
                 
+                        //last_login_time  
+                        date_default_timezone_set('Europe/Dublin');
+                        $last_login_time = date('d-F-Y H:i:s');  
+                        //encrypted_last_login_time 
+                        $encrypted_last_login_time = openssl_encrypt($last_login_time, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        //encrypted_last_login_time_hex 
+                        $encrypted_last_login_time_hex = bin2hex($encrypted_last_login_time);   
+ 
+                        //latest_login_time  
+                        date_default_timezone_set('Europe/Dublin');
+                        $latest_login_time = date('d-F-Y H:i:s');   
+                        //encrypted_latest_login_time 
+                        $encrypted_latest_login_time = openssl_encrypt($latest_login_time, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        //encrypted_latest_login_time_hex 
+                        $encrypted_latest_login_time_hex = bin2hex($encrypted_latest_login_time);
+
                         //badge 
                         $badge = 0; 
                         //encrypted_badge
@@ -148,12 +164,12 @@
                         {
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                             
-                            $sql = "INSERT INTO players (playerID, iv, email, password, points, leaderboard_position, streak, badge, ranking_category1, ranking_category2, ranking_category3, ranking_category4, levels) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            $sql = "INSERT INTO players (playerID, iv, email, password, points, leaderboard_position, streak, last_login_time, latest_login_time, badge, ranking_category1, ranking_category2, ranking_category3, ranking_category4, levels) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                             $stmt = $con -> prepare($sql); 
                             $playerID = NULL; 
                     
-                            $stmt -> bind_param('issssssssssss', $playerID, $iv_hex, $email, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex, $encrypted_levels_hex); 
+                            $stmt -> bind_param('issssssssssssss', $playerID, $iv_hex, $email, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_latest_login_time_hex,$encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex, $encrypted_levels_hex); 
                     
                             $stmt -> execute(); 
 

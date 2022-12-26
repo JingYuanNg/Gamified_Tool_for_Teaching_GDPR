@@ -84,6 +84,10 @@
       //last_login_time 
       $last_login_time_bin = hex2bin($row -> last_login_time); 
       $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
+      
+      //latest_login_time 
+      $latest_login_time_bin = hex2bin($row -> latest_login_time); 
+      $latest_login_time = openssl_decrypt($latest_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
 
       //streak 
       $streak_bin = hex2bin($row -> streak);
@@ -97,41 +101,41 @@
     if($points < 90)
     {
         $badgeVal = 0; 
-        // $badgeImgVar = "img/sad.png";
+        $badgeImgVar = "img/sad.png";
         $badgeTxt = "At least 90 points to get a badge";
     }
     elseif($points >= 90 && $points <= 100)
     {
         //bronze 
         $badgeVal = 1; 
-        // $badgeImgVar = "img/BadgeBronze.png"; 
+        $badgeImgVar = "img/BadgeBronze.png"; 
         $badgeTxt = "Bronze";
     }
     elseif($points >= 100 & $points<= 199)
     {
         //silver 
         $badgeVal = 2; 
-        // $badgeImgVar = "img/BadgeSilver.png"; 
+        $badgeImgVar = "img/BadgeSilver.png"; 
         $badgeTxt = "Silver";
     }
     elseif($points >= 500)
     {
         //gold 
         $badgeVal = 3; 
-        // $badgeImgVar = "img/BadgeGold.png"; 
+        $badgeImgVar = "img/BadgeGold.png"; 
         $badgeTxt = "Gold";
     }
 
     
     //track number of consecutive login days
-    $consecutive_login_days = 0; 
+    $consecutive_login_days = $streak; 
 
     //get the last_login_time, convert to unix timestamp 
-    $previous_timestamp = $last_login_time; 
+    $previous_timestamp = $last_login_time;  
     $unix_previous_timestamp = strtotime($previous_timestamp); 
 
-    //get the current date time, convert to unix timestamp 
-    $current_timestamp = date('d-F-Y H:i'); 
+    //get the latest_login_time, convert to unix timestamp 
+    $current_timestamp = $latest_login_time; 
     $unix_current_timestamp = strtotime($current_timestamp); 
 
     //compare current timestamp to the previous login timestamp 
@@ -152,6 +156,7 @@
     }
     else 
     {
+        $streakImgVar = "img/fire.png"; 
         $streakTxt = $consecutive_login_days;
     }
 
@@ -167,9 +172,9 @@
     $encrypted_badgeVal_hex = bin2hex($encrypted_badgeVal);
 
     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    $sql = "UPDATE players SET badge = ? WHERE email = ?";
+    $sql = "UPDATE players SET streak = ?, badge = ? WHERE email = ?";
     $stmt = $con ->prepare($sql);
-    $stmt -> bind_param('ss', $encrypted_badgeVal_hex, $email);
+    $stmt -> bind_param('sss', $encrypted_streak_hex, $encrypted_badgeVal_hex, $email);
 
     if($stmt -> execute())
     {
@@ -227,14 +232,26 @@
                                             echo "img/BadgeGold.png";  
                                         }
                                         ?>" 
-                                        class="img-size p-3"/><br/> 
+                                        class="img-size p-3"
+                                        alt="<?php echo $badgeImgVar ?>"/><br/> 
                         <label for="badge" class="txt"><?php echo $badgeTxt ?></label></div>
                         </td>
                     </tr> 
                     <tr>
                         <td><label for="streak" class="txt">Streak</label></td>
                         <td class="text-center" style="height:100px;">
-                        <div class="shadow p-3 mb-5 bg-body rounded bg-white"><img src="<?php echo $streakImgVar?>" class="img-size"/><br/>
+                        <div class="shadow p-3 mb-5 bg-body rounded bg-white">
+                            <img src="<?php 
+                                        if($consecutive_login_days == 0)
+                                        {
+                                            echo "img/sad.png"; 
+                                        }
+                                        else 
+                                        {
+                                            echo "img/fire.png";
+                                        }
+                                        ?>" class="img-size"
+                                        alt="<?php echo $streakImgVar ?>"/><br/>
                         <label for="streak" class="txt"><?php echo $streakTxt ?></label></div>
                         </td>
                     </tr>

@@ -42,6 +42,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS players (
     leaderboard_position varchar(256) NOT NULL,
     streak varchar(256) NOT NULL,
     last_login_time varchar(256) NOT NULL,
+    latest_login_time varchar(256) NOT NULL, 
     badge varchar(256) NOT NULL,
     ranking_category1 varchar(256) NOT NULL,
     ranking_category2 varchar(256) NOT NULL,

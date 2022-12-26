@@ -65,16 +65,26 @@
                     //get iv 
                     $iv = hex2bin($row -> iv); 
 
-                    //time
+                    //get latest_login_time 
+                    $latest_login_time = hex2bin($row -> latest_login_time); 
+
+                    //assign latest_login_time to last_login_time 
+                    $last_login_time = $latest_login_time; 
+                    $encrypted_last_login_time_hex = bin2hex($last_login_time);
+
+                    //latest_login_time
                     date_default_timezone_set('Europe/Dublin');
-                    $date_now = date('d-F-Y H:i'); 
-                    $encrypted_date_now = openssl_encrypt($date_now, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                    $encrypted_date_now_hex = bin2hex($encrypted_date_now);
+                    $date_now = date('d-F-Y H:i:s'); 
+                    $encrypted_latest_login_time = openssl_encrypt($date_now, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                    $encrypted_latest_login_time_hex = bin2hex($encrypted_latest_login_time);
 
                     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                    $sql = "UPDATE players SET last_login_time = ? WHERE email = ?";
+                    $sql = "UPDATE players SET last_login_time = ? , latest_login_time = ? WHERE email = ?";
                     $stmt = $con ->prepare($sql);
-                    $stmt -> bind_param('ss', $encrypted_date_now_hex, $email);
+                    $stmt -> bind_param('sss', $encrypted_last_login_time_hex, 
+                                               $encrypted_latest_login_time_hex,
+                                               $email);
+
                     if($stmt -> execute())
                     {
                         //echo $date_now . '<br/>' . $encrypted_date_now_hex; 
