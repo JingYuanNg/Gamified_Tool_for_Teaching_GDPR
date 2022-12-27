@@ -62,7 +62,90 @@
     //store in array according to ID 
     //arsort() - sort array descending according to the value in the array 
     //display top 5  
+
+    $cipher = 'AES-128-CBC';
+    $key = 'thebestsecretkey';
+
+    //connect db 
+    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+    //SQL statement players
+    $sql = "SELECT * from players"; 
+
+    //get result from sql 
+    $result = $con -> query($sql); 
+
+    $playerID_i = 0; 
+    //get data from both side 
+    while($row = $result -> fetch_object())
+    {
+        //id 
+        $playerID = $row -> playerID;
+
+        //iv 
+        $iv = hex2bin($row -> iv); 
+
+        //email 
+        $email = $row -> email;
+
+        //points  
+        $points_bin = hex2bin($row -> points); 
+        $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
     
+        //store into array 
+        $rank[$playerID] = $points; 
+    }
+
+    //arsort() - sort array descending according to the value in the array
+    arsort($rank); 
+
+    $leaderboard_position = 1; 
+
+    foreach ($rank as $playerID => $points) 
+    {  
+        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+        $sql = "SELECT * FROM players WHERE playerID = '$playerID'";
+        $result = $con -> query($sql); 
+
+        if($row = $result -> fetch_object())
+        {
+            $email = $row -> email;
+
+            $iv = hex2bin($row -> iv);
+
+            //add email to the array
+            $rank[$playerID] = array( 
+                'points' => $points,
+                'email' => $email, 
+                'leaderboard_position' => $leaderboard_position
+                );
+
+            //encrypt_leaderboard_position
+            $encrypted_leaderboard_position = openssl_encrypt($leaderboard_position, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+            //encrypted_leaderboard_position_hex 
+            $encrypted_leaderboard_position_hex = bin2hex($encrypted_leaderboard_position);
+            
+            $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $sql = "UPDATE players SET leaderboard_position = ? WHERE email = ?";
+            $stmt = $con ->prepare($sql);
+            $stmt -> bind_param('ss', $encrypted_leaderboard_position_hex, $email);
+
+            if($stmt -> execute())
+            {
+                //update successful 
+                /* echo '$email: ' . $email . '<br/>';
+                echo '$leaderboard_position: ' . $leaderboard_position . '<br/>';
+                echo '$encrypted_leaderboard_position_hex: ' . $encrypted_leaderboard_position_hex . '<br/><br/>'; */
+            }
+            else 
+            {
+                echo 'Uh-oh'. '<br/>'; 
+            } 
+            $leaderboard_position++; 
+        } 
+    } 
+    
+    $con -> close();
     ?>
 
     <div class="container mt-5 display-top">
@@ -70,74 +153,42 @@
             <div class="col-md-6">
                 <h1 class="text-center txt">Leaderboard</h1>
                 
-                <table width="70%" height="170px"> 
+                <table class="bg-white rounded shadow table-bordered table-responsive-sm mb-5" >  
+                    <thead>
                     <tr>
-                        <td style="width: 30%;font-size:23px;"></td>
+                        <th class="p-2"><label for="rank" class="txt">Rank</label></th>
+                        <th class="ps-2 w-100"><label for="user" class="txt">User</label></th>
+                        <th class="pt-2 pb-2 ps-2 pe-5"><label for="points" class="txt">Points</label></th>
                     </tr>
-                    <tr>
-                        <td><label for="email" class="txt">Email</label></td>
-                        <td style="height:100px;"><input type="email" class="form-control" id="email" value="<?php echo $email ?>" disabled/></td>
-                    </tr>
-                    <tr>
-                        <td><label for="points" class="txt">Points</label></td>
-                        <td style="height:100px;"><input type="points" class="form-control" id="points" value="<?php echo $points ?>" disabled/></td>
-                    </tr> 
-                    <tr>
-                        <td><label for="badge" class="txt">Badge</label></td>
-                        <td class="text-center" style="height:100px;"> 
-                        <div class="shadow p-3 mb-5 bg-body rounded bg-white">
-                            <img src="<?php 
-                                        if($points < 90)
-                                        {
-                                            echo "img/sad.png";
-                                        }
-                                        elseif($points >= 90 && $points <= 100)
-                                        {
-                                            //bronze 
-                                            echo "img/BadgeBronze.png";
-                                        }
-                                        elseif($points >= 100 & $points<= 199)
-                                        {
-                                            //silver 
-                                            echo "img/BadgeSilver.png";
-                                        }
-                                        elseif($points >= 200)
-                                        {
-                                            //gold  
-                                            echo "img/BadgeGold.png";  
-                                        }
-                                        ?>" 
-                                        class="img-size p-3"
-                                        alt="<?php echo $badgeImgVar ?>"/><br/> 
-                        <label for="badge" class="txt"><?php echo $badgeTxt ?></label></div>
-                        </td>
-                    </tr> 
-                    <tr>
-                        <td><label for="streak" class="txt">Streak</label></td>
-                        <td class="text-center" style="height:100px;">
-                        <div class="shadow p-3 mb-5 bg-body rounded bg-white">
-                            <img src="<?php 
-                                        if($consecutive_login_days == 0)
-                                        {
-                                            echo "img/sad.png"; 
-                                        }
-                                        else 
-                                        {
-                                            echo "img/fire.png";
-                                        }
-                                        ?>" class="img-size"
-                                        alt="<?php echo $streakImgVar ?>"/><br/>
-                        <label for="streak" class="txt"><?php echo $streakTxt ?></label></div>
-                        </td>
-                    </tr>
+                    </thead>
+                    <?php 
+
+                        $counter = 0;
+
+                        foreach($rank as $playerID => $values)
+                        {
+                            if($counter < 5)
+                            {
+                                // echo "PlayerID: $playerID, Email: {$values['email']}, Points: {$values['points']}, Leaderboard: {$values['leaderboard_position']}<br/>";
+                                //display
+                                echo '<tr>';
+                                echo '<td class="p-2"><label for="rank" class="txt">'.$values['leaderboard_position'].'</label></td>';
+                                echo '<td class="ps-2 w-100"><label for="user" class="txt">'.$values['email'].'</label></td>';
+                                echo '<td class="pt-2 pb-2 ps-2 pe-5"><label for="points" class="txt">'.$values['points'].'</label></td>';
+                                echo '</tr>';
+                                $counter++;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    ?> 
+
+                    
                 </table> 
  
-                <div class="mb-3">
-                <br/> 
-                <div class="text-center">
-                    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="logout" name="logout" value="Logout" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/>
-                </div>
-                </div> 
+                 
             </div>
         </div> 
     </div>
