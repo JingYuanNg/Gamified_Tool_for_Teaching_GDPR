@@ -195,7 +195,7 @@
             <div class="col-md-6">
                 <h1 class="text-center txt">Player Profile</h1>
                 
-                <table align="center" width="500px" height="170px"> 
+                <table width="500px" height="170px"> 
                     <tr>
                         <td style="width: 30%;font-size:23px;"></td>
                     </tr>
