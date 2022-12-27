@@ -219,7 +219,7 @@
                 <div class="login-link">
                 <hr>
                 <div class="text-center">
-                    <a class="txt" href="#">Forgot Password?</a>
+                    <a class="txt" href="forgotPassword.php">Forgot Password?</a>
                 </div>
                 <div class="text-center">
                     <a class="txt" href="signUp.php">Create an Account</a>
