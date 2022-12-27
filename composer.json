@@ -1,0 +1,18 @@
+{
+    "name": "jy/inshield",
+    "require": {
+        "phpmailer/phpmailer": "^6.7",
+        "league/oauth2-client": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jy\\Inshield\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "JingYuanNg",
+            "email": "ngjingyuan020115@gmail.com"
+        }
+    ]
+}
