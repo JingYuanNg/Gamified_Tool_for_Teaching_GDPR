@@ -50,6 +50,16 @@
         background-color: white;
         border:none;
     } 
+     
+    div.dataTables_wrapper div.dataTables_filter label 
+    {
+        font-size: 1rem;
+    } 
+
+    div.dataTables_wrapper div.dataTables_info 
+    {
+        font-size: 1rem;
+    } 
 </style>
 
 <body id="page-top">
@@ -69,8 +79,38 @@
         <script src="js/adminScripts.js"></script>
         <script src="js/jquery.dataTables.min.js"></script>
         <script src="js/dataTables.min.js"></script> 
+        <!-- for search box --> 
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
+        <script>
+            // Initialize the DataTables plugin on the table element  
+            // Ensure that the table is initialized after the page finished loading 
+            // coz DataTables plugin will not work on table that is not fully rendered 
+            $(document).ready(function() 
+            {
+              //$ - used by jQuery to find html element 
+              //# - find an element with a specific id 
+              $('#dataTable').DataTable();
+            });
 
+            $(document).ready(function() 
+            {
+                var table = $('#dataTable').DataTable();
+
+                //keyup - to trigger whenever User releases a key from the keyboard
+                $('#search-user').on('keyup', function() 
+                {
+                    //searches the second column (1)
+                    //draw() - redraw table with the search results 
+                    table.columns(1).search(this.value).draw();
+                });
+            });
+        </script>
+
+        <div class="d-flex flex-row-reverse">
+            <a href="adminDashboard.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
+        </div>  
+        <br/>
         <form action="" method="POST">
         <div class="card shadow mb-4 txt">
             <!------Content Title------->
@@ -80,12 +120,11 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table txt" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th class="product-text fs-6">ID</th>
-                                <th class="product-text fs-6">User</th> 
-                                <th class="product-text fs-6">Action</th>
+                        <thead> 
+                            <tr> 
+                                <th class="fs-6">ID</th>
+                                <th class="fs-6">User</th> 
+                                <th class="fs-6">Action</th>
                             </tr>
                         </thead>
 
@@ -104,15 +143,14 @@
                                     {
                                         printf('
                                             <tr id="%s">
-                                                <td><input type="checkbox" name="checked[]" value="%s" /></td> 
                                                 <td class="fs-6">%s</td> 
                                                 <td class="fs-6">%s</td> 
                                                 <td>
-                                                    <a href="adminPlayersDetails.php?id=%d" class="edit-delete-btn fs-6"><i class="fas fa-edit"></i> Edit</a>&nbsp; &nbsp; &nbsp; &nbsp
-                                                    <a href="javascript:delete_id(%d)" class="edit-delete-btn remove fs-6"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                                    <a href="adminEditPlayer.php?id=%d" class="edit-delete-btn fs-6"><i class="fas fa-edit"></i> Edit</a>&nbsp; &nbsp; &nbsp; &nbsp
+                                                    <a href="adminDeletePlayer.php?id=%d" class="edit-delete-btn remove fs-6"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
                                                 </td>
                                             </tr>
-                                                 ',$row->playerID, $row->playerID, $row->playerID, $row-> email, $row->playerID, $row->playerID);
+                                                 ', $row->playerID, $row->playerID, $row-> email, $row->playerID, $row->playerID);
                                     }
                                     
                                 $result->free();
@@ -121,140 +159,23 @@
                             ?>
                         </tbody>
                     </table>
-
-                    <div class="d-flex flex-row-reverse">
-                        <input class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button" value="Delete Checked" type="submit" id="delete" name="delete" /> 
-                    </div>
+ 
                 </div>
             </div>
         </div>
-
-        
-
     </form>
-        <!-- Leaderboard -->
-        <?php 
-    
-            //select * from players - ID, email, points 
-            //decrypt points 
-            //store in array according to ID 
-            //arsort() - sort array descending according to the value in the array 
-            //display top 5  
-/* 
-            $cipher = 'AES-128-CBC';
-            $key = 'thebestsecretkey';
-
-            //connect db 
-            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-
-            //SQL statement players
-            $sql = "SELECT * from players"; 
-
-            //get result from sql 
-            $result = $con -> query($sql); 
-
-            $playerID_i = 0; 
-            //get data from both side 
-            while($row = $result -> fetch_object())
-            {
-                //id 
-                $playerID = $row -> playerID;
-
-                //iv 
-                $iv = hex2bin($row -> iv); 
-
-                //email 
-                $email = $row -> email;
-
-                //points  
-                $points_bin = hex2bin($row -> points); 
-                $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-
-                //store into array 
-                $rank[$playerID] = $points; 
-            }
-
-           //arsort() - sort array descending according to the value in the array
-           arsort($rank); 
-
-           $leaderboard_position = 1; 
-
-          foreach ($rank as $playerID => $points) 
-          {  
-              $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-              $sql = "SELECT * FROM players WHERE playerID = '$playerID'";
-              $result = $con -> query($sql); 
-
-              if($row = $result -> fetch_object())
-              {
-                  $email = $row -> email;
-
-                  $iv = hex2bin($row -> iv);
-
-                   //add email to the array
-                   $rank[$playerID] = array( 
-                       'points' => $points,
-                       'email' => $email, 
-                       'leaderboard_position' => $leaderboard_position
-                      );
-
-                  //encrypt_leaderboard_position
-                  $encrypted_leaderboard_position = openssl_encrypt($leaderboard_position, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                  //encrypted_leaderboard_position_hex 
-                  $encrypted_leaderboard_position_hex = bin2hex($encrypted_leaderboard_position);
-
-                  $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                  $sql = "UPDATE players SET leaderboard_position = ? WHERE email = ?";
-                  $stmt = $con ->prepare($sql);
-                  $stmt -> bind_param('ss', $encrypted_leaderboard_position_hex, $email);
-
-                   if($stmt -> execute())
-                   {
-                       //update successful 
-                      /* echo '$email: ' . $email . '<br/>';
-                      //echo '$leaderboard_position: ' . $leaderboard_position . '<br/>';
-                      //echo '$encrypted_leaderboard_position_hex: ' . $encrypted_leaderboard_position_hex . '<br/><br/>';  
-                  }
-                 else 
-                  {
-                      echo 'Uh-oh'. '<br/>'; 
-                 } 
-                  $leaderboard_position++; 
-              } 
-          } 
-
-          $con -> close(); */
-        ?>
-
-          <!-- <br/>
-
-           <table class="bg-white rounded shadow table-bordered table-responsive-sm table">
-            <thead>
-                 <tr>
-                     <th class="pt-0 pb-0 ps-2 pe-2"><label for="rank" class="txt fs-6">Rank</label></th>
-                     <th class="pt-0 pb-0 ps-2 pe-2 w-100"><label for="user" class="txt fs-6">User</label></th>
-                     <th class="pt-0 pb-0 ps-2 pe-5"><label for="points" class="txt fs-6">Points</label></th>
-                 </tr>
-            </thead>
-            <tbody>
-              <?php  
-              /* 
-                     foreach($rank as $playerID => $values)
-                     { 
-                             // echo "PlayerID: $playerID, Email: {$values['email']}, Points: {$values['points']}, Leaderboard: {$values['leaderboard_position']}<br/>";
-                             //display
-                             echo '<tr>';
-                            echo '<td class="pt-0 pb-0 ps-2 pe-2"><label for="rank" class="txt fs-6">'.$values['leaderboard_position'].'</label></td>';
-                            echo '<td class="pt-0 pb-0 ps-2 pe-2 w-100"><label for="user" class="txt fs-6">'.$values['email'].'</label></td>';
-                             echo '<td class="pt-0 pb-0 ps-2 pe-5"><label for="points" class="txt fs-6">'.$values['points'].'</label></td>';
-                             echo '</tr>'; 
-                    } */
-               ?> 
-               </tbody>
-                
-          </table>    -->
+        
     </div>
     </div> 
+    <script type="text/javascript">
+        $('#dataTable').DataTable(
+        {
+            ordering: false,
+            scrollY: 400,
+            paging:false
+        });
+    </script>
+
 
  <!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
