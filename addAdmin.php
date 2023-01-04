@@ -115,17 +115,18 @@
                             $stmt -> close(); 
                             $con -> close();
                         }
+                        else
+                        {
+                            //display error msg 
+                            echo "<ul class=‘error’>";
+                            foreach ($error as $value)
+                            {
+                                echo "<li>$value</li>";
+                                echo "</ul>";
+                            }
+                        }
                     }
-                    else
-                    {
-                       //display error msg 
-                       echo "<ul class=‘error’>";
-                       foreach ($error as $value)
-                       {
-                       echo "<li>$value</li>";
-                       echo "</ul>";
-                       }
-                    }
+                    
                 ?> 
              <form class="user" action="" method="post" enctype='multipart/form-data'>
                 <div class="mb-3 form-floating">
