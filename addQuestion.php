@@ -73,27 +73,39 @@
                 <?php 
                     if(isset($_POST["addQuestion"]))
                     {
-                        //trim data input
-                        $question = trim($_POST['question']); 
-                        $category = trim($_POST['category']); 
-                        $optionA = trim($_POST['optionA']);
-                        $optionB = trim($_POST['optionB']);
-                        $optionC = trim($_POST['optionC']);
-                        $optionD = trim($_POST['optionD']);
-                        $answer = trim($_POST['answer']); 
 
                         //validation 
                         if(empty($_POST['category']))
                         {
-                            $error['category'] = "Please select a <strong>category</strong> !";
+                            $error['category'] = "Please select a <strong>category</strong> !"; 
                         }  
                         if(empty($_POST['answer']))
                         {
-                            $error['answer'] = "Please select an <strong>answer</strong> !";
+                            $error['answer'] = "Please select an <strong>answer</strong> !"; 
                         }
 
-                        if(empty($error))
+                        if(!empty($error))
                         {
+                            //display error msg 
+                           echo "<ul class=‘error’>";
+                           foreach ($error as $value)
+                           {
+                           echo "<li style='color: black;'>$value</li>";
+                           echo "</ul>";
+                           }
+                        }
+                        elseif(empty($error))
+                        {
+                            
+                            //trim data input
+                            $question = trim($_POST['question']); 
+                            $category = trim($_POST['category']); 
+                            $optionA = trim($_POST['optionA']);
+                            $optionB = trim($_POST['optionB']);
+                            $optionC = trim($_POST['optionC']);
+                            $optionD = trim($_POST['optionD']);
+                            $answer = trim($_POST['answer']); 
+
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                             $sql = "INSERT INTO questions (questionID, question, category, optionA, optionB, optionC, optionD, answer) values (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -114,16 +126,7 @@
                             $stmt -> close(); 
                             $con -> close();
                         }
-                        else
-                        {
-                           //display error msg 
-                           echo "<ul class=‘error’>";
-                           foreach ($error as $value)
-                           {
-                           echo "<li style='color: black;'>$value</li>";
-                           echo "</ul>";
-                           }
-                        }
+                        
                     }
                 ?> 
             
