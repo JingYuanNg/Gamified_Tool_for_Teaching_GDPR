@@ -124,7 +124,7 @@
                     //If both data are correct then exist = 1 
                     $exist = 1; 
                 
-                    $location = "#"; 
+                    $location = "adminDashboard.php"; 
                     echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
                 
                     //store the email into session 
