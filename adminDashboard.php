@@ -78,7 +78,7 @@
                     <!-- Total players --> 
                     <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-warning shadow h-100 py-2">
-                        <a href="#" class="players-link">
+                        <a href="adminPlayers.php" class="players-link">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -110,7 +110,7 @@
                     <!-- Total questions --> 
                     <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-warning shadow h-100 py-2">
-                        <a href="#" class="questions-link">
+                        <a href="adminQuestions.php" class="questions-link">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">

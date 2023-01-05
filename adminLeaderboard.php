@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="img/icon.png" type="image/png" sizes="16x16">
-    <title>INSHIELD | Admin Leaderboard</title>
+    <title>INSHIELD | Admin - Leaderboard</title>
     <link href="css/dataTables.min.css" rel="stylesheet">
     <link href="css/adminStyle.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">

@@ -175,7 +175,7 @@
                     </select>
                 </div>
                 <div class="mb-3"> 
-                    <a href="#" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
+                    <a href="adminQuestions.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
                     <button type="submit" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg float-end" aria-pressed="true" id="addQuestion" name="addQuestion">Add</button>
                 </div>
              </form> 

@@ -84,7 +84,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion navbar-admin sticky-top" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center nav-link" href="#">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center nav-link" href="adminDashboard.php">
     <div class="sidebar-brand mx-0"><img src="img/icon.png" class="img-att"></div>
     <div class="sidebar-brand-text mx-3 txt">INSHIELD Admin</div>
     </a>
@@ -101,7 +101,7 @@
 
     <!--Navbar Item - questions -->
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="adminQuestions.php">
         <span class="navlink txt-sidebar">Questions</span>
         </a>
     </li>
