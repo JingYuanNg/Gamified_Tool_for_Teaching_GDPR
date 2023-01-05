@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="img/icon.png" type="image/png" sizes="16x16">
-    <title>INSHIELD | Admin - Players</title>
+    <title>INSHIELD | Admin - Questions</title>
     <link href="css/dataTables.min.css" rel="stylesheet">
     <link href="css/adminStyle.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">
@@ -71,7 +71,7 @@
         ?>
         
         <div class="container-fluid ps-5">  
-        <h1 class="text-left txt fw-bold">Players</h1> 
+        <h1 class="text-left txt fw-bold">Questions</h1> 
                 
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
@@ -109,22 +109,24 @@
 
         <div class="d-flex flex-row-reverse">
             <a href="adminDashboard.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
+            <a href="addQuestion.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" style="margin-right: 5px;" role="button">Add Question</a>
         </div>  
         <br/>
         <form action="" method="POST">
         <div class="card shadow mb-4 txt">
             <!------Content Title------->
             <div class="card-header py-3">
-                <h6 class="h6 m-0 font-weight-bold">All Players</h6>
+                <h6 class="h6 m-0 font-weight-bold">All Questions</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table txt" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table txt container-fluid" id="dataTable" width="100%" cellspacing="0">
                         <thead> 
                             <tr> 
                                 <th class="fs-6">ID</th>
-                                <th class="fs-6">User</th> 
-                                <th class="fs-6">Details</th>
+                                <th class="fs-6">Question</th> 
+                                <th class="fs-6">Update</th>
+                                <th class="fs-6">Delete</th>
                             </tr>
                         </thead>
 
@@ -133,7 +135,7 @@
                                 //Establish connection
                                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);   
                                 //SQL statement
-                                $sql = "SELECT * FROM players";
+                                $sql = "SELECT * FROM questions";
 
                                     //Getting connection object to process the sql command
                                 if($result = $con ->query($sql))
@@ -146,10 +148,13 @@
                                                 <td class="fs-6">%s</td> 
                                                 <td class="fs-6">%s</td> 
                                                 <td>
-                                                    <a href="adminPlayerDetails.php?id=%d" class="edit-delete-btn fs-6">Details</a> 
+                                                    <a href="adminUpdateQuestion.php?id=%d" class="edit-delete-btn fs-6">Update</a> 
+                                                </td>
+                                                <td>
+                                                    <a href="adminDeleteQuestion.php?id=%d" class="edit-delete-btn fs-6" onclick="return confirm(\'Are you sure to delete question with ID %d?\');">Delete</a>
                                                 </td>
                                             </tr>
-                                                 ', $row->playerID, $row->playerID, $row-> email, $row->playerID);
+                                                 ', $row->questionID, $row->questionID, $row-> question, $row->questionID, $row->questionID, $row->questionID, $row->questionID);
                                     }
                                     
                                 $result->free();

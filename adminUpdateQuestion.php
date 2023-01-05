@@ -119,7 +119,7 @@
                 }
             } 
             elseif($_SERVER['REQUEST_METHOD'] == 'POST')
-            {
+            { 
                 //POST method for updating question form
                 //validation 
                 if(empty($_POST['category']))
@@ -144,6 +144,7 @@
                 elseif(empty($error))
                 {
                     //trim data input
+                    $questionID = trim($_POST['questionID']);
                     $question = trim($_POST['question']); 
                     $category = trim($_POST['category']); 
                     $optionA = trim($_POST['optionA']);
@@ -154,13 +155,6 @@
 
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
-                    /* $sql = "UPDATE questions SET question = ?, category = ?, optionA = ?, optionB = ?, optionC = ?, optionD = ?, answer = ? WHERE questionID = ?";
-
-                    $stmt = $con -> prepare($sql); 
-
-                    $stmt -> bind_param('sssssssi', $question, $category, $optionA, $optionB, $optionC, $optionD, $answer, $questionID); 
-                    */
-
                     //SQL statement
                     $sql = "UPDATE questions SET question = '$question', category = '$category', optionA = '$optionA', optionB = '$optionB', optionC = '$optionC', optionD = '$optionD', answer = '$answer' WHERE questionID = '$questionID'"; 
                     
@@ -169,14 +163,12 @@
                     { 
                         $location = "adminQuestions.php";
                         echo "<script type='text/JavaScript'>alert('Question updated successfully');window.location='$location'</script>"; 
-                    
                     }
                     else 
                     {
                         echo 'uh-oh' . $stmt->error;
                     }
                     
-                    $stmt -> close(); 
                     $con -> close();
                 }
             }
@@ -196,7 +188,8 @@
                     <!-- questionID --> 
                     <div class="mb-3">
                     <label for="questionID" class="txt fs-5 fs-5">Question ID</label>
-                    <input type="text" class="form-control fs-5" id="questionID" value="<?php echo $questionID ?>" disabled/>
+                    <input type="text" class="form-control fs-5" id="questionID" name="questionID" value="<?php echo $questionID ?>" disabled/>
+                    <input type="text" class="form-control fs-5" id="questionID" name="questionID" value="<?php echo $questionID ?>" hidden/>
                     </div>
 
                     <!-- question --> 
