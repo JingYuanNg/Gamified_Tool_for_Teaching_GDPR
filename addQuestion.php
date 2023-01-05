@@ -65,11 +65,13 @@
             include './headerFooterAdmin.php';
             require_once './validation.php'; 
         ?>
-        <div class="container mt-5 display-top">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1 class="text-left txt">Add Question</h1> 
+        <div class="container-fluid"> 
+            <h1 class="text-left txt">Add Question</h1> 
                 
+            <div class="d-flex flex-row-reverse">
+                <a href="adminQuestions.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
+            </div>  
+
                 <?php 
                     if(isset($_POST["addQuestion"]))
                     {
@@ -129,58 +131,57 @@
                         
                     }
                 ?> 
-            
-             <form class="user" action="" method="post" enctype='multipart/form-data'>
-                <div class="mb-3 form-floating">
-                    <input type="text" class="form-control txt txt-resize" id="question" name="question" placeholder="Question" autofocus="autofocus" required="required">
-                    <label for="question" class="txt txt-resize">Question</label>
-                </div>
-                <div class="mb-3 form-floating">
-                    <select class="dropdown-toggle form-control txt txt-resize text-start btn-txt" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="category" name="category">
-                    <option value="none" selected disabled hidden>Choose Category</option>
-                    <?php 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                        $sql = "SELECT * FROM question_category"; 
-                        $result = $con -> query($sql);
-                        foreach($result as $row)
-                        {
-                            echo "<option value=$row[question_categoryID]>$row[question_categoryName]</option>";
-                        }
-                    ?>
-                    </select>
-                </div>
-                <div class="mb-3 form-floating">
-                    <input type="text" class="form-control txt  txt-resize" id="optionA" name="optionA" placeholder="Option 1" required="required">
-                    <label for="optionA" class="txt txt-resize">Option A</label>
-                </div>
-                <div class="mb-3 form-floating">
-                    <input type="text" class="form-control txt  txt-resize" id="optionB" name="optionB" placeholder="Option 2" required="required">
-                    <label for="optionB" class="txt txt-resize">Option B</label>
-                </div>
-                <div class="mb-3 form-floating">
-                    <input type="text" class="form-control txt  txt-resize" id="optionC" name="optionC" placeholder="Option 3" required="required">
-                    <label for="optionC" class="txt txt-resize">Option C</label>
-                </div>
-                <div class="mb-3 form-floating">
-                    <input type="text" class="form-control txt  txt-resize" id="optionD" name="optionD" placeholder="Option 4" required="required">
-                    <label for="optionD" class="txt txt-resize">Option D</label>
-                </div>
-                <div class="mb-3 form-floating">
-                    <select class="dropdown-toggle form-control txt txt-resize text-start btn-txt" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="answer" name="answer">
-                    <option value="none" selected disabled hidden>Answer</option>
-                    <option value="a">Option A</option>
-                    <option value="b">Option B</option>
-                    <option value="c">Option C</option>
-                    <option value="d">Option D</option>
-                    </select>
-                </div>
-                <div class="mb-3"> 
-                    <a href="adminQuestions.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
-                    <button type="submit" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg float-end" aria-pressed="true" id="addQuestion" name="addQuestion">Add</button>
-                </div>
-             </form> 
-            </div> 
-        </div> 
+                <br/>
+                <div class="shadow ps-3 pe-3 pt-3 pb-5 bg-body rounded bg-white txt">
+                 <form class="user" action="" method="post" enctype='multipart/form-data'>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control txt txt-resize" id="question" name="question" placeholder="Question" autofocus="autofocus" required="required">
+                        <label for="question" class="txt txt-resize">Question</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select class="dropdown-toggle form-control txt txt-resize text-start btn-txt" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="category" name="category">
+                        <option value="none" selected disabled hidden>Choose Category</option>
+                        <?php 
+                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                            $sql = "SELECT * FROM question_category"; 
+                            $result = $con -> query($sql);
+                            foreach($result as $row)
+                            {
+                                echo "<option value=$row[question_categoryID]>$row[question_categoryName]</option>";
+                            }
+                        ?>
+                        </select>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control txt  txt-resize" id="optionA" name="optionA" placeholder="Option 1" required="required">
+                        <label for="optionA" class="txt txt-resize">Option A</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control txt  txt-resize" id="optionB" name="optionB" placeholder="Option 2" required="required">
+                        <label for="optionB" class="txt txt-resize">Option B</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control txt  txt-resize" id="optionC" name="optionC" placeholder="Option 3" required="required">
+                        <label for="optionC" class="txt txt-resize">Option C</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control txt  txt-resize" id="optionD" name="optionD" placeholder="Option 4" required="required">
+                        <label for="optionD" class="txt txt-resize">Option D</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select class="dropdown-toggle form-control txt txt-resize text-start btn-txt" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="answer" name="answer">
+                        <option value="none" selected disabled hidden>Answer</option>
+                        <option value="a">Option A</option>
+                        <option value="b">Option B</option>
+                        <option value="c">Option C</option>
+                        <option value="d">Option D</option>
+                        </select>
+                        <br/>
+                        <button type="submit" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg float-end" aria-pressed="true" id="addQuestion" name="addQuestion">Add</button>
+                    </div>
+                </form>
+                 </div>
+                 <br/>  
         </div>
     </div> 
 
