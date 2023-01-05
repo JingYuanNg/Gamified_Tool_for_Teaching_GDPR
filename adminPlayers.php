@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="img/icon.png" type="image/png" sizes="16x16">
-    <title>INSHIELD | Admin Leaderboard</title>
+    <title>INSHIELD | Admin - Players</title>
     <link href="css/dataTables.min.css" rel="stylesheet">
     <link href="css/adminStyle.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">
@@ -124,7 +124,7 @@
                             <tr> 
                                 <th class="fs-6">ID</th>
                                 <th class="fs-6">User</th> 
-                                <th class="fs-6">Action</th>
+                                <th class="fs-6">Details</th>
                             </tr>
                         </thead>
 
@@ -146,8 +146,7 @@
                                                 <td class="fs-6">%s</td> 
                                                 <td class="fs-6">%s</td> 
                                                 <td>
-                                                    <a href="adminEditPlayer.php?id=%d" class="edit-delete-btn fs-6"><i class="fas fa-edit"></i> Edit</a>&nbsp; &nbsp; &nbsp; &nbsp
-                                                    <a href="adminDeletePlayer.php?id=%d" class="edit-delete-btn remove fs-6"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                                    <a href="adminPlayerDetails.php?id=%d" class="edit-delete-btn fs-6"><i class="fas fa-edit"></i> Details </a> 
                                                 </td>
                                             </tr>
                                                  ', $row->playerID, $row->playerID, $row-> email, $row->playerID, $row->playerID);

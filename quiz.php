@@ -477,7 +477,7 @@
                             ' . $optionD[$i] . '
                             </label>
 
-                            </div><br>';
+                            </div>';
 
                       /* 
                       echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="a">' . $optionA[$i] . '</div><br>';
@@ -486,7 +486,7 @@
                       echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="d">' . $optionD[$i] . '</div><br>'; 
                       */
 
-                      echo '<div><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></div><br>';
+                      echo '<div><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></div>';
                       
                     //echo 'Answer(system): ' . $answers[$i] . '<br/>'; 
                       /*echo 'questionID: ' . $quesID[$i] . '<br />';  */

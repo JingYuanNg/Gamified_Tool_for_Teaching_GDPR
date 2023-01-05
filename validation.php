@@ -128,8 +128,7 @@ function validateConfirmPassword($password, $confirmPassword)
     //check if both are the same 
     if($password != $confirmPassword)
     {
-        return "Both password are <strong> not same</strong> !";
+        return "Both password are <strong> not same</strong>";
     }
-}
-
+} 
 ?>

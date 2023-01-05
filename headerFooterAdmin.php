@@ -95,7 +95,7 @@
 
     <!--Navbar Item - dashboard-->
     <li class="nav-item dashboard-active">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="adminDashboard.php">
         <span class="navlink txt-sidebar">Dashboard</span></a>
     </li>
 
@@ -108,14 +108,14 @@
 
     <!-- Nav Item - leaderboard -->
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="adminLeaderboard.php">
             <span class="navlink txt-sidebar">Leaderboard</span>
         </a>
     </li>
 
     <!-- Nav Item - players -->
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="adminPlayers.php">
             <span class="navlink txt-sidebar">Players</span>
         </a>
     </li>
@@ -125,7 +125,7 @@
         <?php  
             if(isset($_SESSION["aName"]))
             {
-                echo '<a href="#" class="nav-link "><span class="navlink txt-sidebar">' . $_SESSION["aName"]. '</span></a>';
+                echo '<a href="logoutAdmin.php" class="nav-link" onclick="return confirm(\'Are you sure you want to log out?\');"><span class="navlink txt-sidebar">' . $_SESSION["aName"]. '</span></a>';
             }
             else
             {

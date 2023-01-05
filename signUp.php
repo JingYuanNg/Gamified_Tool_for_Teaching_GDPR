@@ -67,6 +67,7 @@
                         $error['password'] = validatePassword($password);
                         $error['confirmPassword'] = validateConfirmPassword($password, $confirmPassword);
                         
+                        //Remove null value in $error when there is no error
                         $error = array_filter($error); 
 
                         $cipher = 'AES-128-CBC';
