@@ -81,6 +81,19 @@ if (!$conn->query($sql) === TRUE) {
 die('Error creating table: ' . $conn->error);
 }
 
+/* password_reset */ 
+$sql = 'CREATE TABLE IF NOT EXISTS password_reset (
+  eventID int NOT NULL AUTO_INCREMENT,
+  iv varchar(256) NOT NULL,
+  email varchar(256) NOT NULL,
+  token varchar(256) NOT NULL,
+  timestamp varchar(256) NOT NULL,
+  PRIMARY KEY (eventID)
+);';
+if (!$conn->query($sql) === TRUE) {
+die('Error creating table: ' . $conn->error);
+}
+
 //email
 function validateEmail($email)
 {
