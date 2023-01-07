@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-
-<?php
-    //session_start(); 
-?> 
+ 
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,6 +60,11 @@
         <?php 
             include './headerFooterAdmin.php';
             require_once './validation.php'; 
+            if ($_SESSION["aName"] !== "developerInshield@gmail.com")
+            {
+                $location = "login.php";
+                echo "<script type='text/JavaScript'>alert('Only developer of Inshield is allowed to add admin');window.location='$location'</script>"; 
+            }
         ?>
         <div class="container mt-5 display-top">
         <div class="row justify-content-center">
