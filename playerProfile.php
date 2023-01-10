@@ -55,7 +55,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient.php'; 
+    include './headerFooterClient1.php'; 
     //badge 
     //streak 
 
@@ -84,10 +84,26 @@
       //last_login_time 
       $last_login_time_bin = hex2bin($row -> last_login_time); 
       $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-      
+      echo '$last_login_time:' . $last_login_time . "<br/>";
+      $date_last_login_time = new DateTime($last_login_time); 
+      $day_last_login_time = $date_last_login_time -> format('d');
+      $month_last_login_time = $date_last_login_time -> format('m'); 
+      $year_last_login_time = $date_last_login_time -> format('Y');
+      echo '$day_last_login_time: ' . $day_last_login_time . "<br/>"; 
+      echo '$month_last_login_time: ' . $month_last_login_time . "<br/>";
+      echo '$year_last_login_time: ' . $year_last_login_time . "<br/><br/>"; 
+
       //latest_login_time 
       $latest_login_time_bin = hex2bin($row -> latest_login_time); 
       $latest_login_time = openssl_decrypt($latest_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
+      echo '$latest_login_time:' . $latest_login_time . "<br/>";
+      $date_latest_login_time = new DateTime($latest_login_time); 
+      $day_latest_login_time = $date_latest_login_time -> format('d');
+      $month_latest_login_time = $date_latest_login_time -> format('m'); 
+      $year_latest_login_time = $date_latest_login_time -> format('Y');
+      echo '$day_last_login_time: ' . $day_latest_login_time . "<br/>"; 
+      echo '$month_last_login_time: ' . $month_latest_login_time . "<br/>";
+      echo '$year_last_login_time: ' . $year_latest_login_time . "<br/><br/>"; 
 
       //streak 
       $streak_bin = hex2bin($row -> streak);
@@ -130,19 +146,25 @@
     //track number of consecutive login days
     $consecutive_login_days = $streak; 
 
-    //get the last_login_time, convert to unix timestamp 
-    $previous_timestamp = $last_login_time;  
-    $unix_previous_timestamp = strtotime($previous_timestamp); 
-
-    //get the latest_login_time, convert to unix timestamp 
-    $current_timestamp = $latest_login_time; 
-    $unix_current_timestamp = strtotime($current_timestamp); 
-
-    //compare current timestamp to the previous login timestamp 
-     //if the difference is less than or equal to 24 hours 
-    if(isset($unix_previous_timestamp) && ($unix_current_timestamp - $unix_previous_timestamp) <= 86400)
+    //if same year is same 
+    if($year_latest_login_time == $year_last_login_time)
     {
-        $consecutive_login_days++; 
+        //make sure month is same 
+        if($month_latest_login_time == $month_last_login_time)
+        {
+            if($day_latest_login_time - $day_last_login_time === 1)
+            {
+                $consecutive_login_days++; 
+            }
+            else 
+            {
+                $consecutive_login_days = 0; 
+            }
+        }
+        else 
+        {
+            $consecutive_login_days = 0; 
+        }
     }
     else 
     {
