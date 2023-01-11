@@ -55,7 +55,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient1.php'; 
+    include './headerFooterClient.php'; 
     //badge 
     //streak 
 
@@ -84,26 +84,26 @@
       //last_login_time 
       $last_login_time_bin = hex2bin($row -> last_login_time); 
       $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-      echo '$last_login_time:' . $last_login_time . "<br/>";
+      //echo '$last_login_time:' . $last_login_time . "<br/>";
       $date_last_login_time = new DateTime($last_login_time); 
       $day_last_login_time = $date_last_login_time -> format('d');
       $month_last_login_time = $date_last_login_time -> format('m'); 
       $year_last_login_time = $date_last_login_time -> format('Y');
-      echo '$day_last_login_time: ' . $day_last_login_time . "<br/>"; 
+      /* echo '$day_last_login_time: ' . $day_last_login_time . "<br/>"; 
       echo '$month_last_login_time: ' . $month_last_login_time . "<br/>";
-      echo '$year_last_login_time: ' . $year_last_login_time . "<br/><br/>"; 
+      echo '$year_last_login_time: ' . $year_last_login_time . "<br/><br/>";  */
 
       //latest_login_time 
       $latest_login_time_bin = hex2bin($row -> latest_login_time); 
       $latest_login_time = openssl_decrypt($latest_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-      echo '$latest_login_time:' . $latest_login_time . "<br/>";
+      //echo '$latest_login_time:' . $latest_login_time . "<br/>";
       $date_latest_login_time = new DateTime($latest_login_time); 
       $day_latest_login_time = $date_latest_login_time -> format('d');
       $month_latest_login_time = $date_latest_login_time -> format('m'); 
       $year_latest_login_time = $date_latest_login_time -> format('Y');
-      echo '$day_latest_login_time: ' . $day_latest_login_time . "<br/>"; 
+      /* echo '$day_latest_login_time: ' . $day_latest_login_time . "<br/>"; 
       echo '$month_latest_login_time: ' . $month_latest_login_time . "<br/>";
-      echo '$year_latest_login_time: ' . $year_latest_login_time . "<br/><br/>"; 
+      echo '$year_latest_login_time: ' . $year_latest_login_time . "<br/><br/>";  */
 
       //streak 
       $streak_bin = hex2bin($row -> streak);
@@ -140,38 +140,9 @@
         $badgeVal = 3; 
         $badgeImgVar = "img/BadgeGold.png"; 
         $badgeTxt = "Gold";
-    }
+    } 
 
-    
-    //track number of consecutive login days
-    $consecutive_login_days = $streak; 
-
-    //if same year is same 
-    if($year_latest_login_time == $year_last_login_time)
-    {
-        //make sure month is same 
-        if($month_latest_login_time == $month_last_login_time)
-        {
-            if($day_latest_login_time - $day_last_login_time === 1)
-            {
-                $consecutive_login_days++; 
-            }
-            else 
-            {
-                $consecutive_login_days = 0; 
-            }
-        }
-        else 
-        {
-            $consecutive_login_days = 0; 
-        }
-    }
-    else 
-    {
-        $consecutive_login_days = 0; 
-    }
-
-    if($consecutive_login_days == 0)
+    if($streak == 0)
     {
         $streakImgVar = "img/sad.png";
         $streakTxt = "Login everyday to keep the streak";
@@ -179,24 +150,19 @@
     else 
     {
         $streakImgVar = "img/fire.png"; 
-        $streakTxt = $consecutive_login_days;
+        $streakTxt = $streak;
     }
-
-    //encrypted_streak 
-    $encrypted_streak = openssl_encrypt($consecutive_login_days, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-    //encrypted_streak_hex 
-    $encrypted_streak_hex = bin2hex($encrypted_streak);
-
+ 
     // echo '$badgeVal: ' . $badgeVal . '<br/>';
     //encrypted_badge
     $encrypted_badgeVal = openssl_encrypt($badgeVal, $cipher, $key, OPENSSL_RAW_DATA, $iv);
     //encrypted_badge_hex 
     $encrypted_badgeVal_hex = bin2hex($encrypted_badgeVal);
-
+ 
     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    $sql = "UPDATE players SET streak = ?, badge = ? WHERE email = ?";
+    $sql = "UPDATE players SET badge = ? WHERE email = ?";
     $stmt = $con ->prepare($sql);
-    $stmt -> bind_param('sss', $encrypted_streak_hex, $encrypted_badgeVal_hex, $email);
+    $stmt -> bind_param('ss', $encrypted_badgeVal_hex, $email);
 
     if($stmt -> execute())
     {
@@ -264,7 +230,7 @@
                         <td class="text-center" style="height:100px;">
                         <div class="shadow p-3 mb-5 bg-body rounded bg-white">
                             <img src="<?php 
-                                        if($consecutive_login_days == 0)
+                                        if($streak == 0)
                                         {
                                             echo "img/sad.png"; 
                                         }
