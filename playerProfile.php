@@ -101,9 +101,9 @@
       $day_latest_login_time = $date_latest_login_time -> format('d');
       $month_latest_login_time = $date_latest_login_time -> format('m'); 
       $year_latest_login_time = $date_latest_login_time -> format('Y');
-      echo '$day_last_login_time: ' . $day_latest_login_time . "<br/>"; 
-      echo '$month_last_login_time: ' . $month_latest_login_time . "<br/>";
-      echo '$year_last_login_time: ' . $year_latest_login_time . "<br/><br/>"; 
+      echo '$day_latest_login_time: ' . $day_latest_login_time . "<br/>"; 
+      echo '$month_latest_login_time: ' . $month_latest_login_time . "<br/>";
+      echo '$year_latest_login_time: ' . $year_latest_login_time . "<br/><br/>"; 
 
       //streak 
       $streak_bin = hex2bin($row -> streak);
