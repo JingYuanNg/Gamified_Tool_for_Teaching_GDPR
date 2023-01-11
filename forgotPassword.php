@@ -7,6 +7,9 @@
     include_once 'vendor/autoload.php';
     use PHPMailer\PHPMailer\PHPMailer; 
     use PHPMailer\PHPMailer\Exception;
+    require_once 'vendor/phpmailer/phpmailer/src/Exception.php';
+    require_once 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+    require_once 'vendor/phpmailer/phpmailer/src/SMTP.php'; 
   
 ?> 
 <html>
@@ -83,10 +86,12 @@
                        $mail = new PHPMailer();
 
                        // specify the SMTP server and port
-                       //$mail->IsSMTP();
+                       $mail->IsSMTP();
+                       $mail->Mailer = "smtp";
+                       $mail->SMTPDebug  = 1; 
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
-                       $mail->Username = 'developerInshield@gmail.com';
+                       $mail->Username = 'developerinshield@gmail.com';
                        $mail->Password = ''; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
