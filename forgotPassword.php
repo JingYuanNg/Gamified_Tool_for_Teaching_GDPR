@@ -10,7 +10,7 @@
     require_once 'vendor/phpmailer/phpmailer/src/Exception.php';
     require_once 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
     require_once 'vendor/phpmailer/phpmailer/src/SMTP.php'; 
-  
+    require_once 'vendor/phpmailer/phpmailer/src/POP3.php';
 ?> 
 <html>
 <meta charset="utf-8">
@@ -99,24 +99,25 @@
                        // set the email address and name of the sender
                        $mail->setFrom('developerInshield@gmail.com', 'Inshield');
 
-                       // set the email address and name of the recipient
+                        // set the email address and name of the recipient
                        $mail->addAddress($email);
 
                        // set the subject and message of the email
                        $mail->Subject = 'Reset Your Password';
                        $mail->Body = 'Click the link below to reset your password:<br><br>' .
-                                     'https://example.com/reset-password.php?token=' . $token;
+                                     'http://localhost/Inshield/reset-password.php?token=' . $token;
                        $mail->AltBody = 'Click the link below to reset your password: ' .
-                                        'https://example.com/reset-password.php?token=' . $token;
+                                        'http://localhost/Inshield/reset-password.php?token=' . $token;
 
                        // send the email
                        if (!$mail->send()) 
                        {
                          echo 'Error: ' . $mail->ErrorInfo;
+                         
                        } 
                        else 
                        {
-                        
+                            
                        }
                     }
 
@@ -166,7 +167,9 @@
                             if($stmt -> affected_rows > 0)
                             {
                                 sendResetPasswordEmail($email, $token);
-                                printf('<script>alert("Email with link to reset password sent.")</script>');
+                                printf('<script>alert("Email with link to reset password sent.\nYou have 15 minutes to reset the password.")</script>');
+                                $location = "forgotPassword.php";
+                                echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
                             }
     
                             $stmt -> close(); 
@@ -216,7 +219,9 @@
                                 if($stmt -> affected_rows > 0)
                                 {
                                     sendResetPasswordEmail($email, $token);
-                                    printf('<script>alert("Email with link to reset password sent.")</script>');
+                                    printf('<script>alert("Email with link to reset password sent.\nYou have 15 minutes to reset the password.")</script>');
+                                    $location = "forgotPassword.php";
+                                    echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
                                 }
         
                                 $stmt -> close(); 
