@@ -123,6 +123,8 @@
                             if($stmt -> affected_rows > 0)
                             {
                                 printf('<script>alert("Question added successfully")</script>');
+                                $location = "adminQuestions.php";
+                                echo "<script type='text/JavaScript'>window.location='$location'</script>";
                             }
                             
                             $stmt -> close(); 

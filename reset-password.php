@@ -2,7 +2,7 @@
 
 <?php
     //start session 
-    session_start(); 
+    session_start();
     
 ?> 
 <html>
@@ -50,14 +50,14 @@
 <body>
     <?php 
         
-    include './headerFooterClient1.php'; 
+    include './headerFooterClient.php'; 
     require_once './validation.php';
        if(!empty($msg))
        {
             echo "<script>alert('$msg')</script>";
        }
     ?>
-
+<br/><br/><br/><br/><br/><br/>
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -78,6 +78,7 @@
                         {
                             //retrieve token from URL
                             $token = trim($_GET['token']);
+                            $_SESSION['token'] = $token;
 
                             //Establish connection
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -130,7 +131,7 @@
                                         $location = "home.php";
                                         echo "<script type='text/JavaScript'>alert('Token expired');window.location='$location'</script>";
                                     }
-                                    else 
+                                    else
                                     {
                                         echo '<form class="user" action="reset-password.php" method="post" enctype="multipart/form-data">';
                                         echo '<br/>';
@@ -151,6 +152,11 @@
                                 }
                                  
                                 
+                            }
+                            else 
+                            {
+                                $location = "home.php";
+                                echo "<script type='text/JavaScript'>alert('Invalid token');window.location='$location'</script>";
                             }
                         }
                     }
@@ -187,6 +193,9 @@
                             //store in session to get the email from the if statement above 
                             $email = $_SESSION['email'];
 
+                            //store in session to get the token from the if statement above 
+                            $token = $_SESSION['token']; 
+
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                             //SQL statement
@@ -198,22 +207,21 @@
                                 /* echo '$password: ' . $password . '<br/>';
                                 echo '$password to db: ' . $hashed_password_hex . '<br/>';
                                 echo '$email: ' . $email . '<br/>';
-                                */
+                                */ 
 
-                                $token = trim($_GET['token']);
-                                
                                 //Establish connection
                                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                 //SQL statement
                                 $sql="DELETE FROM password_reset WHERE token ='". $token . "'";
              
+                                echo '$sql: ' . $sql . '<br/>';
+
                                 if($con -> query($sql))
                                 { 
                                     $location = "login.php";
                                     echo "<script type='text/JavaScript'>alert('Password reset successfully');window.location='$location'</script>"; 
-                                }
-                                $con -> close();
+                                } 
                                }
                             else 
                             {
@@ -231,6 +239,22 @@
                            echo "<li style='color: black;'>$value</li>";
                            echo "</ul>";
                            }
+
+                           echo '<form class="user" action="reset-password.php" method="post" enctype="multipart/form-data">';
+                           echo '<br/>';
+        
+                           echo '<div class="mb-3 form-floating">';
+                           echo '    <input type="password" class="form-control txt" id="password" placeholder="New Password" name="password" required="required">';
+                           echo '    <label for="password" class="txt">New Password</label>';
+                           echo '</div>';
+                           echo '<div class="mb-3 form-floating">';
+                           echo '    <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
+                           echo '    <label for="confirmPassword" class="txt">Confirm New Password</label>';
+                           echo '</div>';
+                           echo '<div class="mb-3">';
+                           echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
+                           echo '</div>';
+                           echo '</form>';   
                         } 
                         }
                         

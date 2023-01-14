@@ -69,10 +69,11 @@
     include './headerFooterClient.php';  
 
     ?>
-
+<br/><br/><br/><br/><br/><br/>
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
+            
                 <h1 class="text-center txt">Quiz</h1>
                 
                 <?php

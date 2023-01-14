@@ -1,7 +1,10 @@
 
 <?php
     require_once './validation.php';
-    session_start();
+    if (!isset($_SESSION)) 
+    {
+        session_start();
+    }
 ?> 
 <head>
     <meta charset="UTF-8">
