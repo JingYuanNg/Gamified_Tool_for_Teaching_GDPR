@@ -241,6 +241,7 @@
                         
                     } 
                 ?>
+                
                 <form id="forgotPassForm" method="post" action="">
                     <br/>
                     <div><label class="txt text-center">Just enter your email address below and
