@@ -66,6 +66,7 @@
                 <?php 
                     $cipher = 'AES-128-CBC';
                     $key = 'thebestsecretkey';
+                    $exist = 0; 
 
                     if($_SERVER['REQUEST_METHOD'] == 'GET')
                     {
@@ -196,38 +197,95 @@
                             //store in session to get the token from the if statement above 
                             $token = $_SESSION['token']; 
 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //select from player table
+                            //Establish connection
+                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                             //SQL statement
-                            $sql = "UPDATE players SET password = '$hashed_password_hex' WHERE email = '$email'"; 
-                           
-                            // if($stmt -> execute())
-                            if($con -> query($sql) === TRUE)
-                            {  
-                                /* echo '$password: ' . $password . '<br/>';
-                                echo '$password to db: ' . $hashed_password_hex . '<br/>';
-                                echo '$email: ' . $email . '<br/>';
-                                */ 
+                            $sql = "SELECT * FROM players WHERE email = '$email'";
 
+                            //Execute SQL and store record in $result
+                            $result = $con -> query($sql);
+
+                            if($row = $result -> fetch_object())
+                            {
+                                $exist = 1; 
+
+                                //player forgot pass 
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+                                //SQL statement
+                                $sql = "UPDATE players SET password = '$hashed_password_hex' WHERE email = '$email'"; 
+                            
+                                // if($stmt -> execute())
+                                if($con -> query($sql) === TRUE)
+                                {   
+                                    //Establish connection
+                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                                    //SQL statement
+                                    $sql="DELETE FROM password_reset WHERE token ='". $token . "'";
+             
+                                    echo '$sql: ' . $sql . '<br/>';
+
+                                    if($con -> query($sql))
+                                    { 
+                                        $location = "login.php";
+                                        echo "<script type='text/JavaScript'>alert('Password reset successfully');window.location='$location'</script>"; 
+                                    } 
+                                }
+                                else 
+                                {
+                                    echo 'uh-oh' . $stmt->error;
+                                } 
+                            }
+ 
+                            if($exist == 0)
+                            {
+                                //select from admin table 
                                 //Establish connection
                                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                 //SQL statement
-                                $sql="DELETE FROM password_reset WHERE token ='". $token . "'";
-             
-                                echo '$sql: ' . $sql . '<br/>';
+                                $sql = "SELECT * FROM admin WHERE email = '$email'";
 
-                                if($con -> query($sql))
-                                { 
-                                    $location = "login.php";
-                                    echo "<script type='text/JavaScript'>alert('Password reset successfully');window.location='$location'</script>"; 
-                                } 
-                               }
-                            else 
-                            {
-                                echo 'uh-oh' . $stmt->error;
-                            }
-                    
+                                //Execute SQL and store record in $result
+                                $result = $con -> query($sql);
+
+                                if($row = $result -> fetch_object())
+                                {
+                                    $exist = 1; 
+
+                                    //player forgot pass 
+                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+                                    //SQL statement
+                                    $sql = "UPDATE admin SET password = '$hashed_password_hex' WHERE email = '$email'"; 
+                            
+                                    // if($stmt -> execute())
+                                    if($con -> query($sql) === TRUE)
+                                    {   
+                                        //Establish connection
+                                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                                        //SQL statement
+                                        $sql="DELETE FROM password_reset WHERE token ='". $token . "'";
+             
+                                        echo '$sql: ' . $sql . '<br/>';
+
+                                        if($con -> query($sql))
+                                        { 
+                                            $location = "login.php";
+                                            echo "<script type='text/JavaScript'>alert('Password reset successfully');window.location='$location'</script>"; 
+                                        } 
+                                    }
+                                    else 
+                                    {
+                                        echo 'uh-oh' . $stmt->error;
+                                    } 
+                                }
+                            } 
+
                             $con -> close();
                         }
                         elseif(!empty($error))
