@@ -143,13 +143,17 @@
                             //make sure month is same 
                             if($month_latest_login_time == $month_last_login_time)
                             {
-                                if($day_latest_login_time - $day_last_login_time === 1)
+                                if($day_latest_login_time - $day_last_login_time === 0)
+                                {
+                                    //$consecutive_login_days = $consecutive_login_days; 
+                                }
+                                elseif($day_latest_login_time - $day_last_login_time === 1)
                                 {
                                     $consecutive_login_days++; 
-                                }
+                                } 
                                 else 
                                 {
-                                    $consecutive_login_days = 0; 
+                                    $consecutive_login_days = 0;
                                 }
                             }
                             else 
