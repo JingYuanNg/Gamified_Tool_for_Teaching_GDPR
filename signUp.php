@@ -84,7 +84,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
+                       $mail->Password = ''; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -159,9 +159,14 @@
                         $iv = random_bytes(16); 
                         $iv_hex = bin2hex($iv);
 
+                        //hashed_email 
+                        $hashed_email = hash('sha3-256', $email, true);
+                        //hashed_email_hex
+                        $hashed_email_hex = bin2hex($hashed_email);
+
                         //hashed_password 
                         $hashed_password = hash('sha3-256', $password, true);
-                        //hashedPassword_hex 
+                        //hashed_password_hex 
                         $hashed_password_hex = bin2hex($hashed_password);
 
                         //points
@@ -252,7 +257,7 @@
                             $stmt = $con -> prepare($sql); 
                             $playerID = NULL; 
                     
-                            $stmt -> bind_param('issssssssssssss', $playerID, $iv_hex, $email, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_latest_login_time_hex,$encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex, $encrypted_levels_hex); 
+                            $stmt -> bind_param('issssssssssssss', $playerID, $iv_hex, $hashed_email_hex, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_latest_login_time_hex,$encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex, $encrypted_levels_hex); 
                     
                             $stmt -> execute(); 
 
@@ -289,7 +294,7 @@
                             $stmt = $con -> prepare($sql); 
                             $eventID = NULL; 
                         
-                            $stmt -> bind_param('issss', $eventID, $iv_hex, $email, $token, $encrypted_current_timestamp_hex); 
+                            $stmt -> bind_param('issss', $eventID, $iv_hex, $hashed_email_hex, $token, $encrypted_current_timestamp_hex); 
                         
                             $stmt -> execute(); 
                             if($stmt -> affected_rows > 0)

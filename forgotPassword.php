@@ -92,7 +92,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
+                       $mail->Password = ''; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -127,9 +127,14 @@
                     if(isset($_POST['submit']))
                     {  
                         $email = trim($_POST['email']);  
+
+                        //hashed_email 
+                        $hashed_email = hash('sha3-256', $email, true);
+                        //hashed_email_hex
+                        $hashed_email_hex = bin2hex($hashed_email);
  
                         $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
-                        $sql = "SELECT * from players WHERE email = '$email'";
+                        $sql = "SELECT * from players WHERE email = '$hashed_email_hex'";
                         $result = mysqli_query($con, $sql); 
                         $num_rows = mysqli_num_rows($result); 
     
@@ -163,7 +168,7 @@
                             $stmt = $con -> prepare($sql); 
                             $eventID = NULL; 
                         
-                            $stmt -> bind_param('issss', $eventID, $iv_hex, $email, $token, $encrypted_current_timestamp_hex); 
+                            $stmt -> bind_param('issss', $eventID, $iv_hex, $hashed_email_hex, $token, $encrypted_current_timestamp_hex); 
                         
                             $stmt -> execute(); 
                             if($stmt -> affected_rows > 0)
