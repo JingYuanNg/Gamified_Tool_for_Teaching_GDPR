@@ -50,6 +50,11 @@
         text-decoration: underline;
         color: #365194;
     } 
+
+    a:hover 
+    {
+        text-decoration: none !important;
+    }
 </style>
 
 <body>
@@ -242,10 +247,37 @@
                                         alt="<?php echo $streakImgVar ?>"/><br/>
                         <label for="streak" class="txt"><?php echo $streakTxt ?></label></div>
                         </td>
-                    </tr>
+                    </tr> 
                 </table> 
  
                 <div class="mb-3">
+                <br/>
+                <div class="text-center">
+                    <?php 
+                        $email = $_SESSION["pName"]; 
+
+                        $cipher = 'AES-128-CBC';
+                        $key = 'thebestsecretkey';
+                    
+                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        $sql = "SELECT * FROM players WHERE email = '$email'";
+                        $result = $con -> query($sql); 
+                    
+                        if($row = $result -> fetch_object())
+                        { 
+                          //get playerID 
+                          $playerID = $row -> playerID; 
+                    
+                          //get iv 
+                          $iv = hex2bin($row -> iv); 
+
+                          printf('<a href="twoFactorAuth.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">Enable Google Two Factor Authentication</a>', $row -> playerID);
+                        }
+                        $result->free();
+                        $con->close();
+                    ?>
+                    
+                </div>
                 <br/> 
                 <div class="text-center">
                     <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="logout" name="logout" value="Logout" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/>

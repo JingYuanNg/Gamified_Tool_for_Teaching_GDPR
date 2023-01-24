@@ -128,12 +128,13 @@
         <?php  
             if(isset($_SESSION["aName"]))
             {
-                echo '<a href="logoutAdmin.php" class="nav-link" onclick="return confirm(\'Are you sure you want to log out?\');"><span class="navlink txt-sidebar">' . $_SESSION["aName"]. '</span></a>';
+                echo '<a href="adminDetails.php" class="nav-link"><span class="navlink txt-sidebar">' . $_SESSION["aName"]. '</span></a>';
             }
             else
             {
-                $location = "login.php";
-                echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
+                echo '<a href="login.php" class="nav-link"><span class="navlink txt-sidebar">Login</span></a>';
+                //$location = "login.php";
+                //echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
                 //echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar">Login</span></a>';
             } 
         ?> 

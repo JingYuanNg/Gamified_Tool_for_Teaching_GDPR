@@ -2,7 +2,9 @@
     "name": "jy/inshield",
     "require": {
         "phpmailer/phpmailer": "^6.7",
-        "league/oauth2-client": "^2.6"
+        "league/oauth2-client": "^2.6",
+        "zendframework/zend-mail": "^2.5",
+        "pragmarx/google2fa": "^8.0" 
     },
     "autoload": {
         "psr-4": {
@@ -12,7 +14,8 @@
     "authors": [
         {
             "name": "JingYuanNg",
-            "email": "ngjingyuan020115@gmail.com"
+            "email": "developerInshield@gmail.com"
+
         }
     ]
 }

@@ -113,9 +113,21 @@
                                 //make sure the year, month, day, hour are the same 
                                 //if diff 
                                 if($now->format('Y-m-d H') != $timestamp->format('Y-m-d H')) 
-                                {
-                                    $location = "home.php";
-                                    echo "<script type='text/JavaScript'>alert('Token expired');window.location='$location'</script>";
+                                {   
+                                    //Establish connection
+                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                                    //SQL statement
+                                    $sql="DELETE FROM password_reset WHERE token ='". $token . "'";
+         
+                                    echo '$sql: ' . $sql . '<br/>';
+
+                                    if($con -> query($sql))
+                                    {  
+                                        $location = "home.php";
+                                        echo "<script type='text/JavaScript'>alert('Token expired');window.location='$location'</script>";
+                                    } 
+                                   
                                 }
                                 else //if same 
                                 {

@@ -3,6 +3,13 @@
 <?php
     session_start(); 
     require_once './validation.php'; 
+    include_once 'vendor/autoload.php';
+    use PHPMailer\PHPMailer\PHPMailer; 
+    use PHPMailer\PHPMailer\Exception;
+    require_once 'vendor/phpmailer/phpmailer/src/Exception.php';
+    require_once 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+    require_once 'vendor/phpmailer/phpmailer/src/SMTP.php'; 
+    require_once 'vendor/phpmailer/phpmailer/src/POP3.php';
 ?> 
 <html>
 <meta charset="utf-8">
@@ -57,6 +64,56 @@
             <div class="col-md-6">
                 <h1 class="text-center txt">Sign Up</h1>
                 <?php 
+
+                    function generateToken() 
+                    {
+                        return bin2hex(random_bytes(16));
+                    }
+
+                    function sendVerifyEmail($email, $token)
+                    {  
+                       $to = $email;
+
+                       // create a new PHPMailer object
+                       $mail = new PHPMailer();
+
+                       // specify the SMTP server and port
+                       $mail->IsSMTP();
+                       $mail->Mailer = "smtp";
+                       $mail->SMTPDebug  = 1; 
+                       $mail->Host = 'smtp.gmail.com';
+                       $mail->SMTPAuth = true;
+                       $mail->Username = 'developerinshield@gmail.com';
+                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
+                       $mail->SMTPSecure = 'tls';
+                       $mail->Port = 587;
+
+                       // set the email address and name of the sender
+                       $mail->setFrom('developerInshield@gmail.com', 'Inshield');
+
+                        // set the email address and name of the recipient
+                       $mail->addAddress($email);
+
+                       // set the subject and message of the email
+                       $mail->Subject = 'Verify Email';
+                       $mail->Body = 'Click the link below to verify your email:<br><br>' .
+                                     'http://localhost/Inshield/verify-email.php?token=' . $token . '<br>'. 
+                                     'Please contact us immediately by replying to this email if you did not make this request';
+                       $mail->AltBody = 'Click the link below to verify your email: ' .
+                                        'http://localhost/Inshield/verify-email.php?token=' . $token . '<br>'. 
+                                        'Please contact us immediately by replying to this email if you did not make this request';
+
+                       // send the email
+                       if (!$mail->send()) 
+                       {
+                         echo 'Error: ' . $mail->ErrorInfo; 
+                       } 
+                       else 
+                       {
+                            
+                       }
+                    }
+
                     if(isset($_POST['signUp']))
                     {
                         $email = trim($_POST['email']); 
@@ -69,6 +126,31 @@
                         
                         //Remove null value in $error when there is no error
                         $error = array_filter($error); 
+
+                        $exist = 0; 
+
+                        if($exist == 0)
+                        {
+                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //admin SQL statement 
+                            $sql = "SELECT * FROM admin"; 
+                    
+                            //Get the result 
+                            $result = $con -> query($sql); 
+                    
+                            while($row = $result->fetch_object())
+                            {
+                              $exist = 1; 
+                              $compareEmail = $row -> email; 
+                    
+                              if(strcmp($compareEmail, $email) == 0)
+                              {  
+                                $location = "signUp.php"; 
+                                echo "<script type='text/javascript'>alert('Email already taken as an admin');window.location='$location'</script>";
+                                exit();
+                              }
+                            }
+                        }
 
                         $cipher = 'AES-128-CBC';
                         $key = 'thebestsecretkey';
@@ -176,11 +258,51 @@
 
                             if($stmt -> affected_rows > 0)
                             {
-                                printf('<script>alert("Sign Up successfully"); location.href = "./login.php"</script>');
+                                //printf('<script>alert("Sign Up successfully"); location.href = "./login.php"</script>');
                             }
 
                             $stmt -> close(); 
                             $con -> close();
+
+                            $cipher = 'AES-128-CBC';
+                            $key = 'thebestsecretkey';
+    
+                            //iv_hex 
+                            $iv = random_bytes(16); 
+                            $iv_hex = bin2hex($iv);
+     
+                            //generate a unique token 
+                            $token = generateToken(); 
+    
+                            //current_timestamp  
+                            date_default_timezone_set('Europe/Dublin');
+                            $current_timestamp = date('d-F-Y H:i:s');   
+                            //encrypted_current_timestamp 
+                            $encrypted_current_timestamp = openssl_encrypt($current_timestamp, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                            //encrypted_current_timestamp_hex 
+                            $encrypted_current_timestamp_hex = bin2hex($encrypted_current_timestamp);
+     
+                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                
+                            $sql = "INSERT INTO verify_email (eventID, iv, email, token, timestamp) values (?, ?, ?, ?, ?)";
+    
+                            $stmt = $con -> prepare($sql); 
+                            $eventID = NULL; 
+                        
+                            $stmt -> bind_param('issss', $eventID, $iv_hex, $email, $token, $encrypted_current_timestamp_hex); 
+                        
+                            $stmt -> execute(); 
+                            if($stmt -> affected_rows > 0)
+                            {
+                                sendVerifyEmail($email, $token);
+                                //printf('<script>alert("Please verify your email before you log in. \nYou have 1 hour to verify the email.")</script>');
+                                $location = "displayVerifyEmail.php";
+                                echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
+                            }
+
+                            $stmt -> close(); 
+                            $con -> close();
+                                
                         }
                         else
                         {

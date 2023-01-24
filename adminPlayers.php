@@ -68,6 +68,11 @@
         <?php 
             include './headerFooterAdmin.php';
             require_once './validation.php'; 
+            if(empty($_SESSION["aName"]))
+            {
+                $location = "login.php";
+                echo "<script type='text/JavaScript'>alert('Please log in as admin to continue');window.location='$location'</script>"; 
+            } 
         ?>
         
         <div class="container-fluid ps-5">  

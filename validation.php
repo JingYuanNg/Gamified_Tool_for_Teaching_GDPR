@@ -19,20 +19,21 @@ $sql = 'USE inshield;';
 if (!$conn->query($sql) === TRUE) {
   die('Error using database: ' . $conn->error);
 }
-
-/*admin*/ 
+/* 
+/*admin 
 $sql = 'CREATE TABLE IF NOT EXISTS admin (
     adminID int NOT NULL AUTO_INCREMENT,
     iv varchar(32) NOT NULL,
     email varchar(256) NOT NULL,
     password varchar(256) NOT NULL,
+    google2FA_secretKey varchar(256) NULL,
     PRIMARY KEY (adminID)
   );';
 if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 }
 
-/*players*/
+/*players 
 $sql = 'CREATE TABLE IF NOT EXISTS players (
     playerID int NOT NULL AUTO_INCREMENT,
     iv varchar(32) NOT NULL,
@@ -49,13 +50,14 @@ $sql = 'CREATE TABLE IF NOT EXISTS players (
     ranking_category3 varchar(256) NOT NULL,
     ranking_category4 varchar(256) NOT NULL,
     levels varchar(256) NOT NULL,
+    google2FA_secretKey varchar(256) NULL,
     PRIMARY KEY (playerID)
   );';
 if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 } 
 
-/*questions*/
+/*questions 
 $sql = 'CREATE TABLE IF NOT EXISTS questions (
     questionID int NOT NULL AUTO_INCREMENT,
     question varchar(256) NOT NULL,
@@ -71,7 +73,7 @@ if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 }
 
-/*question_category*/
+/*question_category 
 $sql = 'CREATE TABLE IF NOT EXISTS question_category (
   question_categoryID int NOT NULL AUTO_INCREMENT,
   question_categoryName varchar(256) NOT NULL,
@@ -81,7 +83,7 @@ if (!$conn->query($sql) === TRUE) {
 die('Error creating table: ' . $conn->error);
 }
 
-/* password_reset */ 
+/* password_reset  
 $sql = 'CREATE TABLE IF NOT EXISTS password_reset (
   eventID int NOT NULL AUTO_INCREMENT,
   iv varchar(256) NOT NULL,
@@ -94,6 +96,20 @@ if (!$conn->query($sql) === TRUE) {
 die('Error creating table: ' . $conn->error);
 }
 
+/* verify_email  
+$sql = 'CREATE TABLE IF NOT EXISTS verify_email (
+  eventID int NOT NULL AUTO_INCREMENT,
+  iv varchar(256) NOT NULL,
+  email varchar(256) NOT NULL,
+  token varchar(256) NOT NULL,
+  timestamp varchar(256) NOT NULL,
+  PRIMARY KEY (eventID)
+);';
+if (!$conn->query($sql) === TRUE) {
+die('Error creating table: ' . $conn->error);
+}
+ */
+
 //email
 function validateEmail($email)
 {
@@ -103,6 +119,9 @@ function validateEmail($email)
     }
     //check if ady exists in db 
     //establish connection 
+    
+    //check existence 
+    $exist = 0; 
     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
     $sql = "SELECT email from players";
@@ -111,6 +130,7 @@ function validateEmail($email)
 
     while($row = $result -> fetch_object())
     {
+        $exist = 1; 
         $compareEmail = $row -> email; 
 
         if(strcmp($compareEmail, $email) == 0)
@@ -118,7 +138,7 @@ function validateEmail($email)
             return "<strong>Email</strong> already taken";
         }
     }
-
+  
 }
 
 //password 

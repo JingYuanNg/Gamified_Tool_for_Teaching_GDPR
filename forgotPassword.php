@@ -92,7 +92,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = ''; //password not upload to github for security purpose
+                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -105,9 +105,11 @@
                        // set the subject and message of the email
                        $mail->Subject = 'Reset Your Password';
                        $mail->Body = 'Click the link below to reset your password:<br><br>' .
-                                     'http://localhost/Inshield/reset-password.php?token=' . $token;
+                                     'http://localhost/Inshield/reset-password.php?token=' . $token . '<br>'. 
+                                     'Please contact us immediately by replying to this email if you did not make this request';
                        $mail->AltBody = 'Click the link below to reset your password: ' .
-                                        'http://localhost/Inshield/reset-password.php?token=' . $token;
+                                        'http://localhost/Inshield/reset-password.php?token=' . $token . '<br>'. 
+                                        'Please contact us immediately by replying to this email if you did not make this request';
 
                        // send the email
                        if (!$mail->send()) 

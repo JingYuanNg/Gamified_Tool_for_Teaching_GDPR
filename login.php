@@ -8,9 +8,28 @@
     //check whether login btn is pressed 
     if(isset($_POST['login']))
     {
-        /* unset($_SESSION["pName"]);
-        session_destroy();  */
-       
+        $email = trim($_POST['email']);
+
+        //Establish connection
+        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+        //SQL statement
+        $sql = "SELECT * FROM verify_email WHERE email = '$email'";
+
+        //Execute SQL and store record in $result
+        $result = $con -> query($sql);
+
+        if($row = $result -> fetch_object())
+        {
+            $location = "login.php"; 
+            echo "<script type='text/javascript'>alert('Please verify your email before login');window.location='$location'</script>";
+            exit();
+        }
+
+        //Close connection
+        $result -> free();
+        $con -> close();
+
         //retrieve user input 
         $email = trim($_POST['email']); 
         $password = trim($_POST['password']);  
@@ -32,8 +51,6 @@
         //get result from sql 
         $result = $con -> query($sql); 
 
-        
-
         //get data from both side 
         while($row = $result -> fetch_object())
         {
@@ -47,149 +64,172 @@
             {
                 //If both data are correct then exist = 1 
                 $exist = 1; 
+
+                //Establish connection
+                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                $query = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE email = '$email'";
                 
-                //store the email into session 
-                $_SESSION["pName"] = $pName; 
-
-                $email = $_SESSION["pName"]; 
-
-                $cipher = 'AES-128-CBC';
-                $key = 'thebestsecretkey';
-
-                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                $sql = "SELECT * FROM players WHERE email = '$email'";
-                $result = $con -> query($sql); 
-
-                if($row = $result -> fetch_object())
+                $result = mysqli_query($con, $query);
+                
+                $row = mysqli_fetch_assoc($result);
+                
+                if ($row['count'] > 0) 
                 {
-                    //get iv 
-                    $iv = hex2bin($row -> iv); 
+                    $location = "checkGoogle2FA.php?email=" . $email;
+                    echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
+                    exit();
+                }
+                else
+                {
+                    //store the email into session 
+                    $_SESSION["pName"] = $pName; 
 
-                    //get latest_login_time 
-                    $latest_login_time = hex2bin($row -> latest_login_time); 
-
-                    //assign latest_login_time to last_login_time 
-                    $last_login_time = $latest_login_time; 
-                    $encrypted_last_login_time_hex = bin2hex($last_login_time);
-
-                    //latest_login_time
-                    date_default_timezone_set('Europe/Dublin');
-                    $date_now = date('d-F-Y H:i:s'); 
-                    $encrypted_latest_login_time = openssl_encrypt($date_now, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                    $encrypted_latest_login_time_hex = bin2hex($encrypted_latest_login_time);
-
-                    $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                    $sql = "UPDATE players SET last_login_time = ? , latest_login_time = ? WHERE email = ?";
-                    $stmt = $con ->prepare($sql);
-                    $stmt -> bind_param('sss', $encrypted_last_login_time_hex, 
-                                               $encrypted_latest_login_time_hex,
-                                               $email);
-
-                    if($stmt -> execute())
-                    {
-                        //echo $date_now . '<br/>' . $encrypted_date_now_hex; 
-                    }
-                    else
-                    {
-                        
-                    }  
+                    $email = $_SESSION["pName"]; 
 
                     $cipher = 'AES-128-CBC';
                     $key = 'thebestsecretkey';
-                
+
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                     $sql = "SELECT * FROM players WHERE email = '$email'";
                     $result = $con -> query($sql); 
-                
+
                     if($row = $result -> fetch_object())
                     {
+                    
                         //get iv 
-                        $iv = hex2bin($row -> iv);
+                        $iv = hex2bin($row -> iv); 
 
-                        //last_login_time 
-                        $last_login_time_bin = hex2bin($row -> last_login_time); 
-                        $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //echo '$last_login_time:' . $last_login_time . "<br/>";
-                        $date_last_login_time = new DateTime($last_login_time); 
-                        $day_last_login_time = $date_last_login_time -> format('d');
-                        $month_last_login_time = $date_last_login_time -> format('m'); 
-                        $year_last_login_time = $date_last_login_time -> format('Y');
-                        /* echo '$day_last_login_time: ' . $day_last_login_time . "<br/>"; 
-                        echo '$month_last_login_time: ' . $month_last_login_time . "<br/>";
-                        echo '$year_last_login_time: ' . $year_last_login_time . "<br/><br/>"; 
- */
-                        //latest_login_time 
-                        $latest_login_time_bin = hex2bin($row -> latest_login_time); 
-                        $latest_login_time = openssl_decrypt($latest_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //echo '$latest_login_time:' . $latest_login_time . "<br/>";
-                        $date_latest_login_time = new DateTime($latest_login_time); 
-                        $day_latest_login_time = $date_latest_login_time -> format('d');
-                        $month_latest_login_time = $date_latest_login_time -> format('m'); 
-                        $year_latest_login_time = $date_latest_login_time -> format('Y');
-                        /* echo '$day_latest_login_time: ' . $day_latest_login_time . "<br/>"; 
-                        echo '$month_latest_login_time: ' . $month_latest_login_time . "<br/>";
-                        echo '$year_latest_login_time: ' . $year_latest_login_time . "<br/><br/>"; 
- */
-                        //streak 
-                        $streak_bin = hex2bin($row -> streak);
-                        $streak = openssl_decrypt($streak_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                        
-                        //track number of consecutive login days
-                        $consecutive_login_days = $streak; 
+                        //get latest_login_time 
+                        $latest_login_time = hex2bin($row -> latest_login_time); 
 
-                        //if same year is same 
-                        if($year_latest_login_time == $year_last_login_time)
+                        //assign latest_login_time to last_login_time 
+                        $last_login_time = $latest_login_time; 
+                        $encrypted_last_login_time_hex = bin2hex($last_login_time);
+
+                        //latest_login_time
+                        date_default_timezone_set('Europe/Dublin');
+                        $date_now = date('d-F-Y H:i:s'); 
+                        $encrypted_latest_login_time = openssl_encrypt($date_now, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        $encrypted_latest_login_time_hex = bin2hex($encrypted_latest_login_time);
+
+                        $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                        $sql = "UPDATE players SET last_login_time = ? , latest_login_time = ? WHERE email = ?";
+                        $stmt = $con ->prepare($sql);
+                        $stmt -> bind_param('sss', $encrypted_last_login_time_hex, 
+                                               $encrypted_latest_login_time_hex,
+                                               $email);
+
+                        if($stmt -> execute())
                         {
-                            //make sure month is same 
-                            if($month_latest_login_time == $month_last_login_time)
+                            //echo $date_now . '<br/>' . $encrypted_date_now_hex; 
+                        }
+                        else
+                        {
+                        
+                        }  
+
+                        $cipher = 'AES-128-CBC';
+                        $key = 'thebestsecretkey';
+                
+                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        $sql = "SELECT * FROM players WHERE email = '$email'";
+                        $result = $con -> query($sql); 
+                
+                        if($row = $result -> fetch_object())
+                        {
+                            //get iv 
+                            $iv = hex2bin($row -> iv);
+
+                            //last_login_time 
+                            $last_login_time_bin = hex2bin($row -> last_login_time); 
+                            $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                            //echo '$last_login_time:' . $last_login_time . "<br/>";
+                            $date_last_login_time = new DateTime($last_login_time); 
+                            $day_last_login_time = $date_last_login_time -> format('d');
+                            $month_last_login_time = $date_last_login_time -> format('m'); 
+                            $year_last_login_time = $date_last_login_time -> format('Y');
+                            /* echo '$day_last_login_time: ' . $day_last_login_time . "<br/>"; 
+                            echo '$month_last_login_time: ' . $month_last_login_time . "<br/>";
+                            echo '$year_last_login_time: ' . $year_last_login_time . "<br/><br/>"; 
+ */
+                            //latest_login_time 
+                            $latest_login_time_bin = hex2bin($row -> latest_login_time); 
+                            $latest_login_time = openssl_decrypt($latest_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                            //echo '$latest_login_time:' . $latest_login_time . "<br/>";
+                            $date_latest_login_time = new DateTime($latest_login_time); 
+                            $day_latest_login_time = $date_latest_login_time -> format('d');
+                            $month_latest_login_time = $date_latest_login_time -> format('m'); 
+                            $year_latest_login_time = $date_latest_login_time -> format('Y');
+                            /* echo '$day_latest_login_time: ' . $day_latest_login_time . "<br/>"; 
+                            echo '$month_latest_login_time: ' . $month_latest_login_time . "<br/>";
+                            echo '$year_latest_login_time: ' . $year_latest_login_time . "<br/><br/>"; 
+ */
+                            //streak 
+                            $streak_bin = hex2bin($row -> streak);
+                            $streak = openssl_decrypt($streak_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                        
+                            //track number of consecutive login days
+                            $consecutive_login_days = $streak; 
+
+                            //if same year is same 
+                            if($year_latest_login_time == $year_last_login_time)
                             {
-                                if($day_latest_login_time - $day_last_login_time === 0)
+                                //make sure month is same 
+                                if($month_latest_login_time == $month_last_login_time)
                                 {
-                                    //$consecutive_login_days = $consecutive_login_days; 
+                                    if($day_latest_login_time - $day_last_login_time === 0)
+                                    {
+                                        //$consecutive_login_days = $consecutive_login_days; 
+                                    }
+                                    elseif($day_latest_login_time - $day_last_login_time === 1)
+                                    {
+                                        $consecutive_login_days++; 
+                                    } 
+                                    else 
+                                    {
+                                        $consecutive_login_days = 0;
+                                    }
                                 }
-                                elseif($day_latest_login_time - $day_last_login_time === 1)
-                                {
-                                    $consecutive_login_days++; 
-                                } 
                                 else 
                                 {
-                                    $consecutive_login_days = 0;
+                                    $consecutive_login_days = 0; 
                                 }
                             }
                             else 
                             {
                                 $consecutive_login_days = 0; 
                             }
-                        }
-                        else 
-                        {
-                            $consecutive_login_days = 0; 
-                        }
 
-                        //encrypted_streak 
-                        $encrypted_streak = openssl_encrypt($consecutive_login_days, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_streak_hex 
-                        $encrypted_streak_hex = bin2hex($encrypted_streak);
+                            //encrypted_streak 
+                           $encrypted_streak = openssl_encrypt($consecutive_login_days, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                           //encrypted_streak_hex 
+                           $encrypted_streak_hex = bin2hex($encrypted_streak);
 
-                        $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                        $sql = "UPDATE players SET streak = ? WHERE email = ?";
-                        $stmt = $con ->prepare($sql);
-                        $stmt -> bind_param('ss', $encrypted_streak_hex, $email);
+                          $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                          $sql = "UPDATE players SET streak = ? WHERE email = ?";
+                          $stmt = $con ->prepare($sql);
+                          $stmt -> bind_param('ss', $encrypted_streak_hex, $email);
                     
-                        if($stmt -> execute())
-                        {
-                            //update successful 
-                            //echo '$consecutive_login_days: ' . $consecutive_login_days . '<br/>';
+                          if($stmt -> execute())
+                          {
+                              //update successful 
+                              //echo '$consecutive_login_days: ' . $consecutive_login_days . '<br/>';
+                         }
+                          else 
+                         {
+                              echo 'Uh-oh'. '<br/>'; 
+                         }
+                    
                         }
-                        else 
-                        {
-                            echo 'Uh-oh'. '<br/>'; 
-                        }
+                        $stmt -> close();
+                        $con -> close();
+                    
                     
                     }
-                    $stmt -> close();
-                    $con -> close();
                 }
+
+                
 
                 $location = "home.php"; 
                 echo "<script type='text/javascript'>alert('Login successfully');window.location='$location'</script>";
@@ -216,12 +256,31 @@
                 {
                     //If both data are correct then exist = 1 
                     $exist = 1; 
+                        
+                    //Establish connection
+                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                    $query = "SELECT COUNT(google2FA_secretKey) as count FROM admin WHERE email = '$email'";
                 
-                    $location = "adminDashboard.php"; 
-                    echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
+                    $result = mysqli_query($con, $query);
                 
-                    //store the email into session 
-                    $_SESSION["aName"] = $aName; 
+                    $row = mysqli_fetch_assoc($result);
+                
+                    if ($row['count'] > 0) 
+                    {
+                        $location = "adminCheckGoogle2FA.php?email=" . $email;
+                        echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
+                        exit();
+                    }
+                    else
+                    {
+                        $location = "adminDashboard.php"; 
+                        echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
+                    
+                        //store the email into session 
+                        $_SESSION["aName"] = $aName; 
+                    }
+                    
                 }
             }
         }
