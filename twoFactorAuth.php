@@ -53,8 +53,13 @@
     include './headerFooterClient.php'; 
     require_once './validation.php'; 
     require_once 'vendor/autoload.php';
+    if(empty($_SESSION["pName"]))
+    {
+        $location = "login.php";
+        echo "<script type='text/JavaScript'>alert('Please log in to continue');window.location='$location'</script>"; 
+    } 
     ?>
-<br/><br/><br/><br/><br/><br/>
+<br/><br/><br/>
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -82,91 +87,100 @@
                             //retrieve id from URL
                             $id = trim($_GET['id']);  
 
-                            //Establish connection
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                            $error['id'] = validateInteger($id);
 
-                            //SQL statement with placeholder
-                            $sql = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE playerID = ?";
-
-                            //Prepare statement
-                            $stmt = $con->prepare($sql);
-
-                            //Bind id to the statement
-                            $stmt->bind_param("i", $id);
-
-                            //Execute statement
-                            $stmt->execute();
-
-                            $result = $stmt->get_result();
-
-                            $row = mysqli_fetch_assoc($result);
-
-                            if ($row['count'] > 0) 
+                            //Remove null value in $error when there is no error
+                            $error = array_filter($error);
+        
+                            if(empty($error))
                             {
-                                $location = "playerProfile.php";
-                               echo "<script type='text/JavaScript'>alert('Google Two Factor Authentication enabled before');window.location='$location'</script>"; 
-                               exit();
-                            }  
-                            else 
-                            {
-                                //select iv encrypt - not yet
-                                //check existence 
-                                $exist = 0; 
-
-                                //connect db 
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-
-                                //SQL statement players
-                                $sql = "SELECT * from players WHERE playerID = '$id'"; 
-
-                                //get result from sql 
-                                $result = $con -> query($sql); 
-
-                                if($row = $result -> fetch_object())
-                                {
-                                    //get iv 
-                                    $iv = hex2bin($row -> iv);
-
-                                    //email 
-                                    $email = $row -> email;
-                                }
-                                
-                                $google2fa = new \PragmaRX\Google2FA\Google2FA();
-                                $secret_key = $google2fa->generateSecretKey();
-                                        
-                                //encrypted_secret_key 
-                                $encrypted_secret_key = openssl_encrypt($secret_key, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                                //encrypted_streak_hex 
-                                $encrypted_secret_key_hex = bin2hex($encrypted_secret_key);
-                                
-                                //retrieve id from URL
-                                $id = trim($_GET['id']);  
-
                                 //Establish connection
                                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-                                //SQL statement
-                                $sql = "UPDATE players SET google2FA_secretKey = '$encrypted_secret_key_hex' WHERE playerID = '$id'";
+                                //SQL statement with placeholder
+                                $sql = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE playerID = ?";
 
-                                if($con -> query($sql) === TRUE)
+                                //Prepare statement
+                                $stmt = $con->prepare($sql);
+
+                                //Bind id to the statement
+                                $stmt->bind_param("i", $id);
+
+                                //Execute statement
+                                $stmt->execute();
+
+                                $result = $stmt->get_result();
+
+                                $row = mysqli_fetch_assoc($result);
+
+                                if ($row['count'] > 0) 
                                 {
-                                    $text = $google2fa->getQRCodeUrl(
-                                    'Inshield',
-                                    $email,
-                                    $secret_key
-                                    );
-                                           
-                                    $image_url = 'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl='.$text;
-                                    echo '<img src="'.$image_url.'" />';
-                                    //echo "<script type='text/JavaScript'>alert('Yayy');</script>"; 
-                                }
+                                    $location = "playerProfile.php";
+                                   echo "<script type='text/JavaScript'>alert('Google Two Factor Authentication enabled before');window.location='$location'</script>"; 
+                                   exit();
+                                }  
                                 else 
                                 {
-                                    echo 'uh-oh' . $stmt->error;
-                                }
+                                    //select iv encrypt - not yet
+                                    //check existence 
+                                    $exist = 0; 
+
+                                    //connect db 
+                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+                                    //SQL statement players
+                                    $sql = "SELECT * from players WHERE playerID = '$id'"; 
+
+                                    //get result from sql 
+                                    $result = $con -> query($sql); 
+
+                                    if($row = $result -> fetch_object())
+                                    {
+                                        //get iv 
+                                        $iv = hex2bin($row -> iv);
+
+                                        //email 
+                                        $email = $row -> email;
+                                    }
+                                
+                                    $google2fa = new \PragmaRX\Google2FA\Google2FA();
+                                    $secret_key = $google2fa->generateSecretKey();
+                                        
+                                    //encrypted_secret_key 
+                                    $encrypted_secret_key = openssl_encrypt($secret_key, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                                    //encrypted_streak_hex 
+                                    $encrypted_secret_key_hex = bin2hex($encrypted_secret_key);
+                                
+                                    //retrieve id from URL
+                                    $id = trim($_GET['id']);  
+
+                                    //Establish connection
+                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                                    //SQL statement
+                                    $sql = "UPDATE players SET google2FA_secretKey = '$encrypted_secret_key_hex' WHERE playerID = '$id'";
+
+                                    if($con -> query($sql) === TRUE)
+                                    {
+                                        $text = $google2fa->getQRCodeUrl(
+                                        'Inshield',
+                                        $email,
+                                        $secret_key
+                                        );
+                                           
+                                        $image_url = 'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl='.$text;
+                                        echo '<img src="'.$image_url.'" />';
+                                        //echo "<script type='text/JavaScript'>alert('Yayy');</script>"; 
+                                    }
+                                    else 
+                                    {
+                                        echo 'uh-oh' . $stmt->error;
+                                    }
                             
-                                $con -> close();
+                                    $con -> close();
+                                }
                             }
+                            
 
                         }
                     }

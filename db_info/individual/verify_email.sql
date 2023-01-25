@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `password_reset`
+-- Table structure for table `verify_email`
 --
 
-CREATE TABLE `password_reset` (
+CREATE TABLE `verify_email` (
   `eventID` int(11) NOT NULL,
   `iv` varchar(256) NOT NULL,
   `email` varchar(256) NOT NULL,
@@ -40,9 +40,9 @@ CREATE TABLE `password_reset` (
 --
 
 --
--- Indexes for table `password_reset`
+-- Indexes for table `verify_email`
 --
-ALTER TABLE `password_reset`
+ALTER TABLE `verify_email`
   ADD PRIMARY KEY (`eventID`);
 
 --
@@ -50,9 +50,9 @@ ALTER TABLE `password_reset`
 --
 
 --
--- AUTO_INCREMENT for table `password_reset`
+-- AUTO_INCREMENT for table `verify_email`
 --
-ALTER TABLE `password_reset`
+ALTER TABLE `verify_email`
   MODIFY `eventID` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

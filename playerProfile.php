@@ -87,6 +87,10 @@
       //get iv 
       $iv = hex2bin($row -> iv); 
  
+      //displayName 
+      $displayName_bin = hex2bin($row -> displayName); 
+      $displayName = openssl_decrypt($displayName_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+
       //points 
       $points_bin = hex2bin($row -> points); 
       $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
@@ -199,7 +203,7 @@
                     </tr>
                     <tr>
                         <td><label for="email" class="txt">Email</label></td>
-                        <td style="height:100px;"><input type="email" class="form-control" id="email" value="<?php echo $email ?>" disabled/></td>
+                        <td style="height:100px;"><input type="email" class="form-control" id="email" value="<?php echo $displayName ?>" disabled/></td>
                     </tr>
                     <tr>
                         <td><label for="points" class="txt">Points</label></td>

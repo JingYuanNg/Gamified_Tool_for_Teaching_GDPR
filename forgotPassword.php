@@ -63,7 +63,7 @@
             echo "<script>alert('$msg')</script>";
        }
     ?>
-<br/><br/><br/><br/><br/><br/>
+<br/><br/><br/> 
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -92,7 +92,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = ''; //password not upload to github for security purpose
+                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -128,83 +128,37 @@
                     {  
                         $email = trim($_POST['email']);  
 
-                        //hashed_email 
-                        $hashed_email = hash('sha3-256', $email, true);
-                        //hashed_email_hex
-                        $hashed_email_hex = bin2hex($hashed_email);
- 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
-                        $sql = "SELECT * from players WHERE email = '$hashed_email_hex'";
-                        $result = mysqli_query($con, $sql); 
-                        $num_rows = mysqli_num_rows($result); 
-    
-                        //if email is in db, generate a unique token, store it in db 
-                        if($num_rows > 0)
-                        { 
-                            $exist = 1;
-                            $cipher = 'AES-128-CBC';
-                            $key = 'thebestsecretkey';
-    
-                            //iv_hex 
-                            $iv = random_bytes(16); 
-                            $iv_hex = bin2hex($iv);
-     
-                            //generate a unique token 
-                            $token = generateToken(); 
-    
-                            //current_timestamp  
-                            date_default_timezone_set('Europe/Dublin');
-                            $current_timestamp = date('d-F-Y H:i:s');   
-                            //encrypted_current_timestamp 
-                            $encrypted_current_timestamp = openssl_encrypt($current_timestamp, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                            //encrypted_current_timestamp_hex 
-                            $encrypted_current_timestamp_hex = bin2hex($encrypted_current_timestamp);
-    
-                                
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                                
-                            $sql = "INSERT INTO password_reset (eventID, iv, email, token, timestamp) values (?, ?, ?, ?, ?)";
-    
-                            $stmt = $con -> prepare($sql); 
-                            $eventID = NULL; 
-                        
-                            $stmt -> bind_param('issss', $eventID, $iv_hex, $hashed_email_hex, $token, $encrypted_current_timestamp_hex); 
-                        
-                            $stmt -> execute(); 
-                            if($stmt -> affected_rows > 0)
-                            {
-                                sendResetPasswordEmail($email, $token);
-                                printf('<script>alert("Email with link to reset password sent.\nYou have 15 minutes to reset the password.")</script>');
-                                $location = "forgotPassword.php";
-                                echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
-                            }
-    
-                            $stmt -> close(); 
-                            $con -> close();
-                                
-                        } 
-    
-                        if($exist == 0)
+                        $error['email'] = validateEmailFormat($email);
+
+                        //Remove null value in $error when there is no error
+                        $error = array_filter($error);
+
+                        if(empty($error))
                         {
+                            //hashed_email 
+                            $hashed_email = hash('sha3-256', $email, true);
+                            //hashed_email_hex
+                            $hashed_email_hex = bin2hex($hashed_email);
+ 
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
-                            $sql = "SELECT * from admin WHERE email = '$email'";
+                            $sql = "SELECT * from players WHERE email = '$hashed_email_hex'";
                             $result = mysqli_query($con, $sql); 
                             $num_rows = mysqli_num_rows($result); 
-        
+    
                             //if email is in db, generate a unique token, store it in db 
                             if($num_rows > 0)
                             { 
                                 $exist = 1;
                                 $cipher = 'AES-128-CBC';
                                 $key = 'thebestsecretkey';
-        
+    
                                 //iv_hex 
                                 $iv = random_bytes(16); 
                                 $iv_hex = bin2hex($iv);
-         
+     
                                 //generate a unique token 
                                 $token = generateToken(); 
-        
+    
                                 //current_timestamp  
                                 date_default_timezone_set('Europe/Dublin');
                                 $current_timestamp = date('d-F-Y H:i:s');   
@@ -212,16 +166,17 @@
                                 $encrypted_current_timestamp = openssl_encrypt($current_timestamp, $cipher, $key, OPENSSL_RAW_DATA, $iv);
                                 //encrypted_current_timestamp_hex 
                                 $encrypted_current_timestamp_hex = bin2hex($encrypted_current_timestamp);
-        
+    
+                                
                                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                                    
+                                
                                 $sql = "INSERT INTO password_reset (eventID, iv, email, token, timestamp) values (?, ?, ?, ?, ?)";
-        
+    
                                 $stmt = $con -> prepare($sql); 
                                 $eventID = NULL; 
-                            
-                                $stmt -> bind_param('issss', $eventID, $iv_hex, $email, $token, $encrypted_current_timestamp_hex); 
-                            
+                        
+                                $stmt -> bind_param('issss', $eventID, $iv_hex, $hashed_email_hex, $token, $encrypted_current_timestamp_hex); 
+                        
                                 $stmt -> execute(); 
                                 if($stmt -> affected_rows > 0)
                                 {
@@ -230,20 +185,82 @@
                                     $location = "forgotPassword.php";
                                     echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
                                 }
-        
+    
                                 $stmt -> close(); 
                                 $con -> close();
+                                
+                            } 
+    
+                            if($exist == 0)
+                            {
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
+                               $sql = "SELECT * from admin WHERE email = '$email'";
+                               $result = mysqli_query($con, $sql); 
+                               $num_rows = mysqli_num_rows($result); 
+                            
+                              //if email is in db, generate a unique token, store it in db 
+                              if($num_rows > 0)
+                               { 
+                                  $exist = 1;
+                                  $cipher = 'AES-128-CBC';
+                                  $key = 'thebestsecretkey';
+        
+                                  //iv_hex 
+                                  $iv = random_bytes(16); 
+                                  $iv_hex = bin2hex($iv);
+         
+                                  //generate a unique token 
+                                  $token = generateToken(); 
+        
+                                  //current_timestamp  
+                                  date_default_timezone_set('Europe/Dublin');
+                                  $current_timestamp = date('d-F-Y H:i:s');   
+                                  //encrypted_current_timestamp 
+                                  $encrypted_current_timestamp = openssl_encrypt($current_timestamp, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                                  //encrypted_current_timestamp_hex 
+                                  $encrypted_current_timestamp_hex = bin2hex($encrypted_current_timestamp);
+        
+                                  $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                    
+                                  $sql = "INSERT INTO password_reset (eventID, iv, email, token, timestamp) values (?, ?, ?, ?, ?)";
+        
+                                  $stmt = $con -> prepare($sql); 
+                                  $eventID = NULL; 
+                            
+                                  $stmt -> bind_param('issss', $eventID, $iv_hex, $email, $token, $encrypted_current_timestamp_hex); 
+                            
+                                 $stmt -> execute(); 
+                                  if($stmt -> affected_rows > 0)
+                                  {
+                                      sendResetPasswordEmail($email, $token);
+                                      printf('<script>alert("Email with link to reset password sent.\nYou have 15 minutes to reset the password.")</script>');
+                                      $location = "forgotPassword.php";
+                                      echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
+                                  }
+                                
+                                  $stmt -> close(); 
+                                  $con -> close();
                                        
+                              }
                             }
-                        }
                            
-                        if($exist == 0) 
-                        { 
-                            printf('<script>alert("Email entered is not registered.")</script>');
+                            if($exist == 0) 
+                            { 
+                               printf('<script>alert("Email entered is not registered.")</script>');
                                
+                            }
+                        
                         }
-                        
-                        
+                        else
+                        {
+                           //display error msg 
+                           echo "<ul class=‘error’>";
+                           foreach ($error as $value)
+                           {
+                                echo "<li>$value</li>";
+                                echo "</ul>";
+                           }
+                        }
                         
                         
                     } 

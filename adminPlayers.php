@@ -143,9 +143,20 @@
                                     //Getting connection object to process the sql command
                                 if($result = $con ->query($sql))
                                 { 
+                                    $cipher = 'AES-128-CBC';
+                                    $key = 'thebestsecretkey';
+
+                                    
                                     //Check got record or not
                                     while($row = $result -> fetch_object())
                                     {
+                                        //get iv 
+                                        $iv = hex2bin($row -> iv); 
+ 
+                                        //displayName 
+                                        $displayName_bin = hex2bin($row -> displayName); 
+                                        $displayName = openssl_decrypt($displayName_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+
                                         printf('
                                             <tr id="%s">
                                                 <td class="fs-6">%s</td> 
@@ -154,7 +165,7 @@
                                                     <a href="adminPlayerDetails.php?id=%d" class="edit-delete-btn fs-6">Details</a> 
                                                 </td>
                                             </tr>
-                                                 ', $row->playerID, $row->playerID, $row-> email, $row->playerID);
+                                                 ', $row->playerID, $row->playerID, $displayName, $row->playerID);
                                     }
                                     
                                 $result->free();

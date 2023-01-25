@@ -140,12 +140,21 @@
 
                   $iv = hex2bin($row -> iv);
 
+                  //displayName 
+                  $displayName_bin = hex2bin($row -> displayName); 
+                  $displayName = openssl_decrypt($displayName_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+
                    //add email to the array
                    $rank[$playerID] = array( 
                        'points' => $points,
-                       'email' => $email, 
+                       'displayName' => $displayName, 
                        'leaderboard_position' => $leaderboard_position
                       );
+
+                  //encrypt_displayName
+                  $encrypted_displayName = openssl_encrypt($displayName, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                  //encrypted_displayName_hex 
+                  $encrypted_displayName_hex = bin2hex($encrypted_displayName);         
 
                   //encrypt_leaderboard_position
                   $encrypted_leaderboard_position = openssl_encrypt($leaderboard_position, $cipher, $key, OPENSSL_RAW_DATA, $iv);
@@ -153,7 +162,7 @@
                   $encrypted_leaderboard_position_hex = bin2hex($encrypted_leaderboard_position);
 
                   $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                  $sql = "UPDATE players SET leaderboard_position = ? WHERE email = ?";
+                  $sql = "UPDATE players SET leaderboard_position = ? WHERE displayName = ?";
                   $stmt = $con ->prepare($sql);
                   $stmt -> bind_param('ss', $encrypted_leaderboard_position_hex, $email);
 
@@ -194,7 +203,7 @@
                              //display
                              echo '<tr>';
                             echo '<td class="pt-0 pb-0 ps-2 pe-2"><label for="rank" class="txt fs-6">'.$values['leaderboard_position'].'</label></td>';
-                            echo '<td class="pt-0 pb-0 ps-2 pe-2 w-100"><label for="user" class="txt fs-6">'.$values['email'].'</label></td>';
+                            echo '<td class="pt-0 pb-0 ps-2 pe-2 w-100"><label for="user" class="txt fs-6">'.$values['displayName'].'</label></td>';
                              echo '<td class="pt-0 pb-0 ps-2 pe-5"><label for="points" class="txt fs-6">'.$values['points'].'</label></td>';
                              echo '</tr>'; 
                     }

@@ -38,6 +38,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS players (
     playerID int NOT NULL AUTO_INCREMENT,
     iv varchar(32) NOT NULL,
     email varchar(256) NOT NULL,
+    displayName varchar(256) NOT NULL,
     password varchar(256) NOT NULL,
     points varchar(256) NOT NULL,
     leaderboard_position varchar(256) NOT NULL,
@@ -107,9 +108,8 @@ $sql = 'CREATE TABLE IF NOT EXISTS verify_email (
 );';
 if (!$conn->query($sql) === TRUE) {
 die('Error creating table: ' . $conn->error);
-}
- */
-
+} 
+*/
 //email
 function validateEmail($email)
 {
@@ -133,12 +133,36 @@ function validateEmail($email)
         $exist = 1; 
         $compareEmail = $row -> email; 
 
-        if(strcmp($compareEmail, $email) == 0)
+        //hashed_email 
+        $hashed_email = hash('sha3-256', $email, true);
+        //hashed_email_hex
+        $hashed_email_hex = bin2hex($hashed_email);
+
+        if(strcmp($compareEmail, $hashed_email_hex) == 0)
         {
             return "<strong>Email</strong> already taken";
         }
     }
   
+}
+
+//email
+function validateEmailFormat($email)
+{
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+    {
+        return "Invalid <strong>email</strong>";
+    }
+     
+}
+
+//int 
+function validateInteger($inputInt)
+{
+  if(!filter_var($inputInt, FILTER_VALIDATE_INT))
+  {
+    return "Invalid <strong>ID</strong>";
+  } 
 }
 
 //password 

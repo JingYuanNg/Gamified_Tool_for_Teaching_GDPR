@@ -85,12 +85,12 @@
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                             //SQL statement
-                            $sql = "SELECT * FROM verify_email WHERE token = '$token'";
-                            
-                            //Execute SQL and store record in $result
-                            $result = $con -> query($sql);
+                            $stmt = $con->prepare("SELECT * FROM verify_email WHERE token = ?");
+                            $stmt->bind_param("s", $token);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
 
-                            if($row = $result -> fetch_object())
+                            if($row = $result->fetch_object())
                             { 
                                 //eventID 
                                 //iv 

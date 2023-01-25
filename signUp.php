@@ -143,7 +143,12 @@
                               $exist = 1; 
                               $compareEmail = $row -> email; 
                     
-                              if(strcmp($compareEmail, $email) == 0)
+                              //hashed_email 
+                              $hashed_email = hash('sha3-256', $email, true);
+                              //hashed_email_hex
+                              $hashed_email_hex = bin2hex($hashed_email);
+
+                              if(strcmp($compareEmail, $hashed_email_hex) == 0)
                               {  
                                 $location = "signUp.php"; 
                                 echo "<script type='text/javascript'>alert('Email already taken as an admin');window.location='$location'</script>";
@@ -168,6 +173,13 @@
                         $hashed_password = hash('sha3-256', $password, true);
                         //hashed_password_hex 
                         $hashed_password_hex = bin2hex($hashed_password);
+
+                        //displayName
+                        $displayName = $email; 
+                        //encrypted_displayName
+                        $encrypted_displayName = openssl_encrypt($displayName, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                        //encrypted_displayName_hex 
+                        $encrypted_displayName_hex = bin2hex($encrypted_displayName);
 
                         //points
                         $points = 0; 
@@ -252,23 +264,19 @@
                         {
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                             
-                            $sql = "INSERT INTO players (playerID, iv, email, password, points, leaderboard_position, streak, last_login_time, latest_login_time, badge, ranking_category1, ranking_category2, ranking_category3, ranking_category4, levels) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            $sql = "INSERT INTO players (playerID, iv, email, displayName, password, points, leaderboard_position, streak, last_login_time, latest_login_time, badge, ranking_category1, ranking_category2, ranking_category3, ranking_category4, levels) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                             $stmt = $con -> prepare($sql); 
                             $playerID = NULL; 
                     
-                            $stmt -> bind_param('issssssssssssss', $playerID, $iv_hex, $hashed_email_hex, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_latest_login_time_hex,$encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex, $encrypted_levels_hex); 
+                            $stmt -> bind_param('isssssssssssssss', $playerID, $iv_hex, $hashed_email_hex, $encrypted_displayName_hex, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_latest_login_time_hex,$encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex, $encrypted_levels_hex); 
                     
                             $stmt -> execute(); 
 
                             if($stmt -> affected_rows > 0)
                             {
                                 //printf('<script>alert("Sign Up successfully"); location.href = "./login.php"</script>');
-                            }
-
-                            $stmt -> close(); 
-                            $con -> close();
-
+                                
                             $cipher = 'AES-128-CBC';
                             $key = 'thebestsecretkey';
     
@@ -307,6 +315,11 @@
 
                             $stmt -> close(); 
                             $con -> close();
+                            }
+
+                            $stmt -> close(); 
+                            $con -> close();
+
                                 
                         }
                         else
