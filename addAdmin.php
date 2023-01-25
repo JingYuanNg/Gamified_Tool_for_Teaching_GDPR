@@ -90,6 +90,11 @@
                         $iv = random_bytes(16); 
                         $iv_hex = bin2hex($iv);  
 
+                        //hashed_email 
+                        $hashed_email = hash('sha3-256', $email, true);
+                        //hashed_email_hex
+                        $hashed_email_hex = bin2hex($hashed_email);
+
                         //hashed_password 
                         $hashed_password = hash('sha3-256', $password, true);
                         //hashedPassword_hex 
@@ -105,7 +110,7 @@
 
                             $adminID = NULL; 
 
-                            $stmt -> bind_param('isss', $adminID, $iv_hex, $email, $hashed_password_hex);
+                            $stmt -> bind_param('isss', $adminID, $iv_hex, $hashed_email_hex, $hashed_password_hex);
 
                             $stmt -> execute(); 
 

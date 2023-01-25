@@ -10,11 +10,24 @@
     {
         $email = trim($_POST['email']);
 
+        $error['email'] = validateEmail($email);
+
+        //Remove null value in $error when there is no error
+        $error = array_filter($error);
+
+        if(empty($error))
+        {
+            
+        //hashed_email 
+        $hashed_email = hash('sha3-256', $email, true);
+        //hashed_email_hex
+        $hashed_email_hex = bin2hex($hashed_email);
+
         //Establish connection
         $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
         //SQL statement
-        $sql = "SELECT * FROM verify_email WHERE email = '$email'";
+        $sql = "SELECT * FROM verify_email WHERE email = '$hashed_email_hex'";
 
         //Execute SQL and store record in $result
         $result = $con -> query($sql);
@@ -33,6 +46,11 @@
         //retrieve user input 
         $email = trim($_POST['email']); 
         $password = trim($_POST['password']);  
+
+        //hashed_email 
+        $hashed_email = hash('sha3-256', $email, true);
+        //hashed_email_hex
+        $hashed_email_hex = bin2hex($hashed_email);
 
         //hashedPassword 
         $hashedPassword = hash('sha3-256', $password, true); 
@@ -60,7 +78,7 @@
 
            
             //compare email with pass 
-            if(strcmp($pEmail, $email) == 0 && strcmp($pPassword, $hashedPassword_hex) == 0)
+            if(strcmp($pEmail, $hashed_email_hex) == 0 && strcmp($pPassword, $hashedPassword_hex) == 0)
             {
                 //If both data are correct then exist = 1 
                 $exist = 1; 
@@ -68,7 +86,7 @@
                 //Establish connection
                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-                $query = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE email = '$email'";
+                $query = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE email = '$hashed_email_hex'";
                 
                 $result = mysqli_query($con, $query);
                 
@@ -83,7 +101,7 @@
                 else
                 {
                     //store the email into session 
-                    $_SESSION["pName"] = $pName; 
+                    $_SESSION["pName"] = $email; 
 
                     $email = $_SESSION["pName"]; 
 
@@ -91,7 +109,7 @@
                     $key = 'thebestsecretkey';
 
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                    $sql = "SELECT * FROM players WHERE email = '$email'";
+                    $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                     $result = $con -> query($sql); 
 
                     if($row = $result -> fetch_object())
@@ -118,7 +136,7 @@
                         $stmt = $con ->prepare($sql);
                         $stmt -> bind_param('sss', $encrypted_last_login_time_hex, 
                                                $encrypted_latest_login_time_hex,
-                                               $email);
+                                               $hashed_email_hex);
 
                         if($stmt -> execute())
                         {
@@ -133,7 +151,7 @@
                         $key = 'thebestsecretkey';
                 
                         $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                        $sql = "SELECT * FROM players WHERE email = '$email'";
+                        $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
                 
                         if($row = $result -> fetch_object())
@@ -209,7 +227,7 @@
                           $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                           $sql = "UPDATE players SET streak = ? WHERE email = ?";
                           $stmt = $con ->prepare($sql);
-                          $stmt -> bind_param('ss', $encrypted_streak_hex, $email);
+                          $stmt -> bind_param('ss', $encrypted_streak_hex, $hashed_email_hex);
                     
                           if($stmt -> execute())
                           {
@@ -240,6 +258,13 @@
         //if no exists check admin site 
         if($exist == 0)
         {
+            $email = trim($_POST['email']);
+
+            //hashed_email 
+            $hashed_email = hash('sha3-256', $email, true);
+            //hashed_email_hex
+            $hashed_email_hex = bin2hex($hashed_email);
+
             //admin SQL statement 
             $sql = "SELECT * FROM admin"; 
 
@@ -252,7 +277,7 @@
                 $aPassword = $row -> password; 
                 $aName = $row -> email; 
 
-                if(strcmp($aEmail, $email) == 0 && strcmp($aPassword, $hashedPassword_hex) == 0)
+                if(strcmp($aEmail, $hashed_email_hex) == 0 && strcmp($aPassword, $hashedPassword_hex) == 0)
                 {
                     //If both data are correct then exist = 1 
                     $exist = 1; 
@@ -260,7 +285,7 @@
                     //Establish connection
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-                    $query = "SELECT COUNT(google2FA_secretKey) as count FROM admin WHERE email = '$email'";
+                    $query = "SELECT COUNT(google2FA_secretKey) as count FROM admin WHERE email = '$hashed_email_hex'";
                 
                     $result = mysqli_query($con, $query);
                 
@@ -278,7 +303,7 @@
                         echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
                     
                         //store the email into session 
-                        $_SESSION["aName"] = $aName; 
+                        $_SESSION["aName"] = $email; 
                     }
                     
                 }
@@ -294,6 +319,18 @@
         else 
         {
             $msg = "Your email and password are not match !";
+        }
+
+        }
+        else
+        {
+           //display error msg 
+           echo "<ul class=‘error’>";
+           foreach ($error as $value)
+           {
+           echo "<li>$value</li>";
+           echo "</ul>";
+           }
         }
     }
 ?> 

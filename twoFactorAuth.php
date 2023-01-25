@@ -85,18 +85,28 @@
                             //Establish connection
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-                            $query = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE playerID = '$id'";
-                            
-                            $result = mysqli_query($con, $query);
-                            
+                            //SQL statement with placeholder
+                            $sql = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE playerID = ?";
+
+                            //Prepare statement
+                            $stmt = $con->prepare($sql);
+
+                            //Bind id to the statement
+                            $stmt->bind_param("i", $id);
+
+                            //Execute statement
+                            $stmt->execute();
+
+                            $result = $stmt->get_result();
+
                             $row = mysqli_fetch_assoc($result);
-                            
+
                             if ($row['count'] > 0) 
                             {
                                 $location = "playerProfile.php";
-                                echo "<script type='text/JavaScript'>alert('Google Two Factor Authentication enabled before');window.location='$location'</script>"; 
-                                exit();
-                            } 
+                               echo "<script type='text/JavaScript'>alert('Google Two Factor Authentication enabled before');window.location='$location'</script>"; 
+                               exit();
+                            }  
                             else 
                             {
                                 //select iv encrypt - not yet

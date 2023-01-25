@@ -66,11 +66,16 @@
 
     $email = $_SESSION["pName"]; 
 
+    //hashed_email 
+    $hashed_email = hash('sha3-256', $email, true);
+    //hashed_email_hex
+    $hashed_email_hex = bin2hex($hashed_email);
+
     $cipher = 'AES-128-CBC';
     $key = 'thebestsecretkey';
 
     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-    $sql = "SELECT * FROM players WHERE email = '$email'";
+    $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
     $result = $con -> query($sql); 
 
     if($row = $result -> fetch_object())
@@ -167,7 +172,7 @@
     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     $sql = "UPDATE players SET badge = ? WHERE email = ?";
     $stmt = $con ->prepare($sql);
-    $stmt -> bind_param('ss', $encrypted_badgeVal_hex, $email);
+    $stmt -> bind_param('ss', $encrypted_badgeVal_hex, $hashed_email_hex);
 
     if($stmt -> execute())
     {
@@ -260,7 +265,7 @@
                         $key = 'thebestsecretkey';
                     
                         $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                        $sql = "SELECT * FROM players WHERE email = '$email'";
+                        $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
                     
                         if($row = $result -> fetch_object())

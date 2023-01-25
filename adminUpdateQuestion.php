@@ -83,12 +83,21 @@
 
                     //Establish connection
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+ 
+                    //SQL statement with placeholder
+                    $sql = "SELECT * FROM questions WHERE questionID = ?";
 
-                    //SQL statement
-                    $sql = "SELECT * FROM questions WHERE questionID = '$questionID'";
+                    //Prepare statement
+                    $stmt = $con->prepare($sql);
 
-                    //Execute SQL and store record in $result
-                    $result = $con -> query($sql);
+                    //Bind questionID to the statement
+                    $stmt->bind_param("i", $questionID);
+
+                    //Execute statement
+                    $stmt->execute();
+
+                    //Store result
+                    $result = $stmt->get_result();
 
                     if($row = $result -> fetch_object())
                     { 

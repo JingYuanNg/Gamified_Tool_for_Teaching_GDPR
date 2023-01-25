@@ -84,31 +84,66 @@ Enter the 6-digit code from your Google Authentication App</label>
                         elseif(!empty($_GET['email']))
                         { 
                             $email = trim($_GET['email']);
-                            $_SESSION['email'] = $email;
 
-                            $cipher = 'AES-128-CBC';
-                            $key = 'thebestsecretkey';
+                            $error['email'] = validateEmail($email);
+
+                            //Remove null value in $error when there is no error
+                            $error = array_filter($error);
+
+                            if(empty($error))
+                            {
+                                $_SESSION['email'] = $email;
+
+                                //hashed_email 
+                                $hashed_email = hash('sha3-256', $email, true);
+                                //hashed_email_hex
+                                $hashed_email_hex = bin2hex($hashed_email);
+
+                                $cipher = 'AES-128-CBC';
+                                $key = 'thebestsecretkey';
                     
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                            $sql = "SELECT * FROM players WHERE email = '$email'";
-                            $result = $con -> query($sql);
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
-                            if($row = $result -> fetch_object())
-                            { 
-                                $iv = hex2bin($row -> iv); 
+                                $sql = "SELECT * FROM players WHERE email = ?";
 
-                                //google2FA_secretKey 
-                                $google2FA_secretKey_bin = hex2bin($row -> google2FA_secretKey);
-                                $google2FA_secretKey = openssl_decrypt($google2FA_secretKey_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                                //Prepare statement
+                                $stmt = $con->prepare($sql);
+
+                                //Bind email to the statement
+                                $stmt->bind_param("s", $hashed_email_hex);
+
+                                //Execute statement
+                                $stmt->execute();
+
+                                $result = $stmt->get_result();
+
+                                if($row = $result -> fetch_object())
+                                { 
+                                    $iv = hex2bin($row -> iv); 
+
+                                    //google2FA_secretKey 
+                                    $google2FA_secretKey_bin = hex2bin($row -> google2FA_secretKey);
+                                    $google2FA_secretKey = openssl_decrypt($google2FA_secretKey_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
                                 
-                                $_SESSION['secretKey'] = $google2FA_secretKey;
+                                    $_SESSION['secretKey'] = $google2FA_secretKey;
+                                } 
+                            }
+                            else
+                            {
+                               //display error msg 
+                               echo "<ul class=‘error’>";
+                               foreach ($error as $value)
+                               {
+                               echo "<li>$value</li>";
+                               echo "</ul>";
+                               }
                             }
 
                         }
                     } 
                     elseif($_SERVER['REQUEST_METHOD'] == 'POST')
                     { 
-                        $secret_key = $_SESSION['secretKey']; 
+                        $secret_key = $_SESSION['secretKey'];  
                         
                         $user_provided_code = trim($_POST['loginCode']);
 
@@ -124,12 +159,28 @@ Enter the 6-digit code from your Google Authentication App</label>
 
                             $email = $_SESSION["pName"]; 
 
+                            //hashed_email 
+                            $hashed_email = hash('sha3-256', $email, true);
+                            //hashed_email_hex
+                            $hashed_email_hex = bin2hex($hashed_email);
+
                             $cipher = 'AES-128-CBC';
                             $key = 'thebestsecretkey';
 
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                            $sql = "SELECT * FROM players WHERE email = '$email'";
-                            $result = $con -> query($sql); 
+                            $sql = "SELECT * FROM players WHERE email = ?";
+
+                            //Prepare statement
+                            $stmt = $con->prepare($sql);
+
+                            //Bind email to the statement
+                            $stmt->bind_param("s", $hashed_email_hex);
+
+                            //Execute statement
+                            $stmt->execute();
+
+                            $result = $stmt->get_result();
+
 
                             if($row = $result -> fetch_object())
                             {
@@ -170,8 +221,19 @@ Enter the 6-digit code from your Google Authentication App</label>
                                     $key = 'thebestsecretkey';
                 
                                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                                    $sql = "SELECT * FROM players WHERE email = '$email'";
-                                    $result = $con -> query($sql); 
+                                    $sql = "SELECT * FROM players WHERE email = ?";
+                                    
+                                    //Prepare statement
+                                    $stmt = $con->prepare($sql);
+
+                                    //Bind email to the statement
+                                    $stmt->bind_param("s", $hashed_email_hex);
+
+                                    //Execute statement
+                                    $stmt->execute();
+
+                                    $result = $stmt->get_result();
+
                 
                                     if($row = $result -> fetch_object())
                                     {
@@ -246,7 +308,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                                    $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                                    $sql = "UPDATE players SET streak = ? WHERE email = ?";
                                    $stmt = $con ->prepare($sql);
-                                   $stmt -> bind_param('ss', $encrypted_streak_hex, $email);
+                                   $stmt -> bind_param('ss', $encrypted_streak_hex, $hashed_email_hex);
                     
                                    if($stmt -> execute())
                                    {

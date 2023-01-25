@@ -19,7 +19,7 @@ $sql = 'USE inshield;';
 if (!$conn->query($sql) === TRUE) {
   die('Error using database: ' . $conn->error);
 }
-/* 
+
 /*admin 
 $sql = 'CREATE TABLE IF NOT EXISTS admin (
     adminID int NOT NULL AUTO_INCREMENT,
@@ -31,7 +31,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS admin (
   );';
 if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
-}
+} 
 
 /*players 
 $sql = 'CREATE TABLE IF NOT EXISTS players (

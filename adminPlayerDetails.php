@@ -87,19 +87,28 @@
                     //Establish connection
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-                    //SQL statement
-                    $sql = "SELECT * FROM players WHERE playerID = '$playerID'";
+                    //SQL statement with placeholder
+                    $sql = "SELECT * FROM players WHERE playerID = ?";
 
-                    //Execute SQL and store record in $result
-                    $result = $con -> query($sql);
+                    //Prepare statement
+                    $stmt = $con->prepare($sql);
+
+                    //Bind playerID to the statement
+                    $stmt->bind_param("i", $playerID);
+
+                    //Execute statement
+                    $stmt->execute();
+
+                    //Store result
+                    $result = $stmt->get_result();
 
                     if($row = $result -> fetch_object())
                     {
                         //playerID 
                         $playerID = $row -> playerID;
-                       
+
                         //iv 
-                        $iv = hex2bin($row -> iv);
+                        $iv = hex2bin($row -> iv); 
 
                         //email
                         $email = $row -> email;

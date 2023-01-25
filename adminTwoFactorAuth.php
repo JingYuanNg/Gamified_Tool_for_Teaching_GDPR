@@ -90,25 +90,35 @@
                         }
                         elseif(!empty($_GET['id']))
                         {
-                            //select from admin table 
                             //retrieve id from URL
                             $id = trim($_GET['id']);  
 
                             //Establish connection
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-                            $query = "SELECT COUNT(google2FA_secretKey) as count FROM admin WHERE adminID = '$id'";
-                            
-                            $result = mysqli_query($con, $query);
-                            
+                            //SQL statement with placeholder
+                            $sql = "SELECT COUNT(google2FA_secretKey) as count FROM admin WHERE adminID = ?";
+
+                            //Prepare statement
+                            $stmt = $con->prepare($sql);
+
+                            //Bind id to the statement
+                            $stmt->bind_param("i", $id);
+
+                            //Execute statement
+                            $stmt->execute();
+
+                            $result = $stmt->get_result();
+
                             $row = mysqli_fetch_assoc($result);
-                            
+
                             if ($row['count'] > 0) 
                             {
-                                $location = "adminDetails.php";
-                                echo "<script type='text/JavaScript'>alert('Google Two Factor Authentication enabled before');window.location='$location'</script>"; 
-                                exit();
+                               $location = "adminDetails.php";
+                               echo "<script type='text/JavaScript'>alert('Google Two Factor Authentication enabled before');window.location='$location'</script>"; 
+                               exit();
                             } 
+
                             else 
                             {
                                 //select iv encrypt - not yet
@@ -118,11 +128,19 @@
                                 //connect db 
                                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
-                                //SQL statement admin
-                                $sql = "SELECT * from admin WHERE adminID = '$id'"; 
+                                //SQL statement admin with placeholder
+                                $sql = "SELECT * from admin WHERE adminID = ?"; 
 
-                                //get result from sql 
-                                $result = $con -> query($sql); 
+                                //Prepare statement
+                                $stmt = $con->prepare($sql);
+
+                                //Bind id to the statement
+                                $stmt->bind_param("i", $id);
+
+                                //Execute statement
+                                $stmt->execute();
+
+                                $result = $stmt->get_result();
 
                                 if($row = $result -> fetch_object())
                                 {
@@ -132,6 +150,7 @@
                                     //email 
                                     $email = $row -> email;
                                 }
+
                                 
                                 $google2fa = new \PragmaRX\Google2FA\Google2FA();
                                 $secret_key = $google2fa->generateSecretKey();

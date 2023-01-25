@@ -81,11 +81,17 @@
                     <?php 
                         $email = $_SESSION["aName"]; 
 
+                        //hashed_email 
+                        $hashed_email = hash('sha3-256', $email, true);
+                        //hashed_email_hex
+                        $hashed_email_hex = bin2hex($hashed_email);
+
+
                         $cipher = 'AES-128-CBC';
                         $key = 'thebestsecretkey';
                     
                         $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                        $sql = "SELECT * FROM admin WHERE email = '$email'";
+                        $sql = "SELECT * FROM admin WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
                     
                         if($row = $result -> fetch_object())

@@ -22,16 +22,23 @@
             //Establish connection
             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-             //SQL statement
-             $sql="DELETE FROM questions WHERE questionID ='". $questionID . "'";
-                        
-             if($con -> query($sql))
-                 {
-                    $location = "adminQuestions.php";
-                    echo "<script type='text/JavaScript'>alert('Question with ID " . $questionID . " is deleted');window.location='$location'</script>";
-                 }
+            //SQL statement with placeholder
+            $sql = "DELETE FROM questions WHERE questionID = ?";
+
+            //Prepare statement
+            $stmt = $con->prepare($sql);
+
+            //Bind questionID to the statement
+            $stmt->bind_param("i", $questionID);
+
+            //Execute statement
+            if($stmt->execute())
+            {
+                $location = "adminQuestions.php";
+                echo "<script type='text/JavaScript'>alert('Question with ID " . $questionID . " is deleted');window.location='$location'</script>";
+            }
              
-             $con -> close();
+            $con -> close();
         }
     }
 ?>

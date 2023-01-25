@@ -109,11 +109,16 @@
                 //check player lvl 
                 $email = $_SESSION["pName"]; 
 
+                //hashed_email 
+                $hashed_email = hash('sha3-256', $email, true);
+                //hashed_email_hex
+                $hashed_email_hex = bin2hex($hashed_email);
+
                 $cipher = 'AES-128-CBC';
                 $key = 'thebestsecretkey';
 
                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                $sql = "SELECT * FROM players WHERE email = '$email'";
+                $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                 $result = $con -> query($sql); 
 
                 if($row = $result -> fetch_object())
@@ -199,7 +204,7 @@
                     $key = 'thebestsecretkey';
 
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                    $sql = "SELECT * FROM players WHERE email = '$email'";
+                    $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                     $result = $con -> query($sql); 
 
                     if($row = $result -> fetch_object())
@@ -225,7 +230,7 @@
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                     $sql = "UPDATE players SET levels = ? WHERE email = ?";
                     $stmt = $con -> prepare($sql); 
-                    $stmt -> bind_param('ss', $encrypted_levels_reset_hex, $email);
+                    $stmt -> bind_param('ss', $encrypted_levels_reset_hex, $hashed_email_hex);
 
                     echo 'encryped_levels_hex: ' . $encrypted_levels_reset_hex . '<br/>';
                     if($stmt -> execute())
@@ -338,11 +343,16 @@
 
                      $email = $_SESSION["pName"]; 
 
+                     //hashed_email 
+                     $hashed_email = hash('sha3-256', $email, true);
+                     //hashed_email_hex
+                     $hashed_email_hex = bin2hex($hashed_email);
+
                      $cipher = 'AES-128-CBC';
                      $key = 'thebestsecretkey';
 
                      $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                     $sql = "SELECT * FROM players WHERE email = '$email'";
+                     $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                      $result = $con -> query($sql); 
 
                      if($row = $result -> fetch_object())
@@ -415,7 +425,7 @@
                                                      $encrypted_ranking_category3_new_hex,
                                                      $encrypted_ranking_category4_new_hex,
                                                      $encrypted_levels_new_hex,
-                                                     $email);
+                                                     $hashed_email_hex);
 
                     if($stmt -> execute())
                     {
