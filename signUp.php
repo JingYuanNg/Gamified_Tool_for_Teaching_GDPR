@@ -84,7 +84,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = ''; //password not upload to github for security purpose
+                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -183,11 +183,16 @@
 
                         //points
                         $points = 0; 
-                        //encrypted_points
+                        /* //encrypted_points
                         $encrypted_points = openssl_encrypt($points, $cipher, $key, OPENSSL_RAW_DATA, $iv);
                         //encrypted_points_hex 
                         $encrypted_points_hex = bin2hex($encrypted_points);
+ */
 
+                        $encrypted_points_hex = encrypting($points); 
+                        echo $encrypted_points_hex; 
+                        echo '<br/>';
+  
                         //leader_position
                         $leader_position = 0; 
                         //encrypted_leaderboard_position

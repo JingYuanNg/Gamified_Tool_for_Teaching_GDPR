@@ -93,8 +93,10 @@
 
       //points 
       $points_bin = hex2bin($row -> points); 
-      $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-    
+      //$points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+      $points = decrypting($points_bin, $iv);
+      echo $points. '<br/>';
+
       //last_login_time 
       $last_login_time_bin = hex2bin($row -> last_login_time); 
       $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);

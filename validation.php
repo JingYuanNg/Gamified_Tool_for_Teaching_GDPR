@@ -188,4 +188,33 @@ function validateConfirmPassword($password, $confirmPassword)
         return "Both password are <strong> not same</strong>";
     }
 } 
+
+//encrypting 
+function encrypting($valToEncrypt)
+{
+  $cipher = 'AES-128-CBC';
+  $key = 'thebestsecretkey';
+
+  //iv_hex 
+  $iv = random_bytes(16); 
+  $iv_hex = bin2hex($iv);
+
+  //encrypted_valToEncrypt
+  $encrypted_valToEncrypt = openssl_encrypt($valToEncrypt, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+  //encrypted_valToEncrypt_hex 
+  $encrypted_valToEncrypt_hex = bin2hex($encrypted_valToEncrypt); 
+
+  return $encrypted_valToEncrypt_hex; 
+}
+
+//decrypting 
+function decrypting($val_bin, $iv)
+{
+  $cipher = 'AES-128-CBC';
+  $key = 'thebestsecretkey';
+ 
+  $decryptedVal = openssl_decrypt($val_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+
+  return $decryptedVal;
+} 
 ?>
