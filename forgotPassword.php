@@ -92,7 +92,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
+                       $mail->Password = ''; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -161,12 +161,8 @@
     
                                 //current_timestamp  
                                 date_default_timezone_set('Europe/Dublin');
-                                $current_timestamp = date('d-F-Y H:i:s');   
-                                //encrypted_current_timestamp 
-                                $encrypted_current_timestamp = openssl_encrypt($current_timestamp, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                                //encrypted_current_timestamp_hex 
-                                $encrypted_current_timestamp_hex = bin2hex($encrypted_current_timestamp);
-    
+                                $current_timestamp = date('d-F-Y H:i:s');  
+                                $encrypted_current_timestamp_hex = encrypting($current_timestamp, $iv);
                                 
                                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                 
@@ -215,10 +211,7 @@
                                   //current_timestamp  
                                   date_default_timezone_set('Europe/Dublin');
                                   $current_timestamp = date('d-F-Y H:i:s');   
-                                  //encrypted_current_timestamp 
-                                  $encrypted_current_timestamp = openssl_encrypt($current_timestamp, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                                  //encrypted_current_timestamp_hex 
-                                  $encrypted_current_timestamp_hex = bin2hex($encrypted_current_timestamp);
+                                  $encrypted_current_timestamp_hex = encrypting($current_timestamp, $iv);
         
                                   $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                     
@@ -287,13 +280,6 @@ we’ll send you a link to reset your password</label></div><br/>
                 </div> 
             </div>
         </div> 
-    </div>
-    <!-- <input type="button" value="Logout" name="logout" class="profile-btn" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script> -->
+    </div> 
 </body>
 </html> 

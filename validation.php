@@ -190,14 +190,10 @@ function validateConfirmPassword($password, $confirmPassword)
 } 
 
 //encrypting 
-function encrypting($valToEncrypt)
+function encrypting($valToEncrypt, $iv)
 {
   $cipher = 'AES-128-CBC';
-  $key = 'thebestsecretkey';
-
-  //iv_hex 
-  $iv = random_bytes(16); 
-  $iv_hex = bin2hex($iv);
+  $key = 'thebestsecretkey'; 
 
   //encrypted_valToEncrypt
   $encrypted_valToEncrypt = openssl_encrypt($valToEncrypt, $cipher, $key, OPENSSL_RAW_DATA, $iv); 

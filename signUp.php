@@ -84,7 +84,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
+                       $mail->Password = ''; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -155,11 +155,7 @@
                                 exit();
                               }
                             }
-                        }
-
-                        $cipher = 'AES-128-CBC';
-                        $key = 'thebestsecretkey';
-
+                        } 
                         //iv_hex 
                         $iv = random_bytes(16); 
                         $iv_hex = bin2hex($iv);
@@ -175,95 +171,54 @@
                         $hashed_password_hex = bin2hex($hashed_password);
 
                         //displayName
-                        $displayName = $email; 
-                        //encrypted_displayName
-                        $encrypted_displayName = openssl_encrypt($displayName, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_displayName_hex 
-                        $encrypted_displayName_hex = bin2hex($encrypted_displayName);
+                        $displayName = $email;  
+                        $encrypted_displayName_hex = encrypting($displayName, $iv); 
 
                         //points
-                        $points = 0; 
-                        /* //encrypted_points
-                        $encrypted_points = openssl_encrypt($points, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_points_hex 
-                        $encrypted_points_hex = bin2hex($encrypted_points);
- */
-
-                        $encrypted_points_hex = encrypting($points); 
-                        echo $encrypted_points_hex; 
-                        echo '<br/>';
+                        $points = 0;   
+                        $encrypted_points_hex = encrypting($points, $iv); 
   
                         //leader_position
-                        $leader_position = 0; 
-                        //encrypted_leaderboard_position
-                        $encrypted_leaderboard_position = openssl_encrypt($leader_position, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_leaderboard_position_hex 
-                        $encrypted_leaderboard_position_hex = bin2hex($encrypted_leaderboard_position);
+                        $leaderboard_position = 0;  
+                        $encrypted_leaderboard_position_hex = encrypting($leaderboard_position, $iv);
 
                         //streak
-                        $streak = 0; 
-                        //encrypted_streak 
-                        $encrypted_streak = openssl_encrypt($streak, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_streak_hex 
-                        $encrypted_streak_hex = bin2hex($encrypted_streak);
-                
+                        $streak = 0;  
+                        $encrypted_streak_hex = encrypting($streak, $iv);
+
                         //last_login_time  
                         date_default_timezone_set('Europe/Dublin');
-                        $last_login_time = date('d-F-Y H:i:s');  
-                        //encrypted_last_login_time 
-                        $encrypted_last_login_time = openssl_encrypt($last_login_time, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_last_login_time_hex 
-                        $encrypted_last_login_time_hex = bin2hex($encrypted_last_login_time);   
- 
+                        $last_login_time = date('d-F-Y H:i:s');     
+                        $encrypted_last_login_time_hex = encrypting($last_login_time, $iv);
+
                         //latest_login_time  
                         date_default_timezone_set('Europe/Dublin');
-                        $latest_login_time = date('d-F-Y H:i:s');   
-                        //encrypted_latest_login_time 
-                        $encrypted_latest_login_time = openssl_encrypt($latest_login_time, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_latest_login_time_hex 
-                        $encrypted_latest_login_time_hex = bin2hex($encrypted_latest_login_time);
+                        $latest_login_time = date('d-F-Y H:i:s');    
+                        $encrypted_latest_login_time_hex = encrypting($latest_login_time, $iv);
 
                         //badge 
-                        $badge = 0; 
-                        //encrypted_badge
-                        $encrypted_badge = openssl_encrypt($badge, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_badge_hex 
-                        $encrypted_badge_hex = bin2hex($encrypted_badge);
+                        $badge = 0;  
+                        $encrypted_badge_hex = encrypting($badge, $iv);
 
                         //ranking_category1
-                        $ranking_category1 = 0;
-                        //encrypted_ranking_category1
-                        $encrypted_ranking_category1 = openssl_encrypt($ranking_category1, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_ranking_category1_hex
-                        $encrypted_ranking_category1_hex = bin2hex($encrypted_ranking_category1);
+                        $ranking_category1 = 0; 
+                        $encrypted_ranking_category1_hex = encrypting($ranking_category1, $iv);
                         
                         //ranking_category2
-                        $ranking_category2 = 0;
-                        //encrypted_ranking_category2
-                        $encrypted_ranking_category2 = openssl_encrypt($ranking_category2, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_ranking_category2_hex
-                        $encrypted_ranking_category2_hex = bin2hex($encrypted_ranking_category2);
+                        $ranking_category2 = 0; 
+                        $encrypted_ranking_category2_hex = encrypting($ranking_category2, $iv);
 
                         //ranking_category3
-                        $ranking_category3 = 0;
-                        //encrypted_ranking_category3
-                        $encrypted_ranking_category3 = openssl_encrypt($ranking_category3, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_ranking_category3_hex
-                        $encrypted_ranking_category3_hex = bin2hex($encrypted_ranking_category3);
+                        $ranking_category3 = 0; 
+                        $encrypted_ranking_category3_hex = encrypting($ranking_category3, $iv);
 
                         //ranking_category4
-                        $ranking_category4 = 0;
-                        //encrypted_ranking_category4
-                        $encrypted_ranking_category4 = openssl_encrypt($ranking_category4, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_ranking_category4_hex
-                        $encrypted_ranking_category4_hex = bin2hex($encrypted_ranking_category4);
+                        $ranking_category4 = 0; 
+                        $encrypted_ranking_category4_hex = encrypting($ranking_category4, $iv);
 
                         //level 
-                        $levels = 1; 
-                        //encrypted_levels
-                        $encrypted_levels = openssl_encrypt($levels, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        //encrypted_levels_hex
-                        $encrypted_levels_hex = bin2hex($encrypted_levels);
+                        $levels = 1;  
+                        $encrypted_levels_hex = encrypting($levels, $iv);
 
                         if(empty($error))
                         {
@@ -281,10 +236,7 @@
                             if($stmt -> affected_rows > 0)
                             {
                                 //printf('<script>alert("Sign Up successfully"); location.href = "./login.php"</script>');
-                                
-                            $cipher = 'AES-128-CBC';
-                            $key = 'thebestsecretkey';
-    
+                                  
                             //iv_hex 
                             $iv = random_bytes(16); 
                             $iv_hex = bin2hex($iv);
@@ -294,11 +246,8 @@
     
                             //current_timestamp  
                             date_default_timezone_set('Europe/Dublin');
-                            $current_timestamp = date('d-F-Y H:i:s');   
-                            //encrypted_current_timestamp 
-                            $encrypted_current_timestamp = openssl_encrypt($current_timestamp, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                            //encrypted_current_timestamp_hex 
-                            $encrypted_current_timestamp_hex = bin2hex($encrypted_current_timestamp);
+                            $current_timestamp = date('d-F-Y H:i:s');    
+                            $encrypted_current_timestamp_hex = encrypting($current_timestamp, $iv);
      
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                 
@@ -320,10 +269,7 @@
 
                             $stmt -> close(); 
                             $con -> close();
-                            }
-
-                            $stmt -> close(); 
-                            $con -> close();
+                            } 
 
                                 
                         }

@@ -100,9 +100,9 @@
                                 $email = $row -> email;
 
                                 //timestamp 
-                                $timestamp_bin = hex2bin($row -> timestamp); 
-                                $timestamp_b4formatting = openssl_decrypt($timestamp_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        
+                                $timestamp_bin = hex2bin($row -> timestamp);  
+                                $timestamp_b4formatting = decrypting($timestamp_bin, $iv);
+
                                 $timestamp = new DateTime($timestamp_b4formatting); 
                                 
                                 $_SESSION['email'] = $email; 

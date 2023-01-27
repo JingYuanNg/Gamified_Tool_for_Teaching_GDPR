@@ -67,10 +67,7 @@
         
         <div class="container-fluid ps-5"> 
             <?php 
-
-            $cipher = 'AES-128-CBC';
-            $key = 'thebestsecretkey';
-
+  
             //retrieve from db 
             if($_SERVER['REQUEST_METHOD'] == 'GET')
             { 
@@ -122,52 +119,52 @@
                             $email = $row -> email;
 
                             //displayName 
-                            $displayName_bin = hex2bin($row -> displayName); 
-                            $displayName = openssl_decrypt($displayName_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        
+                            $displayName_bin = hex2bin($row -> displayName);  
+                            $displayName = decrypting($displayName_bin, $iv);
+
                             //points
-                            $points_bin = hex2bin($row -> points); 
-                            $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                        
+                            $points_bin = hex2bin($row -> points);  
+                            $points = decrypting($points_bin, $iv); 
+
                             //leaderboard_position
-                            $leaderboard_position_bin = hex2bin($row -> leaderboard_position); 
-                            $leaderboard_position = openssl_decrypt($leaderboard_position_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                       
+                            $leaderboard_position_bin = hex2bin($row -> leaderboard_position);  
+                            $leaderboard_position = decrypting($leaderboard_position_bin, $iv);
+
                             //streak
-                            $streak_bin = hex2bin($row -> streak); 
-                            $streak = openssl_decrypt($streak_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        
+                            $streak_bin = hex2bin($row -> streak);  
+                            $streak = decrypting($streak_bin , $iv);
+
                             //last_login_time
-                            $last_login_time_bin = hex2bin($row -> last_login_time); 
-                            $last_login_time = openssl_decrypt($last_login_time_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        
+                            $last_login_time_bin = hex2bin($row -> last_login_time);  
+                            $last_login_time = decrypting($last_login_time_bin , $iv);
+
                             //latest_login_time
-                            $latest_login_time_bin = hex2bin($row -> latest_login_time); 
-                            $latest_login_time = openssl_decrypt($latest_login_time_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        
+                            $latest_login_time_bin = hex2bin($row -> latest_login_time);  
+                            $latest_login_time = decrypting($latest_login_time_bin , $iv);
+
                             //badge
-                            $badge_bin = hex2bin($row -> badge); 
-                            $badge = openssl_decrypt($badge_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                       
+                            $badge_bin = hex2bin($row -> badge);  
+                            $badge = decrypting($badge_bin , $iv);
+
                             //ranking_category1
-                            $ranking_category1_bin = hex2bin($row -> ranking_category1); 
-                            $ranking_category1 = openssl_decrypt($ranking_category1_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        
+                            $ranking_category1_bin = hex2bin($row -> ranking_category1);  
+                            $ranking_category1 = decrypting($ranking_category1_bin , $iv);
+
                             //ranking_category2
-                            $ranking_category2_bin = hex2bin($row -> ranking_category2); 
-                            $ranking_category2 = openssl_decrypt($ranking_category2_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                
+                            $ranking_category2_bin = hex2bin($row -> ranking_category2);  
+                            $ranking_category2 = decrypting($ranking_category2_bin , $iv);
+
                             //ranking_category3
-                            $ranking_category3_bin = hex2bin($row -> ranking_category3); 
-                            $ranking_category3 = openssl_decrypt($ranking_category3_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-  
+                            $ranking_category3_bin = hex2bin($row -> ranking_category3);  
+                            $ranking_category3 = decrypting($ranking_category3_bin , $iv);
+
                             //ranking_category4
-                            $ranking_category4_bin = hex2bin($row -> ranking_category4); 
-                            $ranking_category4 = openssl_decrypt($ranking_category4_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                            $ranking_category4_bin = hex2bin($row -> ranking_category4);  
+                            $ranking_category4 = decrypting($ranking_category4_bin , $iv);
 
                             //levels
-                            $levels_bin = hex2bin($row -> levels); 
-                            $levels = openssl_decrypt($levels_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                            $levels_bin = hex2bin($row -> levels);  
+                            $levels = decrypting($levels_bin , $iv);
 
                             echo '
                             <h1 class="text-left txt fw-bold">'. $displayName .'</h1> 
@@ -246,7 +243,32 @@
                                                     '</label>
                                                     </div>
                                                 </td>
+                                            </tr>
+                                             
+                                            <tr>
+                                                <td><label for="ranking_category1" class="txt fs-5">Ranking Category 1</label></td>
+                                                <td style="height:100px;"><input type="text" class="form-control" id="ranking_category1" value="'.$ranking_category1.'" disabled/></td>
+                                            </tr>
+ 
+                                            <tr>
+                                                <td><label for="ranking_category2" class="txt fs-5">Ranking Category 2</label></td>
+                                                <td style="height:100px;"><input type="text" class="form-control" id="ranking_category2" value="'.$ranking_category2.'" disabled/></td>
+                                            </tr>
+ 
+                                            <tr>
+                                                <td><label for="ranking_category3" class="txt fs-5">Ranking Category 3</label></td>
+                                                <td style="height:100px;"><input type="text" class="form-control" id="ranking_category3" value="'.$ranking_category3.'" disabled/></td>
+                                            </tr>
+ 
+                                            <tr>
+                                                <td><label for="ranking_category4" class="txt fs-5">Ranking Category 4</label></td>
+                                                <td style="height:100px;"><input type="text" class="form-control" id="ranking_category4" value="'.$ranking_category4.'" disabled/></td>
                                             </tr> 
+
+                                            <tr>
+                                                <td><label for="levels" class="txt fs-5">Levels</label></td>
+                                                <td style="height:100px;"><input type="text" class="form-control" id="levels" value="'.$levels.'" disabled/></td>
+                                            </tr>
                                         </table> 
                                     </form>'; 
 
@@ -267,16 +289,6 @@
                 
             } 
 
-            ?> 
-
-            
-    
-
- <!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>   -->
+            ?>  
 </body>
 </html> 

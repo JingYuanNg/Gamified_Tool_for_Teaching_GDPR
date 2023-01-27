@@ -131,28 +131,23 @@
 
                     //levels 
                     $levels_bin = hex2bin($row -> levels); 
-                    $levels = openssl_decrypt($levels_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                    
+                    $levels = decrypting($levels_bin, $iv);
                 
                     //ranking_category1 
-                    $ranking_category1_bin = hex2bin($row -> ranking_category1); 
-                    $ranking_category1 = openssl_decrypt($ranking_category1_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                    // echo 'ranking_category1: ' . $ranking_category1 . '<br />'; 
+                    $ranking_category1_bin = hex2bin($row -> ranking_category1);   
+                    $ranking_category1 = decrypting($ranking_category1_bin, $iv);
 
                     //ranking_category2
                     $ranking_category2_bin = hex2bin($row -> ranking_category2); 
-                    $ranking_category2 = openssl_decrypt($ranking_category2_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                    // echo 'ranking_category2: ' . $ranking_category2 . '<br />'; 
+                    $ranking_category2 = decrypting($ranking_category2_bin, $iv);
                 
                     //ranking_category3
-                    $ranking_category3_bin = hex2bin($row -> ranking_category3); 
-                    $ranking_category3 = openssl_decrypt($ranking_category3_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                    // echo 'ranking_category3: ' . $ranking_category3 . '<br />';
+                    $ranking_category3_bin = hex2bin($row -> ranking_category3);
+                    $ranking_category3 = decrypting($ranking_category3_bin, $iv);
 
                     //ranking_category4
-                    $ranking_category4_bin = hex2bin($row -> ranking_category4); 
-                    $ranking_category4 = openssl_decrypt($ranking_category4_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                    // echo 'ranking_category4: ' . $ranking_category4 . '<br />';
+                    $ranking_category4_bin = hex2bin($row -> ranking_category4);  
+                    $ranking_category4 = decrypting($ranking_category4_bin, $iv);
                 }
 
                 //get the smallest ranking_category(weakest) 
@@ -190,13 +185,7 @@
                     $weakestCategory = $vars[0];
                 }
                  
-                $con -> close();
-/* 
-                echo '$min: ' . $min . '<br/>'; 
-                echo 'weakest category: ' . $weakestCategory . '<br/>';
-                     
-                echo 'levels for players with email - ' . $email . ': ' . $levels . '<br/>';
- */
+                $con -> close(); 
                 
                 if($levels > 9)//highest lvl is 9 because only have 10 ques per category
                 { 
@@ -220,13 +209,9 @@
 
                     
                     //level 
-                    $levels_reset = 1; 
-                    //encrypted_levels
-                    $encrypted_levels_reset = openssl_encrypt($levels_reset, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                    //encrypted_levels_hex
-                    $encrypted_levels_reset_hex = bin2hex($encrypted_levels_reset);
-
-
+                    $levels_reset = 1;  
+                    $encrypted_levels_reset_hex = encrypting($levels_reset, $iv);
+ 
                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                     $sql = "UPDATE players SET levels = ? WHERE email = ?";
                     $stmt = $con -> prepare($sql); 
@@ -277,14 +262,7 @@
                     { 
                       $score = 0;
                       for ($i = 0; $i < count($questions); $i++) 
-                      {
-                        /* echo 'questionID from POST :' .$_POST['quesID'][$i]. '<br/>'; 
-                        echo 'answer from POST :' .$_POST['answer'][$i]. '<br/>';  */
-                        /* if ($_POST['answer'][$i] == $answers[$i]) 
-                        {
-                          $score++;
-                        } */
-                        
+                      {  
                         if(empty($_POST['answer'][$i]))
                         {
                             $location = "quiz.php";
@@ -307,10 +285,7 @@
                             {
                                 $questionID = $row ->questionID;
                                 $answer = $row ->answer; 
-                                $category = $row ->category;
-                            
-                                /* echo 'questionID from db: ' . $questionID . '<br />'; 
-                                echo 'answer: ' . $answer . '<br />';  */
+                                $category = $row ->category; 
                             
                                 if ($_POST['answer'][$i] == $answer) 
                                 {
@@ -337,9 +312,7 @@
                             }
                         
                         }
-                     }
-                     
-                    //  echo $_SESSION["pName"];
+                     } 
 
                      $email = $_SESSION["pName"]; 
 
@@ -366,54 +339,45 @@
  
                         //points 
                         $points_bin = hex2bin($row -> points); 
-                        $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                        $points_new = $points + $score; 
-                        $encrypted_points_new = openssl_encrypt($points_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        $encrypted_points_new_hex = bin2hex($encrypted_points_new);
+                        $points = decrypting($points_bin, $iv); 
+                        $points_new = $points + $score;  
+                        $encrypted_points_new_hex = encrypting($points_new, $iv);
 
                         //time
                         date_default_timezone_set('Europe/Dublin');
-                        $date_now = date('d-F-Y H:i'); 
-                        $encrypted_date_now = openssl_encrypt($date_now, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        $encrypted_date_now_hex = bin2hex($encrypted_date_now);
+                        $date_now = date('d-F-Y H:i');  
+                        $encrypted_date_now_hex = encrypting($date_now, $iv);
 
                         //ranking_category1 
                         $ranking_category1_bin = hex2bin($row -> ranking_category1); 
-                        $ranking_category1 = openssl_decrypt($ranking_category1_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                        $ranking_category1_new = $ranking_category1 + $ranking1; 
-                        $encrypted_ranking_category1_new = openssl_encrypt($ranking_category1_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        $encrypted_ranking_category1_new_hex = bin2hex($encrypted_ranking_category1_new);
+                        $ranking_category1 = decrypting($ranking_category1_bin, $iv); 
+                        $ranking_category1_new = $ranking_category1 + $ranking1;  
+                        $encrypted_ranking_category1_new_hex = encrypting($ranking_category1_new, $iv);
 
                         //ranking_category2
                         $ranking_category2_bin = hex2bin($row -> ranking_category2); 
-                        $ranking_category2 = openssl_decrypt($ranking_category2_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                        $ranking_category2_new = $ranking_category2 + $ranking2;
-                        $encrypted_ranking_category2_new = openssl_encrypt($ranking_category2_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        $encrypted_ranking_category2_new_hex = bin2hex($encrypted_ranking_category2_new);
+                        $ranking_category2 = decrypting($ranking_category2_bin, $iv); 
+                        $ranking_category2_new = $ranking_category2 + $ranking2; 
+                        $encrypted_ranking_category2_new_hex = encrypting($ranking_category2_new, $iv);
 
                         //ranking_category3
                         $ranking_category3_bin = hex2bin($row -> ranking_category3); 
-                        $ranking_category3 = openssl_decrypt($ranking_category3_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                        $ranking_category3_new = $ranking_category3 + $ranking3;
-                        $encrypted_ranking_category3_new = openssl_encrypt($ranking_category3_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        $encrypted_ranking_category3_new_hex = bin2hex($encrypted_ranking_category3_new);
+                        $ranking_category3 = decrypting($ranking_category3_bin, $iv);
+                        $ranking_category3_new = $ranking_category3 + $ranking3;  
+                        $encrypted_ranking_category3_new_hex = encrypting($ranking_category3_new, $iv);
 
                         //ranking_category4
                         $ranking_category4_bin = hex2bin($row -> ranking_category4); 
-                        $ranking_category4 = openssl_decrypt($ranking_category4_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                        $ranking_category4_new = $ranking_category4 + $ranking4;
-                        $encrypted_ranking_category4_new = openssl_encrypt($ranking_category4_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        $encrypted_ranking_category4_new_hex = bin2hex($encrypted_ranking_category4_new);
-                        
+                        $ranking_category4 = decrypting($ranking_category4_bin, $iv); 
+                        $ranking_category4_new = $ranking_category4 + $ranking4; 
+                        $encrypted_ranking_category4_new_hex = encrypting($ranking_category4_new, $iv);
+
                         //levels 
                         $addLevel = 1;
                         $levels_bin = hex2bin($row -> levels); 
-                        $levels = openssl_decrypt($levels_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        // echo 'levels' . $levels . '<br/>';
-                        $levels_new = $levels + $addLevel; 
-                        // echo 'levels_new' . $levels_new . '<br/>';
-                        $encrypted_levels_new = openssl_encrypt($levels_new, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                        $encrypted_levels_new_hex = bin2hex($encrypted_levels_new);
+                        $levels = decrypting($levels_bin, $iv); 
+                        $levels_new = $levels + $addLevel;   
+                        $encrypted_levels_new_hex = encrypting($levels_new, $iv);
                      }
 
                      $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -489,13 +453,7 @@
                             </label>
 
                             </div>';
-
-                      /* 
-                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="a">' . $optionA[$i] . '</div><br>';
-                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="b">' . $optionB[$i] . '</div><br>';
-                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="c">' . $optionC[$i] . '</div><br>';
-                      echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded txt-ans"><input type="radio" name="answer[' . $i . ']" value="d">' . $optionD[$i] . '</div><br>'; 
-                      */
+ 
 
                       echo '<div><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></div>';
                       

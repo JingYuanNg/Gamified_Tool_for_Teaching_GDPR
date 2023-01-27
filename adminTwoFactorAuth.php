@@ -154,12 +154,9 @@
                                 
                                 $google2fa = new \PragmaRX\Google2FA\Google2FA();
                                 $secret_key = $google2fa->generateSecretKey();
-                                        
-                                //encrypted_secret_key 
-                                $encrypted_secret_key = openssl_encrypt($secret_key, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                                //encrypted_streak_hex 
-                                $encrypted_secret_key_hex = bin2hex($encrypted_secret_key);
-                                
+                                      
+                                $encrypted_secret_key_hex = encrypting($secret_key, $iv);
+
                                 //retrieve id from URL
                                 $id = trim($_GET['id']);  
 
@@ -178,8 +175,7 @@
                                     );
                                            
                                     $image_url = 'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl='.$text;
-                                    echo '<img src="'.$image_url.'" />';
-                                    //echo "<script type='text/JavaScript'>alert('Yayy');</script>"; 
+                                    echo '<img src="'.$image_url.'" />'; 
                                 }
                                 else 
                                 {
@@ -199,11 +195,5 @@
         </div>
     </div> 
 
- <!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>   -->
 </body>
 </html> 

@@ -5,6 +5,66 @@
     session_start(); 
     require_once './validation.php';
 
+   
+?> 
+<html>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="img/icon.png" type="image/png" sizes="16x16">
+    <title>INSHIELD | Login</title>
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<style>   
+
+    .display-top
+    {
+        padding-top: 90px;
+    }
+
+    .display-inside
+    {
+        padding-top: 50px;
+    }
+
+    .txt
+    {
+        font-family: "Strait"; 
+        color: #000000;
+    }
+ 
+    .btn-design
+    { 
+        border-color: #000000 !important;
+        background-color: #F5F5DC !important;
+    }
+     
+    .text-center a:hover
+    {
+        text-decoration: underline;
+        color: #365194;
+    }
+
+</style>
+
+<body>
+    <?php 
+        
+    include './headerFooterClient.php'; 
+       if(!empty($msg))
+       {
+            echo "<script>alert('$msg')</script>";
+       }
+ 
+    ?>
+<br/><br/><br/> 
+    <div class="container mt-5 display-top">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="text-center txt">Login</h1>
+                <?php 
     //check whether login btn is pressed 
     if(isset($_POST['login']))
     {
@@ -333,64 +393,7 @@
            }
         }
     }
-?> 
-<html>
-<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="img/icon.png" type="image/png" sizes="16x16">
-    <title>INSHIELD | Login</title>
-    <link href="css/styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-</head>
-<style>   
-
-    .display-top
-    {
-        padding-top: 90px;
-    }
-
-    .display-inside
-    {
-        padding-top: 50px;
-    }
-
-    .txt
-    {
-        font-family: "Strait"; 
-        color: #000000;
-    }
- 
-    .btn-design
-    { 
-        border-color: #000000 !important;
-        background-color: #F5F5DC !important;
-    }
-     
-    .text-center a:hover
-    {
-        text-decoration: underline;
-        color: #365194;
-    }
-
-</style>
-
-<body>
-    <?php 
-        
-    include './headerFooterClient.php'; 
-       if(!empty($msg))
-       {
-            echo "<script>alert('$msg')</script>";
-       }
-    ?>
-<br/><br/><br/> 
-    <div class="container mt-5 display-top">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1 class="text-center txt">Login</h1>
-                
+                ?> 
                 <form id="loginForm" method="post" action="">
                     <div class="mb-3 form-floating">
                         <input type="text" class="form-control txt" id="email" placeholder="Email" name="email" required="required">

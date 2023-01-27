@@ -85,7 +85,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                         { 
                             $email = trim($_GET['email']);
 
-                            $error['email'] = validateEmail($email);
+                            $error['email'] = validateEmailFormat($email);
 
                             //Remove null value in $error when there is no error
                             $error = array_filter($error);
@@ -98,9 +98,6 @@ Enter the 6-digit code from your Google Authentication App</label>
                                 $hashed_email = hash('sha3-256', $email, true);
                                 //hashed_email_hex
                                 $hashed_email_hex = bin2hex($hashed_email);
-
-                                $cipher = 'AES-128-CBC';
-                                $key = 'thebestsecretkey';
                     
                                 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
@@ -123,8 +120,8 @@ Enter the 6-digit code from your Google Authentication App</label>
 
                                     //google2FA_secretKey 
                                     $google2FA_secretKey_bin = hex2bin($row -> google2FA_secretKey);
-                                    $google2FA_secretKey = openssl_decrypt($google2FA_secretKey_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                                
+                                    $google2FA_secretKey = decrypting($google2FA_secretKey_bin, $iv); 
+
                                     $_SESSION['secretKey'] = $google2FA_secretKey;
                                 } 
                             }
@@ -164,9 +161,6 @@ Enter the 6-digit code from your Google Authentication App</label>
                             //hashed_email_hex
                             $hashed_email_hex = bin2hex($hashed_email);
 
-                            $cipher = 'AES-128-CBC';
-                            $key = 'thebestsecretkey';
-
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                             $sql = "SELECT * FROM players WHERE email = ?";
 
@@ -198,8 +192,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                                     //latest_login_time
                                     date_default_timezone_set('Europe/Dublin');
                                     $date_now = date('d-F-Y H:i:s'); 
-                                    $encrypted_latest_login_time = openssl_encrypt($date_now, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                                    $encrypted_latest_login_time_hex = bin2hex($encrypted_latest_login_time);
+                                    $encrypted_latest_login_time_hex = encrypting($date_now, $iv);
 
                                     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                                     $sql = "UPDATE players SET last_login_time = ? , latest_login_time = ? WHERE email = ?";
@@ -215,10 +208,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                                     else
                                     {
                         
-                                    }  
-
-                                    $cipher = 'AES-128-CBC';
-                                    $key = 'thebestsecretkey';
+                                    }   
                 
                                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                     $sql = "SELECT * FROM players WHERE email = ?";
@@ -242,32 +232,25 @@ Enter the 6-digit code from your Google Authentication App</label>
 
                                         //last_login_time 
                                         $last_login_time_bin = hex2bin($row -> last_login_time); 
-                                        $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                                        //echo '$last_login_time:' . $last_login_time . "<br/>";
+                                        $last_login_time = decrypting($last_login_time_bin, $iv); 
                                         $date_last_login_time = new DateTime($last_login_time); 
                                         $day_last_login_time = $date_last_login_time -> format('d');
                                         $month_last_login_time = $date_last_login_time -> format('m'); 
-                                        $year_last_login_time = $date_last_login_time -> format('Y');
-                                        /* echo '$day_last_login_time: ' . $day_last_login_time . "<br/>"; 
-                                        echo '$month_last_login_time: ' . $month_last_login_time . "<br/>";
-                                        echo '$year_last_login_time: ' . $year_last_login_time . "<br/><br/>"; 
- */
+                                        $year_last_login_time = $date_last_login_time -> format('Y'); 
+ 
                                         //latest_login_time 
                                         $latest_login_time_bin = hex2bin($row -> latest_login_time); 
-                                        $latest_login_time = openssl_decrypt($latest_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                                        //echo '$latest_login_time:' . $latest_login_time . "<br/>";
+                                        $latest_login_time = decrypting($latest_login_time_bin, $iv); 
                                         $date_latest_login_time = new DateTime($latest_login_time); 
                                         $day_latest_login_time = $date_latest_login_time -> format('d');
                                         $month_latest_login_time = $date_latest_login_time -> format('m'); 
-                                        $year_latest_login_time = $date_latest_login_time -> format('Y');
-                                        /* echo '$day_latest_login_time: ' . $day_latest_login_time . "<br/>"; 
-                                        echo '$month_latest_login_time: ' . $month_latest_login_time . "<br/>";
-                                        echo '$year_latest_login_time: ' . $year_latest_login_time . "<br/><br/>"; 
- */
+                                        $year_latest_login_time = $date_latest_login_time -> format('Y'); 
+ 
                                         //streak 
                                         $streak_bin = hex2bin($row -> streak);
-                                        $streak = openssl_decrypt($streak_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-                        
+                                        //$streak = openssl_decrypt($streak_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+                                        $streak = decrypting($streak_bin, $iv);
+
                                         //track number of consecutive login days
                                         $consecutive_login_days = $streak; 
 
@@ -299,11 +282,9 @@ Enter the 6-digit code from your Google Authentication App</label>
                                       {
                                           $consecutive_login_days = 0; 
                                       }
-
-                                      //encrypted_streak 
-                                    $encrypted_streak = openssl_encrypt($consecutive_login_days, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                                    //encrypted_streak_hex 
-                                    $encrypted_streak_hex = bin2hex($encrypted_streak);
+ 
+                                    //encrypted_streak_hex  
+                                    $encrypted_streak_hex = encrypting($consecutive_login_days, $iv);
 
                                    $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                                    $sql = "UPDATE players SET streak = ? WHERE email = ?";
@@ -314,8 +295,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                                    {
                                         $location = "home.php"; 
                                         echo "<script type='text/javascript'>alert('Login successfully');window.location='$location'</script>";
-                                       //update successful 
-                                       //echo '$consecutive_login_days: ' . $consecutive_login_days . '<br/>';
+                                        
                                    }
                                    else 
                                    {
@@ -353,12 +333,5 @@ Enter the 6-digit code from your Google Authentication App</label>
         </div> 
     </div>
     <br>
-    <!-- <input type="button" value="Logout" name="logout" class="profile-btn" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script> -->
 </body>
 </html> 

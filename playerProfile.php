@@ -88,42 +88,32 @@
       $iv = hex2bin($row -> iv); 
  
       //displayName 
-      $displayName_bin = hex2bin($row -> displayName); 
-      $displayName = openssl_decrypt($displayName_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+      $displayName_bin = hex2bin($row -> displayName);  
+      $displayName = decrypting($displayName_bin, $iv);
 
       //points 
-      $points_bin = hex2bin($row -> points); 
-      //$points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-      $points = decrypting($points_bin, $iv);
-      echo $points. '<br/>';
+      $points_bin = hex2bin($row -> points);  
+      $points = decrypting($points_bin, $iv); 
 
       //last_login_time 
-      $last_login_time_bin = hex2bin($row -> last_login_time); 
-      $last_login_time = openssl_decrypt($last_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-      //echo '$last_login_time:' . $last_login_time . "<br/>";
+      $last_login_time_bin = hex2bin($row -> last_login_time);  
+      $last_login_time = decrypting($last_login_time_bin, $iv); 
       $date_last_login_time = new DateTime($last_login_time); 
       $day_last_login_time = $date_last_login_time -> format('d');
       $month_last_login_time = $date_last_login_time -> format('m'); 
-      $year_last_login_time = $date_last_login_time -> format('Y');
-      /* echo '$day_last_login_time: ' . $day_last_login_time . "<br/>"; 
-      echo '$month_last_login_time: ' . $month_last_login_time . "<br/>";
-      echo '$year_last_login_time: ' . $year_last_login_time . "<br/><br/>";  */
+      $year_last_login_time = $date_last_login_time -> format('Y'); 
 
       //latest_login_time 
-      $latest_login_time_bin = hex2bin($row -> latest_login_time); 
-      $latest_login_time = openssl_decrypt($latest_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
-      //echo '$latest_login_time:' . $latest_login_time . "<br/>";
+      $latest_login_time_bin = hex2bin($row -> latest_login_time);  
+      $latest_login_time = decrypting($latest_login_time_bin, $iv); 
       $date_latest_login_time = new DateTime($latest_login_time); 
       $day_latest_login_time = $date_latest_login_time -> format('d');
       $month_latest_login_time = $date_latest_login_time -> format('m'); 
-      $year_latest_login_time = $date_latest_login_time -> format('Y');
-      /* echo '$day_latest_login_time: ' . $day_latest_login_time . "<br/>"; 
-      echo '$month_latest_login_time: ' . $month_latest_login_time . "<br/>";
-      echo '$year_latest_login_time: ' . $year_latest_login_time . "<br/><br/>";  */
+      $year_latest_login_time = $date_latest_login_time -> format('Y'); 
 
       //streak 
-      $streak_bin = hex2bin($row -> streak);
-      $streak = openssl_decrypt($streak_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
+      $streak_bin = hex2bin($row -> streak); 
+      $streak = decrypting($streak_bin, $iv);
     }
 
     //badge  
@@ -168,12 +158,8 @@
         $streakImgVar = "img/fire.png"; 
         $streakTxt = $streak;
     }
- 
-    // echo '$badgeVal: ' . $badgeVal . '<br/>';
-    //encrypted_badge
-    $encrypted_badgeVal = openssl_encrypt($badgeVal, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-    //encrypted_badge_hex 
-    $encrypted_badgeVal_hex = bin2hex($encrypted_badgeVal);
+  
+    $encrypted_badgeVal_hex = encrypting($badgeVal, $iv);
  
     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     $sql = "UPDATE players SET badge = ? WHERE email = ?";

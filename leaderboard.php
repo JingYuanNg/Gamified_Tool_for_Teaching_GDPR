@@ -63,9 +63,6 @@
     //arsort() - sort array descending according to the value in the array 
     //display top 5  
 
-    $cipher = 'AES-128-CBC';
-    $key = 'thebestsecretkey';
-
     //connect db 
     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
@@ -88,12 +85,10 @@
         //email 
         $email = $row -> email;
 
-         
-
         //points  
         $points_bin = hex2bin($row -> points); 
-        $points = openssl_decrypt($points_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
-    
+        $points = decrypting($points_bin, $iv); 
+
         //store into array 
         $rank[$playerID] = $points; 
     }
@@ -116,8 +111,8 @@
             $iv = hex2bin($row -> iv);
 
             //displayName 
-            $displayName_bin = hex2bin($row -> displayName); 
-            $displayName = openssl_decrypt($displayName_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+            $displayName_bin = hex2bin($row -> displayName);  
+            $displayName = decrypting($displayName_bin, $iv);
 
             //add email to the array
             $rank[$playerID] = array( 
@@ -126,16 +121,10 @@
                 'leaderboard_position' => $leaderboard_position
                 );
 
-            //encrypt_displayName
-            $encrypted_displayName = openssl_encrypt($displayName, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-            //encrypted_displayName_hex 
-            $encrypted_displayName_hex = bin2hex($encrypted_displayName);
-
-            //encrypt_leaderboard_position
-            $encrypted_leaderboard_position = openssl_encrypt($leaderboard_position, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-            //encrypted_leaderboard_position_hex 
-            $encrypted_leaderboard_position_hex = bin2hex($encrypted_leaderboard_position);
+            $encrypted_displayName_hex = encrypting($displayName, $iv);
             
+            $encrypted_leaderboard_position_hex = encrypting($leaderboard_position, $iv);
+
             $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
             $sql = "UPDATE players SET leaderboard_position = ? WHERE displayName = ?";
             $stmt = $con ->prepare($sql);
@@ -143,10 +132,6 @@
 
             if($stmt -> execute())
             {
-                //update successful 
-                /* echo '$email: ' . $email . '<br/>';
-                echo '$leaderboard_position: ' . $leaderboard_position . '<br/>';
-                echo '$encrypted_leaderboard_position_hex: ' . $encrypted_leaderboard_position_hex . '<br/><br/>'; */
             }
             else 
             {
