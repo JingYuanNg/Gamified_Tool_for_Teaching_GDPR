@@ -52,6 +52,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS players (
     ranking_category4 varchar(256) NOT NULL,
     levels varchar(256) NOT NULL,
     google2FA_secretKey varchar(256) NULL,
+    profilePic varchar(256) NULL,
     PRIMARY KEY (playerID)
   );';
 if (!$conn->query($sql) === TRUE) {

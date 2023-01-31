@@ -57,7 +57,7 @@
             echo "<script>alert('$msg')</script>";
        }
     ?>
-<br/><br/><br/><br/><br/><br/>
+<br/><br/><br/>
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -330,32 +330,11 @@
                         
                     }
                 ?>
-                
-                <!-- <form class="user" action="reset-password.php" method="post" enctype='multipart/form-data'>
-                    <br/>
-                     
-                    <div class="mb-3 form-floating">
-                        <input type="password" class="form-control txt" id="password" placeholder="New Password" name="password" required="required">
-                        <label for="password" class="txt">New Password</label>
-                    </div>
-                    <div class="mb-3 form-floating">
-                        <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">
-                        <label for="confirmPassword" class="txt">Confirm New Password</label>
-                    </div>
-                    <div class="mb-3"> 
-                        <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>
-                    </div>
-                </form>  -->
+                 
  
             </div>
         </div> 
     </div>
-    <!-- <input type="button" value="Logout" name="logout" class="profile-btn" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script> -->
+     
 </body>
 </html> 

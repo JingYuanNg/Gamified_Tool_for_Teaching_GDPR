@@ -75,8 +75,8 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h1 class="text-center txt font-weight-bold"><?php echo $_SESSION["aName"] ?></h1> 
-                <div class="mb-3">
                 <br/>
+                <div class="mb-3"> 
                 <div class="text-center">
                     <?php 
                         $email = $_SESSION["aName"]; 
@@ -84,12 +84,8 @@
                         //hashed_email 
                         $hashed_email = hash('sha3-256', $email, true);
                         //hashed_email_hex
-                        $hashed_email_hex = bin2hex($hashed_email);
+                        $hashed_email_hex = bin2hex($hashed_email); 
 
-
-                        $cipher = 'AES-128-CBC';
-                        $key = 'thebestsecretkey';
-                    
                         $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         $sql = "SELECT * FROM admin WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
@@ -102,18 +98,50 @@
                           //get iv 
                           $iv = hex2bin($row -> iv); 
 
-                          printf('<a href="adminTwoFactorAuth.php?id=%d" class="btn btn-block btn-design txt fs-5">Enable Google Two Factor Authentication</a>', $row -> adminID);
+                          printf('<a href="adminTwoFactorAuth.php?id=%d" class="btn btn-block btn-design txt fs-5 d-flex align-items-center justify-content-center">Enable Google Two Factor Authentication</a>', $row -> adminID);
                         }
                         $result->free();
                         $con->close();
                     ?>
                     
                 </div>
-                <br/> 
-                <div class="text-center">
-                    <input type="submit" class="btn btn-block btn-design txt fs-5" aria-pressed="true" id="logout" name="logout" value="Logout" onclick="location = 'logoutAdmin.php'; alert('You have successfully been logout!');"/>
                 </div>
-                </div> 
+
+                <div class="mb-3">
+                    <div class="text-center">
+                    <?php 
+                        $email = $_SESSION["aName"]; 
+
+                        //hashed_email 
+                        $hashed_email = hash('sha3-256', $email, true);
+                        //hashed_email_hex
+                        $hashed_email_hex = bin2hex($hashed_email); 
+
+                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        $sql = "SELECT * FROM admin WHERE email = '$hashed_email_hex'";
+                        $result = $con -> query($sql); 
+                    
+                        if($row = $result -> fetch_object())
+                        { 
+                          //get adminID 
+                          $adminID = $row -> adminID; 
+                    
+                          //get iv 
+                          $iv = hex2bin($row -> iv); 
+
+                          printf('<a href="adminChangePass.php?id=%d" class="btn btn-block btn-design txt fs-5 d-flex align-items-center justify-content-center">Change Password</a>', $row -> adminID);
+                        }
+                        $result->free();
+                        $con->close();
+                    ?>
+                    </div> 
+                </div>
+
+                <div class="mb-3">
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-block btn-design txt fs-5 d-flex justify-content-center" aria-pressed="true" id="logout" name="logout" value="Logout" onclick="location = 'logoutAdmin.php'; alert('You have successfully been logout!');"/> 
+                    </div> 
+                </div>
             </div> 
         </div> 
         </div>

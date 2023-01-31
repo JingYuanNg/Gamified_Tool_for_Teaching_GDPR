@@ -308,7 +308,7 @@
                 }
 
                 
-
+                $exist = 1;
                 $location = "home.php"; 
                 echo "<script type='text/javascript'>alert('Login successfully');window.location='$location'</script>";
                 
@@ -371,15 +371,13 @@
         }
 
         //check whether exists or not 
-        if($exist === 1)
-        {
-            $successMsg = "Login successfully";
-            echo "<script type='type/javascript'>alert('$successMsg'); window.location = '$location'</script>";
-        }
-        else 
+        if($exist == 0)
         {
             $msg = "Your email and password are not match !";
-        }
+            $location = "login.php";
+            echo "<script type='text/javascript'>alert('$msg'); window.location = '$location'</script>";
+        } 
+       
 
         }
         else

@@ -55,12 +55,24 @@
     {
         text-decoration: none !important;
     }
+
+    .img-size
+    {
+        width:230px;
+        height:300px;
+    }
+
+    .pp-size
+    {
+        width:250px;
+        height:250px;
+    }
 </style>
 
 <body>
     <?php 
         
-    include './headerFooterClient.php'; 
+    include './headerFooterClient1.php'; 
     //badge 
     //streak 
 
@@ -80,12 +92,12 @@
 
     if($row = $result -> fetch_object())
     {
- 
-      //get playerID 
-      $playerID = $row -> playerID; 
+        
+     //get playerID 
+     $playerID = $row -> playerID; 
 
-      //get iv 
-      $iv = hex2bin($row -> iv); 
+     //get iv 
+     $iv = hex2bin($row -> iv); 
  
       //displayName 
       $displayName_bin = hex2bin($row -> displayName);  
@@ -115,6 +127,8 @@
       $streak_bin = hex2bin($row -> streak); 
       $streak = decrypting($streak_bin, $iv);
     }
+
+    
 
     //badge  
     //bronze (90 - 99) badgeVal = 1 
@@ -179,15 +193,16 @@
     $con -> close();
     
     ?>
-<br/><br/><br/>
+<br/><br/>
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h1 class="text-center txt">Player Profile</h1>
                 
-                <table width="500px" height="170px"> 
+                <table width="500px" > 
                     <tr>
                         <td style="width: 30%;font-size:23px;"></td>
+                    
                     </tr>
                     <tr>
                         <td><label for="email" class="txt">Email</label></td>
@@ -197,6 +212,80 @@
                         <td><label for="points" class="txt">Points</label></td>
                         <td style="height:100px;"><input type="points" class="form-control" id="points" value="<?php echo $points ?>" disabled/></td>
                     </tr> 
+                    <tr>
+                        <td><label for="profilePic" class="txt">Profile Picture</label></td>
+                        <td class="text-center" style="height:100px;"> 
+                        <div class="shadow p-3 bg-body rounded bg-white">
+                            <?php //check if there is profilePic
+    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+    $query = "SELECT COUNT(profilePic) as count FROM players WHERE email = '$hashed_email_hex'";
+                
+    $result = mysqli_query($con, $query);
+                
+    $row = mysqli_fetch_assoc($result);
+                
+    if ($row['count'] > 0) 
+    {
+        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                    
+        $sql = "SELECT * FROM players WHERE email ='$hashed_email_hex'";
+                    
+        $result = $con -> query($sql); 
+                    
+        if($row = $result -> fetch_object())
+        {
+            //img 
+            $img_bin = hex2bin($row -> profilePic); 
+            $img = decrypting($img_bin, $iv);
+            $display_img = '<img src="data:image/jpeg;base64,'.base64_encode( $img ).'"/>'; 
+            $profilePic_txt = " "; 
+             
+        }
+
+    }
+    else 
+    {
+      $display_img = 'img/defaultProfilePic.png';
+      $profilePic_txt = "You haven't upload a profile pic yet";
+    }
+    ?>
+                            
+                            <br/> 
+                        <label for="profilePic" class="txt"><?php echo $profilePic_txt ?></label></div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                    <td></td>
+                    <td>
+                    <div class="mb-3">
+                        <br/>
+                        <div class="text-center mb-5">
+                            <?php  
+                    
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
+                                $result = $con -> query($sql); 
+                    
+                                if($row = $result -> fetch_object())
+                                { 
+                                  //get playerID 
+                                  $playerID = $row -> playerID; 
+                    
+                                  //get iv 
+                                  $iv = hex2bin($row -> iv); 
+
+                                  printf('<a href="uploadProfilePic.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">Upload New Profile Picture</a>', $row -> playerID);
+                                }
+                                $result->free();
+                                $con->close();
+                            ?> 
+                        </div>
+                    </div>
+                    </td>
+                    </tr>
+
                     <tr>
                         <td><label for="badge" class="txt">Badge</label></td>
                         <td class="text-center" style="height:100px;"> 
@@ -222,7 +311,7 @@
                                             echo "img/BadgeGold.png";  
                                         }
                                         ?>" 
-                                        class="img-size p-3"
+                                        class="img-size p-1"
                                         alt="<?php echo $badgeImgVar ?>"/><br/> 
                         <label for="badge" class="txt"><?php echo $badgeTxt ?></label></div>
                         </td>
@@ -240,7 +329,7 @@
                                         {
                                             echo "img/fire.png";
                                         }
-                                        ?>" class="img-size"
+                                        ?>" class="img-size p-1"
                                         alt="<?php echo $streakImgVar ?>"/><br/>
                         <label for="streak" class="txt"><?php echo $streakTxt ?></label></div>
                         </td>
@@ -250,11 +339,7 @@
                 <div class="mb-3">
                 <br/>
                 <div class="text-center">
-                    <?php 
-                        $email = $_SESSION["pName"]; 
-
-                        $cipher = 'AES-128-CBC';
-                        $key = 'thebestsecretkey';
+                    <?php  
                     
                         $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
@@ -275,7 +360,31 @@
                     ?>
                     
                 </div>
-                <br/> 
+                 
+                <div class="mb-3">
+                <br/>
+                <div class="text-center">
+                    <?php 
+                    
+                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
+                        $result = $con -> query($sql); 
+                    
+                        if($row = $result -> fetch_object())
+                        { 
+                          //get playerID 
+                          $playerID = $row -> playerID; 
+                    
+                          //get iv 
+                          $iv = hex2bin($row -> iv); 
+
+                          printf('<a href="changePass.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">Change Password</a>', $row -> playerID);
+                        }
+                        $result->free();
+                        $con->close();
+                    ?>
+                </div>
+                <br/>
                 <div class="text-center">
                     <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="logout" name="logout" value="Logout" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/>
                 </div>
@@ -283,12 +392,6 @@
             </div>
         </div> 
     </div>
-    <!-- <input type="button" value="Logout" name="logout" class="profile-btn" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script> -->
+     
 </body>
 </html> 
