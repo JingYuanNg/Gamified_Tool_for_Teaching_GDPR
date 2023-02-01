@@ -33,7 +33,7 @@ if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 } 
 
-/*players 
+/*players  
 $sql = 'CREATE TABLE IF NOT EXISTS players (
     playerID int NOT NULL AUTO_INCREMENT,
     iv varchar(32) NOT NULL,
@@ -53,11 +53,20 @@ $sql = 'CREATE TABLE IF NOT EXISTS players (
     levels varchar(256) NOT NULL,
     google2FA_secretKey varchar(256) NULL,
     profilePic varchar(256) NULL,
+    time_lvl1 varchar(256) NULL,
+    time_lvl2 varchar(256) NULL,
+    time_lvl3 varchar(256) NULL,
+    time_lvl4 varchar(256) NULL,
+    time_lvl5 varchar(256) NULL,
+    time_lvl6 varchar(256) NULL,
+    time_lvl7 varchar(256) NULL,
+    time_lvl8 varchar(256) NULL,
+    time_lvl9 varchar(256) NULL,
     PRIMARY KEY (playerID)
   );';
 if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
-} 
+} */
 
 /*questions 
 $sql = 'CREATE TABLE IF NOT EXISTS questions (

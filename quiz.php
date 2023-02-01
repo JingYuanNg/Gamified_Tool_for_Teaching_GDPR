@@ -66,7 +66,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient.php';  
+    include './headerFooterClient1.php';  
 
     ?>
 <br/><br/><br/> 
@@ -129,6 +129,8 @@
                     //get iv 
                     $iv = hex2bin($row -> iv); 
 
+                    $_SESSION["iv"] = $iv;
+
                     //levels 
                     $levels_bin = hex2bin($row -> levels); 
                     $levels = decrypting($levels_bin, $iv);
@@ -189,6 +191,8 @@
                 
                 if($levels > 9)//highest lvl is 9 because only have 10 ques per category
                 { 
+                   
+
                     $cipher = 'AES-128-CBC';
                     $key = 'thebestsecretkey';
 
@@ -260,6 +264,8 @@
                     // If the form has been submitted, check the answers
                     if (isset($_POST['submit'])) 
                     { 
+                    
+
                       $score = 0;
                       for ($i = 0; $i < count($questions); $i++) 
                       {  
@@ -315,14 +321,62 @@
                      } 
 
                      $email = $_SESSION["pName"]; 
+                     $iv = $_SESSION["iv"];
 
                      //hashed_email 
                      $hashed_email = hash('sha3-256', $email, true);
                      //hashed_email_hex
                      $hashed_email_hex = bin2hex($hashed_email);
 
-                     $cipher = 'AES-128-CBC';
-                     $key = 'thebestsecretkey';
+                     date_default_timezone_set('Europe/Dublin');
+                     $date_now = date('d-F-Y H:i:s'); 
+ 
+                     $encrypted_time_hex = encrypting($date_now, $iv);
+                     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+ 
+                     switch($levels)
+                     { 
+                         case 1:
+                             $sql = "UPDATE players SET time_lvl1 = ? WHERE email = ?";
+                             break;
+                         case 2:
+                             $sql = "UPDATE players SET time_lvl2 = ? WHERE email = ?";
+                             break;
+                         case 3:
+                             $sql = "UPDATE players SET time_lvl3 = ? WHERE email = ?";
+                             break;
+                         case 4:
+                             $sql = "UPDATE players SET time_lvl4 = ? WHERE email = ?";
+                             break;
+                         case 5:
+                             $sql = "UPDATE players SET time_lvl5 = ? WHERE email = ?";
+                             break;
+                         case 6:
+                             $sql = "UPDATE players SET time_lvl6 = ? WHERE email = ?";
+                             break;
+                         case 7:
+                             $sql = "UPDATE players SET time_lvl7 = ? WHERE email = ?";
+                             break;
+                         case 8:
+                             $sql = "UPDATE players SET time_lvl8 = ? WHERE email = ?";
+                             break;
+                         case 9:
+                             $sql = "UPDATE players SET time_lvl9 = ? WHERE email = ?";
+                             break;
+                     }
+ 
+                     $stmt = $con ->prepare($sql);
+                     $stmt -> bind_param('ss', $encrypted_time_hex, 
+                                               $hashed_email_hex);
+ 
+                     if($stmt -> execute())
+                     {
+                     }
+                     else
+                     {
+                         echo 'uh-oh';
+                     } 
+                      
 
                      $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                      $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
