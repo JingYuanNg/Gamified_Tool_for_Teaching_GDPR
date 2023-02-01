@@ -50,7 +50,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient.php'; 
+    include './headerFooterClient1.php'; 
     require_once './validation.php';  
     if(empty($_SESSION["pName"]))
     {
@@ -90,18 +90,18 @@
         
                             if(empty($error))
                             {
-                                echo '<form class="user" action="uploadProfilePic.php" method="post" enctype="multipart/form-data">';
+                                /* echo '<form class="user" action="uploadProfilePic.php" method="post" enctype="multipart/form-data">';
                                 echo '<br/>';
              
                                 echo '<div class="mb-3">';
-                                echo '    <label class="txtBox">Choose a profile picture:</label>';
-                                echo '     <input type="file" class="txtBox" id="img" name="img" accept="image/*" required="required"/>';
+                                echo '    <label class="txt">Choose a profile picture:</label>';
+                                echo '     <input type="file" class="txt" id="img" name="img" accept="image/*" required="required"/>';
                                 echo '</div>'; 
                                 echo '<br/>';
                                 echo '<div class="mb-3">';
                                 echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                 echo '</div>';
-                                echo '</form>';   
+                                echo '</form>';    */
                             }
                             else
                             {
@@ -113,7 +113,7 @@
                                     echo "</ul>";
                                 }
 
-                                echo '<form class="user" action="uploadProfilePic.php" method="post" enctype="multipart/form-data">';
+                                /* echo '<form class="user" action="uploadProfilePic.php" method="post" enctype="multipart/form-data">';
                                 echo '<br/>';
              
                                 echo '<div class="mb-3">';
@@ -124,7 +124,7 @@
                                 echo '<div class="mb-3">';
                                 echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                 echo '</div>';
-                                echo '</form>';     
+                                echo '</form>'; */     
                             }
                             
 
@@ -133,9 +133,9 @@
                     elseif($_SERVER['REQUEST_METHOD'] == 'POST')
                     {
                         if(isset($_POST['submit']))
-                        {
+                        { 
                             //img 
-                            $img = file_get_contents($_FILES['img']['tmp_name']);
+                            $img = file_get_contents($_FILES['img']['tmp_name']); 
                          
                             //hashed_email 
                             $hashed_email = hash('sha3-256', $email, true);
@@ -159,8 +159,14 @@
                             $con->close();
 
                             //update statement  
+                            
+                            $cipher = 'AES-128-CBC';
+                            $key = 'thebestsecretkey';
 
-                            $encryptedImg_hex = encrypting($img, $iv);
+                            //encryptedImg
+                            $encrypted_img = openssl_encrypt($img, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                            //encryptedImg_hex
+                            $encryptedImg_hex = bin2hex($encrypted_img);
 
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                 
@@ -172,8 +178,8 @@
                 
                             if($stmt -> execute())
                             {
-                                $location = "playerProfile.php"; 
-                                echo "<script type='text/javascript'>alert('Successfully update profile picture');window.location='$location'</script>";
+                                //$location = "playerProfile.php"; 
+                                //echo "<script type='text/javascript'>alert('Successfully update profile picture');window.location='$location'</script>";
                             }
                             else 
                             {
@@ -185,7 +191,20 @@
                 ?> 
             </div>
         </div> 
+
+        <form class="user" action="" method="post" enctype='multipart/form-data'>
+        <br/>
+             
+        <div class="mb-3">
+            <label class="txt">Choose a profile picture:</label>
+             <input type="file" class="txt" id="img" name="img" accept="image/*" required="required"/>
+        </div> 
+        <br/>
+        <div class="mb-3">
+            <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>
+        </div>
+        </form> 
     </div>
-    <br> 
+    
 </body>
 </html> 

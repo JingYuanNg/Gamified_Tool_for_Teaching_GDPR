@@ -72,7 +72,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient1.php'; 
+    include './headerFooterClient.php'; 
     //badge 
     //streak 
 
@@ -128,7 +128,38 @@
       $streak = decrypting($streak_bin, $iv);
     }
 
-    
+    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+    $query = "SELECT COUNT(profilePic) as count FROM players WHERE email = '$hashed_email_hex'";
+                
+    $result = mysqli_query($con, $query);
+                
+    $row = mysqli_fetch_assoc($result);
+                
+    if ($row['count'] > 0) 
+    {
+        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                    
+        $sql = "SELECT * FROM players WHERE email ='$hashed_email_hex'";
+                    
+        $result = $con -> query($sql); 
+                    
+        if($row = $result -> fetch_object())
+        {
+            //img 
+            $img_bin = hex2bin($row -> profilePic); 
+            $img = decrypting($img_bin, $iv);
+            
+            $profilePic_txt = " "; 
+             
+        }
+
+    }
+    else 
+    { 
+      $display_img = '<img class="pp-size" src="img/defaultProfilePic.png"/>'; 
+      $profilePic_txt = "You haven't upload a profile pic yet";
+    }
 
     //badge  
     //bronze (90 - 99) badgeVal = 1 
@@ -215,44 +246,16 @@
                     <tr>
                         <td><label for="profilePic" class="txt">Profile Picture</label></td>
                         <td class="text-center" style="height:100px;"> 
-                        <div class="shadow p-3 bg-body rounded bg-white">
-                            <?php //check if there is profilePic
-    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-    $query = "SELECT COUNT(profilePic) as count FROM players WHERE email = '$hashed_email_hex'";
-                
-    $result = mysqli_query($con, $query);
-                
-    $row = mysqli_fetch_assoc($result);
-                
-    if ($row['count'] > 0) 
-    {
-        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                    
-        $sql = "SELECT * FROM players WHERE email ='$hashed_email_hex'";
-                    
-        $result = $con -> query($sql); 
-                    
-        if($row = $result -> fetch_object())
-        {
-            //img 
-            $img_bin = hex2bin($row -> profilePic); 
-            $img = decrypting($img_bin, $iv);
-            $display_img = '<img src="data:image/jpeg;base64,'.base64_encode( $img ).'"/>'; 
-            $profilePic_txt = " "; 
-             
-        }
-
-    }
-    else 
-    {
-      $display_img = 'img/defaultProfilePic.png';
-      $profilePic_txt = "You haven't upload a profile pic yet";
-    }
-    ?>
-                            
+                        <div class="shadow p-3 bg-body rounded bg-white"> 
                             <br/> 
-                        <label for="profilePic" class="txt"><?php echo $profilePic_txt ?></label></div>
+                        <label for="profilePic" class="txt">
+                        <form class="user" action="" method="post" enctype='multipart/form-data'>
+                            <?php $display_img = '<img src="data:image/jpeg;base64,'.base64_encode( $img ).'" />'; ?>
+                            <?php echo $display_img?>
+                        </form>
+                            <br/>
+                            <?php echo $profilePic_txt?>
+                        </label></div>
                         </td>
                     </tr>
 
@@ -335,7 +338,7 @@
                         </td>
                     </tr> 
                 </table> 
- 
+
                 <div class="mb-3">
                 <br/>
                 <div class="text-center">
@@ -349,9 +352,28 @@
                         { 
                           //get playerID 
                           $playerID = $row -> playerID; 
+
+                          printf('<a href="titleCollection.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">View Title Collection</a>', $row -> playerID);
+                        }
+                        $result->free();
+                        $con->close();
+                    ?>
                     
-                          //get iv 
-                          $iv = hex2bin($row -> iv); 
+                </div>
+
+                <div class="mb-3">
+                <br/>
+                <div class="text-center">
+                    <?php  
+                    
+                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
+                        $result = $con -> query($sql); 
+                    
+                        if($row = $result -> fetch_object())
+                        { 
+                          //get playerID 
+                          $playerID = $row -> playerID; 
 
                           printf('<a href="twoFactorAuth.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">Enable Google Two Factor Authentication</a>', $row -> playerID);
                         }
@@ -374,9 +396,6 @@
                         { 
                           //get playerID 
                           $playerID = $row -> playerID; 
-                    
-                          //get iv 
-                          $iv = hex2bin($row -> iv); 
 
                           printf('<a href="changePass.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">Change Password</a>', $row -> playerID);
                         }
@@ -393,5 +412,6 @@
         </div> 
     </div>
      
+    
 </body>
 </html> 

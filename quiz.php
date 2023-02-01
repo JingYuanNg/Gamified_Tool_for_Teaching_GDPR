@@ -66,7 +66,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient1.php';  
+    include './headerFooterClient.php';  
 
     ?>
 <br/><br/><br/> 

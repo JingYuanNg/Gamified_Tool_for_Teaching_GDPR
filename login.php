@@ -226,11 +226,8 @@
                             $date_last_login_time = new DateTime($last_login_time); 
                             $day_last_login_time = $date_last_login_time -> format('d');
                             $month_last_login_time = $date_last_login_time -> format('m'); 
-                            $year_last_login_time = $date_last_login_time -> format('Y');
-                            /* echo '$day_last_login_time: ' . $day_last_login_time . "<br/>"; 
-                            echo '$month_last_login_time: ' . $month_last_login_time . "<br/>";
-                            echo '$year_last_login_time: ' . $year_last_login_time . "<br/><br/>"; 
- */
+                            $year_last_login_time = $date_last_login_time -> format('Y'); 
+                            
                             //latest_login_time 
                             $latest_login_time_bin = hex2bin($row -> latest_login_time); 
                             $latest_login_time = openssl_decrypt($latest_login_time_bin,  $cipher, $key, OPENSSL_RAW_DATA, $iv);
@@ -238,11 +235,7 @@
                             $date_latest_login_time = new DateTime($latest_login_time); 
                             $day_latest_login_time = $date_latest_login_time -> format('d');
                             $month_latest_login_time = $date_latest_login_time -> format('m'); 
-                            $year_latest_login_time = $date_latest_login_time -> format('Y');
-                            /* echo '$day_latest_login_time: ' . $day_latest_login_time . "<br/>"; 
-                            echo '$month_latest_login_time: ' . $month_latest_login_time . "<br/>";
-                            echo '$year_latest_login_time: ' . $year_latest_login_time . "<br/><br/>"; 
- */
+                            $year_latest_login_time = $date_latest_login_time -> format('Y'); 
                             //streak 
                             $streak_bin = hex2bin($row -> streak);
                             $streak = openssl_decrypt($streak_bin, $cipher, $key, OPENSSL_RAW_DATA, $iv); 
@@ -417,13 +410,6 @@
                 </div> 
             </div>
         </div> 
-    </div>
-    <!-- <input type="button" value="Logout" name="logout" class="profile-btn" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script> -->
+    </div> 
 </body>
 </html> 
