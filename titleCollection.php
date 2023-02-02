@@ -98,15 +98,54 @@
 
                           <p><strong>How many titles in total?</strong><br/>
                           Nine. Each level has a different title and they are listed as below: <br/>
-                          Level 1 - Private <br/>
-                          Level 2 - Private First Class <br/>
-                          Level 3 - Specialist <br/>
-                          Level 4 - Corporal <br/>
-                          Level 5 - Sergeant <br/>
-                          Level 6 - Staff Sergeant <br/>
-                          Level 7 - Sergeant First Class <br/>
-                          Level 8 - Master Sergeant <br/>
-                          Level 9 - Sergeant Major <br/>
+                          <table>
+                            <tr>
+                                <td>Level 1 (Beginner)</td>
+                                <td>-</td>
+                                <td>Private</td>
+                            </tr>
+                            <tr>
+                                <td>Level 2 (Beginner)</td>
+                                <td>-</td>
+                                <td>Private First Class</td>
+                            </tr>
+                            <tr>
+                                <td>Level 3 (Beginner)</td>
+                                <td>-</td>
+                                <td>Specialist</td>
+                            </tr>
+                            <tr>
+                                <td>Level 4 (Intermediate)</td>
+                                <td>-</td>
+                                <td>Corporal</td>
+                            </tr>
+                            <tr>
+                                <td>Level 5 (Intermediate)</td>
+                                <td>-</td>
+                                <td>Sergeant</td>
+                            </tr>
+                            <tr>
+                                <td>Level 6 (Intermediate)</td>
+                                <td>-</td>
+                                <td>Staff Sergeant</td>
+                            </tr>
+                            <tr>
+                                <td>Level 7 (Advanced)</td>
+                                <td>-</td>
+                                <td>Sergeant First Class</td>
+                            </tr>
+                            <tr>
+                                <td>Level 8 (Advanced)</td>
+                                <td>-</td>
+                                <td>Master Sergeant</td>
+                            </tr>
+                            <tr>
+                                <td>Level 9 (Advanced)</td>
+                                <td>-</td>
+                                <td>Sergeant Major</td>
+                            </tr>
+                          </table>
+                          
                           </p>
 
                           <p><strong>Why did the title grey out?</strong><br/>
@@ -302,45 +341,64 @@
 
                         }
                     }
-                ?>
-            
-            <table class="container-fluid">
-            <tr>
-                <td><img src="<?php echo $title_lvl1_src?>" class="img-size"/></td> 
-                <td><img src="<?php echo $title_lvl2_src?>" class="img-size"/></td>
-                <td><img src="<?php echo $title_lvl3_src?>" class="img-size"/></td>
-            </tr> 
-            <tr>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl1_displayName?></label></td>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl2_displayName?></label></td>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl3_displayName?></label></td>
-            </tr>
+                ?> 
+                <br/> 
+            <div class="container-fluid">
+                <div class="row bg-white shadow rounded p-2">
+                    <label class="txt text-center font-weight-bold fs-4">Beginner</label>
+                    <br/>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl1_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl1_displayName?></label>
+                  </div>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl2_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl2_displayName?></label>
+                  </div>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl3_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl3_displayName?></label>
+                  </div>
+                </div>
 
-            <br/>
-            <tr>
-                <td><img src="<?php echo $title_lvl4_src?>" class="img-size"/></td> 
-                <td><img src="<?php echo $title_lvl5_src?>" class="img-size"/></td>
-                <td><img src="<?php echo $title_lvl6_src?>" class="img-size"/></td>
-            </tr>
-            <tr>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl4_displayName?></label></td>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl5_displayName?></label></td>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl6_displayName?></label></td>
-            </tr>
+                <br/><br/>
 
-            <br/>
-            <tr>
-                <td><img src="<?php echo $title_lvl7_src?>" class="img-size"/></td> 
-                <td><img src="<?php echo $title_lvl8_src?>" class="img-size"/></td>
-                <td><img src="<?php echo $title_lvl9_src?>" class="img-size"/></td>
-            </tr> 
-            <tr>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl7_displayName?></label></td>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl8_displayName?></label></td>
-                <td class="text-center"><label class="txt fs-5"><?php echo $title_lvl9_displayName?></label></td>
-            </tr>
+                <div class="row bg-white shadow rounded p-2">
+                    <label class="txt text-center font-weight-bold fs-4">Intermediate</label>
+                    <br/>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl4_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl4_displayName?></label>
+                  </div>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl5_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl5_displayName?></label>
+                  </div>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl6_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl6_displayName?></label>
+                  </div>
+                </div>
 
-            </table>
+                <br/><br/>
+
+                <div class="row bg-white shadow rounded p-2">
+                    <label class="txt text-center font-weight-bold fs-4">Advanced</label>
+                    <br/>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl7_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl7_displayName?></label>
+                  </div>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl8_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl8_displayName?></label>
+                  </div>
+                  <div class="col-4 text-center">
+                    <img src="<?php echo $title_lvl9_src?>" class="img-size"/>
+                    <label class="txt fs-5"><?php echo $title_lvl9_displayName?></label>
+                  </div>
+                </div>
+            </div>
 
             </div>
         </div>
