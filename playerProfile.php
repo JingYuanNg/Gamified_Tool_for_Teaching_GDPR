@@ -127,40 +127,7 @@
       $streak_bin = hex2bin($row -> streak); 
       $streak = decrypting($streak_bin, $iv);
     }
-
-    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-    $query = "SELECT COUNT(profilePic) as count FROM players WHERE email = '$hashed_email_hex'";
-                
-    $result = mysqli_query($con, $query);
-                
-    $row = mysqli_fetch_assoc($result);
-                
-    if ($row['count'] > 0) 
-    {
-        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                    
-        $sql = "SELECT * FROM players WHERE email ='$hashed_email_hex'";
-                    
-        $result = $con -> query($sql); 
-                    
-        if($row = $result -> fetch_object())
-        {
-            //img 
-            $img_bin = hex2bin($row -> profilePic); 
-            $img = decrypting($img_bin, $iv);
-            
-            $profilePic_txt = " "; 
-             
-        }
-
-    }
-    else 
-    { 
-      $display_img = '<img class="pp-size" src="img/defaultProfilePic.png"/>'; 
-      $profilePic_txt = "You haven't upload a profile pic yet";
-    }
-
+ 
     //badge  
     //bronze (90 - 99) badgeVal = 1 
     //silver (100 - 199) badgeVal = 2 
@@ -248,11 +215,43 @@
                         <td class="text-center" style="height:100px;"> 
                         <div class="shadow p-3 bg-body rounded bg-white"> 
                             <br/> 
-                        <label for="profilePic" class="txt">
-                        <form class="user" action="" method="post" enctype='multipart/form-data'>
-                            <?php $display_img = '<img src="data:image/jpeg;base64,'.base64_encode( $img ).'" />'; ?>
-                            <?php echo $display_img?>
-                        </form>
+                        <label for="profilePic" class="txt"> 
+                        <?php 
+                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                            $query = "SELECT COUNT(profilePic) as count FROM players WHERE email = '$hashed_email_hex'";
+            
+                            $result = mysqli_query($con, $query);
+            
+                            $row = mysqli_fetch_assoc($result);
+            
+                            if ($row['count'] > 0) 
+                            {
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                
+                                $sql = "SELECT * FROM players WHERE email ='$hashed_email_hex'";
+                
+                                $result = $con -> query($sql); 
+                
+                                if($row = $result -> fetch_object())
+                                {
+                                    //img 
+                                    $img_bin = hex2bin($row -> profilePic); 
+                                    $img = decrypting($img_bin, $iv); 
+         
+                                    $_SESSION['img'] = $img; 
+                                    $display_img = '<img class="pp-size" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['img'] ).'" />';
+                                    $profilePic_txt = " ";
+                                }
+
+                            }
+                            else 
+                            { 
+                              $display_img = '<img class="pp-size" src="img/defaultProfilePic.png"/>'; 
+                              $profilePic_txt = "You haven't upload a profile pic yet";
+                            }?>
+                            <?php  ?>
+                            <?php echo $display_img?> 
                             <br/>
                             <?php echo $profilePic_txt?>
                         </label></div>

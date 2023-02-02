@@ -50,7 +50,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient1.php'; 
+    include './headerFooterClient.php'; 
     require_once './validation.php';  
     if(empty($_SESSION["pName"]))
     {
@@ -134,8 +134,10 @@
                     {
                         if(isset($_POST['submit']))
                         { 
+                            $files = $_FILES['img']; 
+
                             //img 
-                            $img = file_get_contents($_FILES['img']['tmp_name']); 
+                            $img = file_get_contents($files['tmp_name']); 
                          
                             //hashed_email 
                             $hashed_email = hash('sha3-256', $email, true);
@@ -153,6 +155,8 @@
                     
                               //get iv 
                               $iv = hex2bin($row -> iv); 
+
+                              $_SESSION['iv'] = $iv;
                              
                             }
                             $result->free();
@@ -163,10 +167,12 @@
                             $cipher = 'AES-128-CBC';
                             $key = 'thebestsecretkey';
 
+                            $iv = $_SESSION['iv']; 
+
                             //encryptedImg
                             $encrypted_img = openssl_encrypt($img, $cipher, $key, OPENSSL_RAW_DATA, $iv);
                             //encryptedImg_hex
-                            $encryptedImg_hex = bin2hex($encrypted_img);
+                            $encrypted_img_hex = bin2hex($encrypted_img);
 
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                 
@@ -174,12 +180,12 @@
                 
                             $stmt = $con -> prepare($sql);  
                 
-                            $stmt -> bind_param('ss', $encryptedImg_hex, $hashed_email_hex); 
+                            $stmt -> bind_param('ss', $encrypted_img_hex, $hashed_email_hex); 
                 
                             if($stmt -> execute())
                             {
-                                //$location = "playerProfile.php"; 
-                                //echo "<script type='text/javascript'>alert('Successfully update profile picture');window.location='$location'</script>";
+                                $location = "playerProfile.php"; 
+                                echo "<script type='text/javascript'>alert('Successfully update profile picture');window.location='$location'</script>";
                             }
                             else 
                             {
@@ -189,8 +195,6 @@
                         }
                     } 
                 ?> 
-            </div>
-        </div> 
 
         <form class="user" action="" method="post" enctype='multipart/form-data'>
         <br/>
@@ -204,6 +208,10 @@
             <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>
         </div>
         </form> 
+            </div>
+        </div> 
+
+        
     </div>
     
 </body>

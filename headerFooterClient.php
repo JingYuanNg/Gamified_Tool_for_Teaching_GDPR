@@ -4,6 +4,7 @@ if (!isset($_SESSION))
 {
     session_start();
 }
+require_once './validation.php';
 ?> 
 <head>
     <meta charset="UTF-8">
@@ -62,6 +63,12 @@ if (!isset($_SESSION))
     {
         margin-top:0px;
     } 
+
+    .icon-size
+    {
+        width: 25px;
+        height:25px;
+    }
             
 </style>
 
@@ -80,8 +87,50 @@ if (!isset($_SESSION))
                         <li class="nav-item"> 
                         <?php  
                             if(isset($_SESSION["pName"]))
-                            {
-                                echo '<a href="playerProfile.php" class="nav-link js-scroll-trigger signin"><span><i class="fa fa-user" aria-hidden="true"></i> ' . $_SESSION["pName"]. '</span></a>';
+                            { 
+                                $email = $_SESSION["pName"];
+ 
+                                //hashed_email 
+                                $hashed_email = hash('sha3-256', $email, true);
+                                //hashed_email_hex
+                                $hashed_email_hex = bin2hex($hashed_email);
+                                
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+                                $query = "SELECT COUNT(profilePic) as count FROM players WHERE email = '$hashed_email_hex'";
+            
+                                $result = mysqli_query($con, $query);
+            
+                                $row = mysqli_fetch_assoc($result);
+            
+                                if ($row['count'] > 0) 
+                                {
+                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                
+                                    $sql = "SELECT * FROM players WHERE email ='$hashed_email_hex'";
+                
+                                    $result = $con -> query($sql); 
+                
+                                    if($row = $result -> fetch_object())
+                                    {
+                                        $iv = hex2bin($row -> iv); 
+                                        
+                                        //img 
+                                        $img_bin = hex2bin($row -> profilePic); 
+                                        $img = decrypting($img_bin, $iv);  
+         
+                                        $_SESSION['img'] = $img; 
+                                        $display_img = '<img class="icon-size rounded-circle" src="data:image/jpeg;base64,'.base64_encode( $_SESSION['img'] ).'" />';
+                                        
+                                    }
+
+                                }
+                                else 
+                                { 
+                                  $display_img = '<img class="icon-size rounded-circle" src="img/defaultProfilePic.png"/>';  
+                                }
+                                echo '<a href="playerProfile.php" class="nav-link js-scroll-trigger signin"><span> '. $display_img . ' ' . $_SESSION["pName"]. '</span></a>';
+                                
                             }
                             else
                             {
