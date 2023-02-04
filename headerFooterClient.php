@@ -1,9 +1,9 @@
 
 <?php
-if (!isset($_SESSION)) 
-{
-    session_start();
-}
+session_set_cookie_params(0, '/', '', true, true);
+ini_set('session.cookie_httponly', 1);  
+ini_set('session.use_only_cookies', 1); 
+session_start(); 
 require_once './validation.php';
 ?> 
 <head>
@@ -86,8 +86,13 @@ require_once './validation.php';
                         <li class="nav-item product-active"><a class="nav-link js-scroll-trigger" href="leaderboard.php">Leaderboard</a></li>    
                         <li class="nav-item"> 
                         <?php  
-                            if(isset($_SESSION["pName"]))
+                        
+                            $_SESSION['anyone'] = session_id(); 
+                            //echo $_SESSION['anyone']. "<br/>";
+
+                            if(isset($_SESSION["pName"]) && isset($_SESSION['aftLoggedIn']))
                             { 
+                                //echo $_SESSION['aftLoggedIn'] . "<br/>";
                                 $email = $_SESSION["pName"];
  
                                 //hashed_email 

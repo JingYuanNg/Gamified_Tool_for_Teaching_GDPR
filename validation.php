@@ -33,7 +33,7 @@ if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 } 
 
-/*players */
+/*players 
 $sql = 'CREATE TABLE IF NOT EXISTS players (
     playerID int NOT NULL AUTO_INCREMENT,
     iv varchar(32) NOT NULL,

@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-
-<?php
-    //start session 
-    session_start(); 
-    require_once './validation.php';
- 
-    if(empty($_SESSION["pName"]))
-    {
-        $location = "login.php";
-        echo "<script type='text/JavaScript'>alert('Please log in to continue');window.location='$location'</script>"; 
-    } 
-?> 
+<!DOCTYPE html> 
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -72,7 +60,15 @@
 <body>
     <?php 
         
-    include './headerFooterClient.php'; 
+    require_once './headerFooterClient.php'; 
+
+    if(empty($_SESSION["pName"]) || empty($_SESSION['aftLoggedIn']))
+    {
+        $location = "login.php";
+        echo "<script type='text/JavaScript'>alert('Please log in to continue');window.location='$location'</script>"; 
+        exit();
+    }
+
     //badge 
     //streak 
 
@@ -404,7 +400,7 @@
                 </div>
                 <br/>
                 <div class="text-center">
-                    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="logout" name="logout" value="Logout" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/>
+                    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="logout" name="logout" value="Logout" onclick="location = 'logout.php'"/>
                 </div>
                 </div> 
             </div>

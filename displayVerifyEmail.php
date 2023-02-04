@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-
-<?php
-?> 
+<!DOCTYPE html> 
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,8 +43,7 @@
 
 <body>
     <?php  
-    include './headerFooterClient.php';  
-    require_once './validation.php';
+    require_once './headerFooterClient.php'; 
     ?>
 <br/><br/><br/><br/><br/><br/>
     <div class="container mt-5 display-top">

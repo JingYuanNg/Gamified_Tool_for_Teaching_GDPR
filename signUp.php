@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 
 <?php
-    session_start(); 
-    require_once './validation.php'; 
     include_once 'vendor/autoload.php';
     use PHPMailer\PHPMailer\PHPMailer; 
     use PHPMailer\PHPMailer\Exception;
@@ -55,7 +53,7 @@
 
 <body>
     <?php 
-        include './headerFooterClient.php';
+        require_once './headerFooterClient.php'; 
 
     ?>
 

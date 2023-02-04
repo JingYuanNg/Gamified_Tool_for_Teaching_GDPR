@@ -58,13 +58,12 @@
     <!-- Page Wrapper --> 
     <div id="wrapper">
         <?php 
-            include './headerFooterAdmin.php';
-            require_once './validation.php';  
+            require_once './headerFooterAdmin.php';   
             require_once 'vendor/autoload.php';
-            if(empty($_SESSION["aName"]))
+            if(empty($_SESSION["aName"]) || empty($_SESSION['aftLoggedIn']))
             {
                 $location = "login.php";
-                echo "<script type='text/JavaScript'>alert('Please log in as admin to continue');window.location='$location'</script>"; 
+                echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
             } 
         ?>
         <div class="container mt-5 display-top">

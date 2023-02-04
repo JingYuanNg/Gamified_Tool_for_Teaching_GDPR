@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-
-<?php
-    //session_start(); 
-?> 
+<!DOCTYPE html> 
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -56,13 +52,12 @@
     <!-- Page Wrapper --> 
     <div id="wrapper">
         <?php 
-            include './headerFooterAdmin.php';
-            require_once './validation.php'; 
-            if(empty($_SESSION["aName"]))
+            require_once './headerFooterAdmin.php'; 
+            if(empty($_SESSION["aName"]) || empty($_SESSION['aftLoggedIn']))
             {
                 $location = "login.php";
-                echo "<script type='text/JavaScript'>alert('Please log in as admin to continue');window.location='$location'</script>"; 
-            } 
+                echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
+            }
         ?>
         
         <div class="container-fluid ps-5"> 
@@ -217,16 +212,19 @@
                                                     {
                                                         //bronze 
                                                         echo "img/BadgeBronze.png";
+                                                        $badgeVar = "Bronze";
                                                     } 
                                                     elseif($points >= 100 & $points<= 199)
                                                     {
                                                         //silver 
                                                         echo "img/BadgeSilver.png";
+                                                        $badgeVar = "Silver";
                                                     } 
                                                     elseif($points >= 200) 
                                                     {
                                                         //gold  
-                                                        echo "img/BadgeGold.png";  
+                                                        echo "img/BadgeGold.png"; 
+                                                        $badgeVar = "Gold"; 
                                                     }
                                                     echo '" 
                                                     class="img-size p-3"/><br/> 
@@ -237,7 +235,7 @@
                                                      } 
                                                      else 
                                                      {
-                                                        echo $badge;
+                                                        echo $badgeVar;
                                                      }
                                                     echo 
                                                     '</label>

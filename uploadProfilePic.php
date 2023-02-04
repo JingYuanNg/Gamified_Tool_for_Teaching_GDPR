@@ -1,10 +1,5 @@
 <!DOCTYPE html>
-
-<?php
-    //start session 
-    session_start();
-    
-?> 
+ 
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,12 +45,12 @@
 <body>
     <?php 
         
-    include './headerFooterClient.php'; 
-    require_once './validation.php';  
-    if(empty($_SESSION["pName"]))
+    require_once './headerFooterClient.php'; 
+    if(empty($_SESSION["pName"]) || empty($_SESSION['aftLoggedIn']))
     {
         $location = "login.php";
         echo "<script type='text/JavaScript'>alert('Please log in to continue');window.location='$location'</script>"; 
+        exit();
     } 
     else 
     {

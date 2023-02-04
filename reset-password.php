@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-
-<?php
-    //start session 
-    session_start();
-    
-?> 
+<!DOCTYPE html> 
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,8 +44,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient.php'; 
-    require_once './validation.php';
+        require_once './headerFooterClient.php'; 
        if(!empty($msg))
        {
             echo "<script>alert('$msg')</script>";

@@ -1,12 +1,7 @@
 <!DOCTYPE html>
-
 <?php
-    //start session 
-    session_start(); 
-    require_once './validation.php';
-
-   
-?> 
+ob_start();
+?>
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -302,6 +297,8 @@
 
                 
                 $exist = 1;
+                session_regenerate_id();
+                $_SESSION['aftLoggedIn'] = session_id(); 
                 $location = "home.php"; 
                 echo "<script type='text/javascript'>alert('Login successfully');window.location='$location'</script>";
                 
@@ -352,6 +349,8 @@
                     }
                     else
                     {
+                        session_regenerate_id();
+                        $_SESSION['aftLoggedIn'] = session_id();
                         $location = "adminDashboard.php"; 
                         echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
                     

@@ -58,13 +58,17 @@
     <!-- Page Wrapper --> 
     <div id="wrapper">
         <?php 
-            include './headerFooterAdmin.php';
-            require_once './validation.php'; 
+            require_once './headerFooterAdmin.php'; 
+            if(empty($_SESSION["aName"]) || empty($_SESSION['aftLoggedIn']))
+            {
+                $location = "login.php";
+                echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
+            }
             if ($_SESSION["aName"] !== "developerInshield@gmail.com")
             {
                 $location = "login.php";
                 echo "<script type='text/JavaScript'>alert('Only developer of Inshield is allowed to add admin');window.location='$location'</script>"; 
-            }
+            } 
         ?>
         <div class="container mt-5 display-top">
         <div class="row justify-content-center">
@@ -85,6 +89,31 @@
 
                         $cipher = 'AES-128-CBC';
                         $key = 'thebestsecretkey';
+
+                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        //admin SQL statement 
+                        $sql = "SELECT * FROM admin"; 
+                    
+                        //Get the result 
+                        $result = $con -> query($sql); 
+                    
+                        while($row = $result->fetch_object())
+                        {
+                          $exist = 1; 
+                          $compareEmail = $row -> email; 
+                    
+                          //hashed_email 
+                          $hashed_email = hash('sha3-256', $email, true);
+                          //hashed_email_hex
+                          $hashed_email_hex = bin2hex($hashed_email);
+
+                          if(strcmp($compareEmail, $hashed_email_hex) == 0)
+                          {
+                            $location = "addAdmin.php"; 
+                            echo "<script type='text/javascript'>alert('Email already taken as an admin');window.location='$location'</script>";
+                            exit();
+                          }
+                        }
 
                         //iv_hex 
                         $iv = random_bytes(16); 
@@ -116,7 +145,7 @@
 
                             if($stmt -> affected_rows > 0)
                             {
-                                printf('<script>alert("Admin added successfully"); location.href="./login.php"</script>');
+                                printf('<script>alert("Admin added successfully")</script>');
                             }
 
                             $stmt -> close(); 

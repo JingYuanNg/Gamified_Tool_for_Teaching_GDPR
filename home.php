@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
-<?php
-    session_start(); 
+<?php 
 ?> 
 <html>
 <meta charset="utf-8">
@@ -45,8 +44,7 @@
 
 <body>
     <?php 
-        include './headerFooterClient.php'; 
-        require_once 'validation.php'; 
+        require_once './headerFooterClient.php';  
     ?>
 
 <br/><br/><br/><br/>

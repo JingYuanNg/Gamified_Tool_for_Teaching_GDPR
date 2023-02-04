@@ -190,6 +190,8 @@ Enter the 6-digit code from your Google Authentication App</label>
 
                             if($row = $result -> fetch_object())
                             {
+                                session_regenerate_id();
+                                $_SESSION['aftLoggedIn'] = session_id();
                                 $location = "adminDashboard.php"; 
                                 echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
                             }

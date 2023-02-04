@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-
 <?php
-    //start session 
-    session_start();
-    
-?> 
+ob_start();
+?>
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,8 +47,7 @@
 <body>
     <?php 
         
-    include './headerFooterClient.php'; 
-    require_once './validation.php'; 
+    require_once './headerFooterClient.php';   
     require_once 'vendor/autoload.php';
     ?>
 <br/><br/> 
@@ -293,6 +289,8 @@ Enter the 6-digit code from your Google Authentication App</label>
                     
                                    if($stmt -> execute())
                                    {
+                                        session_regenerate_id();
+                                        $_SESSION['aftLoggedIn'] = session_id();
                                         $location = "home.php"; 
                                         echo "<script type='text/javascript'>alert('Login successfully');window.location='$location'</script>";
                                         

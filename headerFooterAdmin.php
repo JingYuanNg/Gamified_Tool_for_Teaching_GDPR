@@ -1,10 +1,10 @@
 
 <?php
-    require_once './validation.php';
-    if (!isset($_SESSION)) 
-    {
-        session_start();
-    }
+session_set_cookie_params(0, '/', '', true, true);
+ini_set('session.cookie_httponly', 1);  
+ini_set('session.use_only_cookies', 1); 
+session_start(); 
+require_once './validation.php'; 
 ?> 
 <head>
     <meta charset="UTF-8">
@@ -126,16 +126,14 @@
     <!-- Nav Item - Admin Name -->  
     <li class="fixed-bottom itm-btm text-wrap">
         <?php  
-            if(isset($_SESSION["aName"]))
+            if(isset($_SESSION["aName"]) && isset($_SESSION['aftLoggedIn']))
             {
                 echo '<a href="adminDetails.php" class="nav-link"><span class="navlink txt-sidebar">' . $_SESSION["aName"]. '</span></a>';
             }
             else
             {
                 echo '<a href="login.php" class="nav-link"><span class="navlink txt-sidebar">Login</span></a>';
-                //$location = "login.php";
-                //echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
-                //echo '<a href="#" class="nav-link"><span class="navlink txt-sidebar">Login</span></a>';
+                
             } 
         ?> 
     </li> 

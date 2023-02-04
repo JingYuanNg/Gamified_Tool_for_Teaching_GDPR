@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 
-<?php
-    //start session 
-    session_start(); 
-    require_once './validation.php';
+<?php 
     include_once 'vendor/autoload.php';
     use PHPMailer\PHPMailer\PHPMailer; 
     use PHPMailer\PHPMailer\Exception;
@@ -56,8 +53,7 @@
 
 <body>
     <?php 
-        
-    include './headerFooterClient.php'; 
+       require_once './headerFooterClient.php';   
        if(!empty($msg))
        {
             echo "<script>alert('$msg')</script>";
