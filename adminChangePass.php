@@ -69,6 +69,10 @@
                 $location = "login.php";
                 echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
             }
+            else 
+            {
+                $email = $_SESSION["aName"]; 
+            }
         ?>
         <div class="container mt-5 display-top">
         <div class="row justify-content-center">
@@ -78,6 +82,13 @@
                 <div class="mb-3"> 
                 <div class="text-center">
                     <?php 
+
+                        if (!isset($_SESSION['csrf_token'])) 
+                        {
+                            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));  
+                        }
+                        $token = $_SESSION['csrf_token'];
+
                         if($_SERVER['REQUEST_METHOD'] == 'GET')
                         {
                             if(empty($_GET['id']))
@@ -135,6 +146,7 @@
                                     echo '    <input type="password" class="form-control txt fs-5" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
                                     echo '    <label for="confirmPassword" class="txt fs-5">Confirm New Password</label>';
                                     echo '</div>';
+                                     echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
                                     echo '<div class="mb-3">';
                                     echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt fs-5" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                     echo '</div>';
@@ -215,6 +227,7 @@
                                     echo '    <input type="password" class="form-control txt fs-5" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
                                     echo '    <label for="confirmPassword" class="txt fs-5">Confirm New Password</label>';
                                     echo '</div>';
+                                     echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
                                     echo '<div class="mb-3">';
                                     echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt fs-5" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                     echo '</div>';

@@ -291,6 +291,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                                    {
                                         session_regenerate_id();
                                         $_SESSION['aftLoggedIn'] = session_id();
+                                        
                                         $location = "home.php"; 
                                         echo "<script type='text/javascript'>alert('Login successfully');window.location='$location'</script>";
                                         

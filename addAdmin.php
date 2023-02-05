@@ -64,6 +64,7 @@
                 $location = "login.php";
                 echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
             }
+            
             if ($_SESSION["aName"] !== "developerInshield@gmail.com")
             {
                 $location = "login.php";

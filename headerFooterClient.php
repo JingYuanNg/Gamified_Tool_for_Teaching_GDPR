@@ -1,6 +1,6 @@
 
 <?php
-session_set_cookie_params(0, '/', '', true, true);
+session_set_cookie_params(7200, '/', '', true, true); 
 ini_set('session.cookie_httponly', 1);  
 ini_set('session.use_only_cookies', 1); 
 session_start(); 
@@ -86,7 +86,7 @@ require_once './validation.php';
                         <li class="nav-item product-active"><a class="nav-link js-scroll-trigger" href="leaderboard.php">Leaderboard</a></li>    
                         <li class="nav-item"> 
                         <?php  
-                        
+                       
                             $_SESSION['anyone'] = session_id(); 
                             //echo $_SESSION['anyone']. "<br/>";
 

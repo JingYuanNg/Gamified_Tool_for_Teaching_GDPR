@@ -1,3 +1,4 @@
+
 <!DOCTYPE html> 
 <html>
 <meta charset="utf-8">
@@ -62,8 +63,14 @@
             <div class="col-md-6">
                 <h1 class="text-center txt">Change Password</h1>
              
-                <?php  
- 
+                <?php   
+                    // Generate a unique token for the user session
+                    if (!isset($_SESSION['csrf_token'])) 
+                    {
+                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                        
+                    }
+                    $token = $_SESSION['csrf_token'];
                     if($_SERVER['REQUEST_METHOD'] == 'GET')
                     {
                         if(empty($_GET['id']))
@@ -95,6 +102,7 @@
                                 echo '    <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
                                 echo '    <label for="confirmPassword" class="txt">Confirm New Password</label>';
                                 echo '</div>';
+                                echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
                                 echo '<div class="mb-3">';
                                 echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                 echo '</div>';
@@ -121,6 +129,7 @@
                                 echo '    <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
                                 echo '    <label for="confirmPassword" class="txt">Confirm New Password</label>';
                                 echo '</div>';
+                                echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
                                 echo '<div class="mb-3">';
                                 echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                 echo '</div>';
@@ -134,7 +143,13 @@
                     {
                         if(isset($_POST['submit']))
                         {
-                            //POST method to reset pass 
+                            if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                            {
+                                die('CSRF attack detected!');
+                            }
+                            else
+                            {
+
                             //trim 
                             $password = trim($_POST['password']); 
                             $confirmPassword = trim($_POST['confirmPassword']); 
@@ -206,7 +221,10 @@
                                 echo '</div>';
                                 echo '</form>';   
                             }
-                        }
+                            }
+                            
+                            
+                    } 
                     } 
                 ?> 
             </div>

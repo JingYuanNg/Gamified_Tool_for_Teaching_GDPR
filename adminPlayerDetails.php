@@ -58,6 +58,10 @@
                 $location = "login.php";
                 echo "<script type='text/JavaScript'>alert('Please log in as an admin to continue');window.location='$location'</script>"; 
             }
+            else 
+            {
+                $email = $_SESSION["aName"]; 
+            }
         ?>
         
         <div class="container-fluid ps-5"> 
