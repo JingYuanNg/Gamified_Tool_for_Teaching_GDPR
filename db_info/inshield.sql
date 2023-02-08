@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2023 at 12:43 AM
+-- Generation Time: Feb 08, 2023 at 03:52 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -80,7 +80,7 @@ CREATE TABLE `players` (
   `ranking_category4` varchar(256) NOT NULL,
   `levels` varchar(256) NOT NULL,
   `google2FA_secretKey` varchar(256) DEFAULT NULL,
-  `profilePic` varchar(256) DEFAULT NULL,
+  `profilePic` mediumtext DEFAULT NULL,
   `time_lvl1` varchar(256) DEFAULT NULL,
   `time_lvl2` varchar(256) DEFAULT NULL,
   `time_lvl3` varchar(256) DEFAULT NULL,
@@ -170,6 +170,27 @@ INSERT INTO `questions` (`questionID`, `question`, `category`, `optionA`, `optio
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `question_category`
+--
+
+CREATE TABLE `question_category` (
+  `question_categoryID` int(11) NOT NULL,
+  `question_categoryName` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `question_category`
+--
+
+INSERT INTO `question_category` (`question_categoryID`, `question_categoryName`) VALUES
+(1, 'What is GDPR?'),
+(2, 'Where does the regulation apply '),
+(3, 'The seven principles'),
+(4, 'The eight rights ');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `verify_email`
 --
 
@@ -210,6 +231,12 @@ ALTER TABLE `questions`
   ADD PRIMARY KEY (`questionID`);
 
 --
+-- Indexes for table `question_category`
+--
+ALTER TABLE `question_category`
+  ADD PRIMARY KEY (`question_categoryID`);
+
+--
 -- Indexes for table `verify_email`
 --
 ALTER TABLE `verify_email`
@@ -244,10 +271,16 @@ ALTER TABLE `questions`
   MODIFY `questionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
+-- AUTO_INCREMENT for table `question_category`
+--
+ALTER TABLE `question_category`
+  MODIFY `question_categoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `verify_email`
 --
 ALTER TABLE `verify_email`
-  MODIFY `eventID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `eventID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
