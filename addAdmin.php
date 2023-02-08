@@ -93,90 +93,90 @@
                         }
                         else
                         {
-                        $email = trim($_POST['email']);
-                        $password = trim($_POST['password']); 
-                        $confirmPassword = trim($_POST['confirmPassword']); 
+                            $email = trim($_POST['email']);
+                            $password = trim($_POST['password']); 
+                            $confirmPassword = trim($_POST['confirmPassword']); 
 
-                        $error['email'] = validateEmail($email);
-                        $error['password'] = validatePassword($password);
-                        $error['confirmPassword'] = validateConfirmPassword($password, $confirmPassword);
+                            $error['email'] = validateEmail($email);
+                            $error['password'] = validatePassword($password);
+                            $error['confirmPassword'] = validateConfirmPassword($password, $confirmPassword);
                         
-                        $error = array_filter($error); 
+                            $error = array_filter($error); 
 
-                        $cipher = 'AES-128-CBC';
-                        $key = 'thebestsecretkey';
+                            $cipher = 'AES-128-CBC';
+                            $key = 'thebestsecretkey';
 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                        //admin SQL statement 
-                        $sql = "SELECT * FROM admin"; 
-                    
-                        //Get the result 
-                        $result = $con -> query($sql); 
-                    
-                        while($row = $result->fetch_object())
-                        {
-                          $exist = 1; 
-                          $compareEmail = $row -> email; 
-                    
-                          //hashed_email 
-                          $hashed_email = hash('sha3-256', $email, true);
-                          //hashed_email_hex
-                          $hashed_email_hex = bin2hex($hashed_email);
-
-                          if(strcmp($compareEmail, $hashed_email_hex) == 0)
-                          {
-                            $location = "addAdmin.php"; 
-                            echo "<script type='text/javascript'>alert('Email already taken as an admin');window.location='$location'</script>";
-                            exit();
-                          }
-                        }
-
-                        //iv_hex 
-                        $iv = random_bytes(16); 
-                        $iv_hex = bin2hex($iv);  
-
-                        //hashed_email 
-                        $hashed_email = hash('sha3-256', $email, true);
-                        //hashed_email_hex
-                        $hashed_email_hex = bin2hex($hashed_email);
-
-                        //hashed_password 
-                        $hashed_password = hash('sha3-256', $password, true);
-                        //hashedPassword_hex 
-                        $hashed_password_hex = bin2hex($hashed_password);
-
-                        if(empty($error))
-                        {
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-
-                            $sql = "INSERT INTO admin (adminID, iv, email, password) values (?, ?, ?, ?)"; 
-
-                            $stmt = $con -> prepare($sql); 
-
-                            $adminID = NULL; 
-
-                            $stmt -> bind_param('isss', $adminID, $iv_hex, $hashed_email_hex, $hashed_password_hex);
-
-                            $stmt -> execute(); 
-
-                            if($stmt -> affected_rows > 0)
+                            //admin SQL statement 
+                            $sql = "SELECT * FROM admin"; 
+                    
+                            //Get the result 
+                            $result = $con -> query($sql); 
+                    
+                            while($row = $result->fetch_object())
                             {
-                                printf('<script>alert("Admin added successfully")</script>');
+                              $exist = 1; 
+                              $compareEmail = $row -> email; 
+                    
+                              //hashed_email 
+                              $hashed_email = hash('sha3-256', $email, true);
+                              //hashed_email_hex
+                              $hashed_email_hex = bin2hex($hashed_email);
+
+                              if(strcmp($compareEmail, $hashed_email_hex) == 0)
+                              {
+                                $location = "addAdmin.php"; 
+                                echo "<script type='text/javascript'>alert('Email already taken as an admin');window.location='$location'</script>";
+                                exit();
+                              }
                             }
 
-                            $stmt -> close(); 
-                            $con -> close();
-                        }
-                        else
-                        {
-                            //display error msg 
-                            echo "<ul class=‘error’>";
-                            foreach ($error as $value)
+                            //iv_hex 
+                            $iv = random_bytes(16); 
+                            $iv_hex = bin2hex($iv);  
+
+                            //hashed_email 
+                            $hashed_email = hash('sha3-256', $email, true);
+                            //hashed_email_hex
+                            $hashed_email_hex = bin2hex($hashed_email);
+
+                            //hashed_password 
+                            $hashed_password = hash('sha3-256', $password, true);
+                            //hashedPassword_hex 
+                            $hashed_password_hex = bin2hex($hashed_password);
+
+                            if(empty($error))
                             {
-                                echo "<li>$value</li>";
-                                echo "</ul>";
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+                                $sql = "INSERT INTO admin (adminID, iv, email, password) values (?, ?, ?, ?)"; 
+
+                                $stmt = $con -> prepare($sql); 
+
+                                $adminID = NULL; 
+
+                                $stmt -> bind_param('isss', $adminID, $iv_hex, $hashed_email_hex, $hashed_password_hex);
+
+                                $stmt -> execute(); 
+
+                                if($stmt -> affected_rows > 0)
+                                {
+                                    printf('<script>alert("Admin added successfully")</script>');
+                                }
+
+                                $stmt -> close(); 
+                                $con -> close();
                             }
-                        }
+                            else
+                            {
+                                //display error msg 
+                                echo "<ul class=‘error’>";
+                                foreach ($error as $value)
+                                {
+                                    echo "<li>$value</li>";
+                                    echo "</ul>";
+                                }
+                            }
 
                         }//csrf end 
                     }

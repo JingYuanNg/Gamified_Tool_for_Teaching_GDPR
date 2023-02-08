@@ -95,61 +95,61 @@
                         else
                         { 
 
-                        //validation 
-                        if(empty($_POST['category']))
-                        {
-                            $error['category'] = "Please select a <strong>category</strong> !"; 
-                        }  
-                        if(empty($_POST['answer']))
-                        {
-                            $error['answer'] = "Please select an <strong>answer</strong> !"; 
-                        }
-
-                        if(!empty($error))
-                        {
-                            //display error msg 
-                           echo "<ul class=‘error’>";
-                           foreach ($error as $value)
-                           {
-                           echo "<li style='color: black;'>$value</li>";
-                           echo "</ul>";
-                           }
-                        }
-                        elseif(empty($error))
-                        {
-                            
-                            //trim data input
-                            $question = trim($_POST['question']); 
-                            $category = trim($_POST['category']); 
-                            $optionA = trim($_POST['optionA']);
-                            $optionB = trim($_POST['optionB']);
-                            $optionC = trim($_POST['optionC']);
-                            $optionD = trim($_POST['optionD']);
-                            $answer = trim($_POST['answer']); 
-
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-
-                            $sql = "INSERT INTO questions (questionID, question, category, optionA, optionB, optionC, optionD, answer) values (?, ?, ?, ?, ?, ?, ?, ?)";
-
-                            $stmt = $con -> prepare($sql); 
-
-                            $questionID = NULL; 
-
-                            $stmt -> bind_param('isssssss', $questionID, $question, $category, $optionA, $optionB, $optionC, $optionD, $answer); 
-
-                            $stmt -> execute(); 
-
-                            if($stmt -> affected_rows > 0)
+                            //validation 
+                            if(empty($_POST['category']))
                             {
-                                printf('<script>alert("Question added successfully")</script>');
-                                $location = "adminQuestions.php";
-                                echo "<script type='text/JavaScript'>window.location='$location'</script>";
+                                $error['category'] = "Please select a <strong>category</strong> !"; 
+                            }  
+                            if(empty($_POST['answer']))
+                            {
+                                $error['answer'] = "Please select an <strong>answer</strong> !"; 
                             }
+
+                            if(!empty($error))
+                            {
+                                //display error msg 
+                               echo "<ul class=‘error’>";
+                               foreach ($error as $value)
+                               {
+                               echo "<li style='color: black;'>$value</li>";
+                               echo "</ul>";
+                               }
+                            }
+                            elseif(empty($error))
+                            {
                             
-                            $stmt -> close(); 
-                            $con -> close();
-                        }
-                    }//csrf end 
+                                //trim data input
+                                $question = trim($_POST['question']); 
+                                $category = trim($_POST['category']); 
+                                $optionA = trim($_POST['optionA']);
+                                $optionB = trim($_POST['optionB']);
+                                $optionC = trim($_POST['optionC']);
+                                $optionD = trim($_POST['optionD']);
+                                $answer = trim($_POST['answer']); 
+
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+                                $sql = "INSERT INTO questions (questionID, question, category, optionA, optionB, optionC, optionD, answer) values (?, ?, ?, ?, ?, ?, ?, ?)";
+
+                                $stmt = $con -> prepare($sql); 
+
+                                $questionID = NULL; 
+
+                                $stmt -> bind_param('isssssss', $questionID, $question, $category, $optionA, $optionB, $optionC, $optionD, $answer); 
+
+                                $stmt -> execute(); 
+
+                                if($stmt -> affected_rows > 0)
+                                {
+                                    printf('<script>alert("Question added successfully")</script>');
+                                    $location = "adminQuestions.php";
+                                    echo "<script type='text/JavaScript'>window.location='$location'</script>";
+                                }
+                            
+                                $stmt -> close(); 
+                                $con -> close();
+                            }
+                        }//csrf end 
                     }
                 ?> 
                 <br/>
@@ -206,12 +206,6 @@
                  <br/>  
         </div>
     </div> 
-
- <!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>   -->
+ 
 </body>
 </html> 

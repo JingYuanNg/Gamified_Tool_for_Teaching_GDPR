@@ -9,7 +9,7 @@
     <link href="css/adminStyle.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-</head>
+ 
 <style>    
     .txt
     {
@@ -62,12 +62,12 @@
             {
                 $email = $_SESSION["aName"]; 
             }
+  
         ?>
         
         <div class="container-fluid ps-5"> 
             <?php 
-  
-            //retrieve from db 
+
             if($_SERVER['REQUEST_METHOD'] == 'GET')
             { 
                 if(empty($_GET['id']))

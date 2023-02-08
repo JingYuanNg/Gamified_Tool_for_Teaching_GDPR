@@ -168,81 +168,81 @@
                                 else
                                 { 
 
-                                //POST method to reset pass 
-                                //trim 
-                                $password = trim($_POST['password']); 
-                                $confirmPassword = trim($_POST['confirmPassword']); 
-    
-                                //validation
-                                $error['password'] = validatePassword($password);
-                                $error['confirmPassword'] = validateConfirmPassword($password, $confirmPassword);
-                        
-                                //Remove null value in $error when there is no error
-                                $error = array_filter($error); 
-    
-                                if(empty($error))
-                                {
+                                    //POST method to reset pass 
                                     //trim 
                                     $password = trim($_POST['password']); 
                                     $confirmPassword = trim($_POST['confirmPassword']); 
     
+                                    //validation
+                                    $error['password'] = validatePassword($password);
+                                    $error['confirmPassword'] = validateConfirmPassword($password, $confirmPassword);
+                        
                                     //Remove null value in $error when there is no error
                                     $error = array_filter($error); 
     
-                                    //hashed_password 
-                                    $hashed_password = hash('sha3-256', $password, true);
-                                    //hashedPassword_hex 
-                                    $hashed_password_hex = bin2hex($hashed_password);
+                                    if(empty($error))
+                                    {
+                                        //trim 
+                                        $password = trim($_POST['password']); 
+                                        $confirmPassword = trim($_POST['confirmPassword']); 
+    
+                                        //Remove null value in $error when there is no error
+                                        $error = array_filter($error); 
+    
+                                        //hashed_password 
+                                        $hashed_password = hash('sha3-256', $password, true);
+                                        //hashedPassword_hex 
+                                        $hashed_password_hex = bin2hex($hashed_password);
                                 
-                                    //hashed_email 
-                                    $hashed_email = hash('sha3-256', $email, true);
-                                    //hashed_email_hex
-                                    $hashed_email_hex = bin2hex($hashed_email);
+                                        //hashed_email 
+                                        $hashed_email = hash('sha3-256', $email, true);
+                                        //hashed_email_hex
+                                        $hashed_email_hex = bin2hex($hashed_email);
                             
-                                    //player forgot pass 
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                        //player forgot pass 
+                                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
     
-                                    //SQL statement
-                                    $sql = "UPDATE admin SET password = '$hashed_password_hex' WHERE email = '$hashed_email_hex'"; 
-                                    if($con -> query($sql) === TRUE)
-                                    { 
-                                        $location = "adminDetails.php";
-                                        echo "<script type='text/JavaScript'>alert('Password changed successfully');window.location='$location'</script>"; 
+                                        //SQL statement
+                                        $sql = "UPDATE admin SET password = '$hashed_password_hex' WHERE email = '$hashed_email_hex'"; 
+                                        if($con -> query($sql) === TRUE)
+                                        { 
+                                            $location = "adminDetails.php";
+                                            echo "<script type='text/JavaScript'>alert('Password changed successfully');window.location='$location'</script>"; 
+                                        }
+                                        else 
+                                        {
+                                            echo 'uh-oh' . $stmt->error;
+                                        }
                                     }
-                                    else 
+                                    else
                                     {
-                                        echo 'uh-oh' . $stmt->error;
-                                    }
-                                }
-                                else
-                                {
-                                    //display error msg 
-                                    echo "<ul class=‘error’>";
-                                    foreach ($error as $value)
-                                    {
-                                        echo "<li style='color: black;'>$value</li>";
-                                        echo "</ul>";
-                                    }
+                                        //display error msg 
+                                        echo "<ul class=‘error’>";
+                                        foreach ($error as $value)
+                                        {
+                                            echo "<li style='color: black;'>$value</li>";
+                                            echo "</ul>";
+                                        }
     
-                                    echo '<form class="user" action="adminChangePass.php" method="post" enctype="multipart/form-data">';
-                                    echo '<br/>';
+                                        echo '<form class="user" action="adminChangePass.php" method="post" enctype="multipart/form-data">';
+                                        echo '<br/>';
                  
-                                    echo '<div class="mb-3 form-floating">';
-                                    echo '    <input type="password" class="form-control txt fs-5" id="password" placeholder="New Password" name="password" required="required">';
-                                    echo '    <label for="password" class="txt fs-5">New Password</label>';
-                                    echo '</div>';
-                                    echo '<div class="mb-3 form-floating">';
-                                    echo '    <input type="password" class="form-control txt fs-5" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
-                                    echo '    <label for="confirmPassword" class="txt fs-5">Confirm New Password</label>';
-                                    echo '</div>';
-                                     echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
-                                    echo '<div class="mb-3">';
-                                    echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt fs-5" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
-                                    echo '</div>';
-                                    echo '</form>';   
-                                }
+                                        echo '<div class="mb-3 form-floating">';
+                                        echo '    <input type="password" class="form-control txt fs-5" id="password" placeholder="New Password" name="password" required="required">';
+                                        echo '    <label for="password" class="txt fs-5">New Password</label>';
+                                        echo '</div>';
+                                        echo '<div class="mb-3 form-floating">';
+                                        echo '    <input type="password" class="form-control txt fs-5" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
+                                        echo '    <label for="confirmPassword" class="txt fs-5">Confirm New Password</label>';
+                                        echo '</div>';
+                                         echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
+                                        echo '<div class="mb-3">';
+                                        echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt fs-5" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
+                                        echo '</div>';
+                                        echo '</form>';   
+                                    }
                             
-                            }//csrf end 
+                                }//csrf end 
                             }
                         } 
                     ?> 
