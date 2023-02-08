@@ -8,7 +8,11 @@
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-
+<head>
+  <script>
+    document.getElementById("csrf_form").submit(); 
+  </script>
+</head>
 <style>   
 
     .display-top
@@ -52,6 +56,23 @@
         exit();
     }  
 
+    // Generate a unique token for the user session
+    if (!isset($_SESSION['csrf_token'])) 
+    {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+
+    $csrf_token = $_SESSION['csrf_token'];
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST')
+    {
+        if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+        { 
+            die('CSRF attack detected!');
+        }
+    }
+    else 
+    {
     //select * from players - ID, email, points 
     //decrypt points 
     //store in array according to ID 
@@ -137,14 +158,18 @@
     } 
     
     $con -> close();
-    
+    }
     ?>
 <br/><br/><br/> 
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h1 class="text-center txt">Leaderboard</h1>
-                  
+                
+                <form id="csrf_form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                </form>
+                
                 <table class="bg-white rounded shadow table-bordered table-responsive-sm mb-5" >  
                     <thead>
                     <tr>
@@ -183,6 +208,13 @@
                  
             </div>
         </div> 
-    </div> 
+    </div>
+    <!-- <input type="button" value="Logout" name="logout" class="profile-btn" onclick="location = 'logout.php'; alert('You have successfully been logout!');"/> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script> -->
 </body>
 </html> 

@@ -149,58 +149,58 @@
                 else
                 { 
 
-                    //POST method for updating question form
-                    //validation 
-                    if(empty($_POST['category']))
-                    {
-                        $error['category'] = "Please select a <strong>category</strong> !"; 
-                    }  
-                    if(empty($_POST['answer']))
-                    {
-                        $error['answer'] = "Please select an <strong>answer</strong> !"; 
-                    }
+                //POST method for updating question form
+                //validation 
+                if(empty($_POST['category']))
+                {
+                    $error['category'] = "Please select a <strong>category</strong> !"; 
+                }  
+                if(empty($_POST['answer']))
+                {
+                    $error['answer'] = "Please select an <strong>answer</strong> !"; 
+                }
 
-                    if(!empty($error))
-                    {
-                        //display error msg 
-                       echo "<ul class=‘error’>";
-                       foreach ($error as $value)
-                       {
-                       echo "<li style='color: black;'>$value</li>";
-                       echo "</ul>";
-                       }
-                    }
-                    elseif(empty($error))
-                    {
-                        //trim data input
-                        $questionID = trim($_POST['questionID']);
-                        $question = trim($_POST['question']); 
-                        $category = trim($_POST['category']); 
-                        $optionA = trim($_POST['optionA']);
-                        $optionB = trim($_POST['optionB']);
-                        $optionC = trim($_POST['optionC']);
-                        $optionD = trim($_POST['optionD']);
-                        $answer = trim($_POST['answer']); 
+                if(!empty($error))
+                {
+                    //display error msg 
+                   echo "<ul class=‘error’>";
+                   foreach ($error as $value)
+                   {
+                   echo "<li style='color: black;'>$value</li>";
+                   echo "</ul>";
+                   }
+                }
+                elseif(empty($error))
+                {
+                    //trim data input
+                    $questionID = trim($_POST['questionID']);
+                    $question = trim($_POST['question']); 
+                    $category = trim($_POST['category']); 
+                    $optionA = trim($_POST['optionA']);
+                    $optionB = trim($_POST['optionB']);
+                    $optionC = trim($_POST['optionC']);
+                    $optionD = trim($_POST['optionD']);
+                    $answer = trim($_POST['answer']); 
 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
-                        //SQL statement
-                        $sql = "UPDATE questions SET question = '$question', category = '$category', optionA = '$optionA', optionB = '$optionB', optionC = '$optionC', optionD = '$optionD', answer = '$answer' WHERE questionID = '$questionID'"; 
+                    //SQL statement
+                    $sql = "UPDATE questions SET question = '$question', category = '$category', optionA = '$optionA', optionB = '$optionB', optionC = '$optionC', optionD = '$optionD', answer = '$answer' WHERE questionID = '$questionID'"; 
                     
-                        // if($stmt -> execute())
-                        if($con -> query($sql) === TRUE)
-                        { 
-                            $location = "adminQuestions.php";
-                            echo "<script type='text/JavaScript'>alert('Question updated successfully');window.location='$location'</script>"; 
-                        }
-                        else 
-                        {
-                            echo 'uh-oh' . $stmt->error;
-                        }
-                    
-                        $con -> close();
+                    // if($stmt -> execute())
+                    if($con -> query($sql) === TRUE)
+                    { 
+                        $location = "adminQuestions.php";
+                        echo "<script type='text/JavaScript'>alert('Question updated successfully');window.location='$location'</script>"; 
                     }
-                }//csrf end 
+                    else 
+                    {
+                        echo 'uh-oh' . $stmt->error;
+                    }
+                    
+                    $con -> close();
+                }
+            }//csrf end 
             }
                 
             ?>

@@ -144,13 +144,6 @@ Enter the 6-digit code from your Google Authentication App</label>
                     } 
                     elseif($_SERVER['REQUEST_METHOD'] == 'POST')
                     { 
-                        if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
-                        { 
-                            die('CSRF attack detected!');
-                        }
-                        else
-                        { 
-
                         $secret_key = $_SESSION['secretKey'];  
                         
                         $user_provided_code = trim($_POST['loginCode']);
@@ -329,7 +322,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                             // Code is NOT valid
                             echo "<script type='text/JavaScript'>alert('Code is invalid');</script>"; 
                         }
-                    }//csrf end 
+                        
                     }
                      
                 ?>

@@ -164,62 +164,62 @@ Enter the 6-digit code from your Google Authentication App</label>
                         }
                         else
                         { 
-                            $secret_key = $_SESSION['secretKey']; 
+                        $secret_key = $_SESSION['secretKey']; 
 
-                            $email = $_SESSION['email'];
+                        $email = $_SESSION['email'];
                         
-                            //hashed_email 
-                      	    $hashed_email = hash('sha3-256', $email, true);
-                            //hashed_email_hex
-                            $hashed_email_hex = bin2hex($hashed_email);
+                        //hashed_email 
+                      	$hashed_email = hash('sha3-256', $email, true);
+                        //hashed_email_hex
+                        $hashed_email_hex = bin2hex($hashed_email);
                         
-                            $user_provided_code = trim($_POST['loginCode']);
+                        $user_provided_code = trim($_POST['loginCode']);
 
-                            $google2fa = new \PragmaRX\Google2FA\Google2FA();
+                        $google2fa = new \PragmaRX\Google2FA\Google2FA();
 
-                            if ($google2fa->verifyKey($secret_key, $user_provided_code)) 
+                        if ($google2fa->verifyKey($secret_key, $user_provided_code)) 
+                        {
+                            // Code is valid
+                            echo "<script type='text/JavaScript'>alert('Code is valid');</script>"; 
+                        
+                            //store the email into session 
+                            $_SESSION["aName"] = $_SESSION['email'];  
+
+                            $cipher = 'AES-128-CBC';
+                            $key = 'thebestsecretkey';
+
+                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
+                            //SQL statement with placeholder
+                            $sql = "SELECT * FROM admin WHERE email = ?";
+
+                            //Prepare statement
+                            $stmt = $con->prepare($sql);
+
+                            //Bind email to the statement
+                            $stmt->bind_param("s", $hashed_email_hex);
+
+                            //Execute statement
+                            $stmt->execute();
+
+                            $result = $stmt->get_result();
+
+                            if($row = $result -> fetch_object())
                             {
-                                // Code is valid
-                                echo "<script type='text/JavaScript'>alert('Code is valid');</script>"; 
-                        
-                                //store the email into session 
-                                $_SESSION["aName"] = $_SESSION['email'];  
-
-                                $cipher = 'AES-128-CBC';
-                                $key = 'thebestsecretkey';
-
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-
-                                //SQL statement with placeholder
-                                $sql = "SELECT * FROM admin WHERE email = ?";
-
-                                //Prepare statement
-                                $stmt = $con->prepare($sql);
-
-                                //Bind email to the statement
-                                $stmt->bind_param("s", $hashed_email_hex);
-
-                                //Execute statement
-                                $stmt->execute();
-
-                                $result = $stmt->get_result();
-
-                                if($row = $result -> fetch_object())
-                                {
-                                    session_regenerate_id();
-                                    $_SESSION['aftLoggedIn'] = session_id();
-                                    $location = "adminDashboard.php"; 
-                                    echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
-                                }
-
-
-                            } 
-                            else 
-                            {
-                                // Code is NOT valid
-                                echo "<script type='text/JavaScript'>alert('Code is invalid');</script>"; 
+                                session_regenerate_id();
+                                $_SESSION['aftLoggedIn'] = session_id();
+                                $location = "adminDashboard.php"; 
+                                echo "<script type='text/javascript'>alert('Login successfully as admin');window.location='$location'</script>";
                             }
-                        }//csrf end 
+
+
+                        } 
+                        else 
+                        {
+                            // Code is NOT valid
+                            echo "<script type='text/JavaScript'>alert('Code is invalid');</script>"; 
+                        }
+                    }//csrf end 
                     }
                      
                 ?>

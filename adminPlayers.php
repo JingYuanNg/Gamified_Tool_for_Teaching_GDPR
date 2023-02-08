@@ -9,7 +9,11 @@
     <link href="css/adminStyle.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
- 
+<head>
+<script> 
+      document.getElementById("csrf_form").submit(); 
+</script>
+</head>
 <style>    
     .txt
     {
@@ -72,9 +76,17 @@
             {
                 $email = $_SESSION["aName"]; 
             }
- 
+
+            // Generate a unique token for the user session
+            if (!isset($_SESSION['csrf_token'])) 
+            {
+                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+            }
+
+            $csrf_token = $_SESSION['csrf_token'];
         ?>
-          
+         
+        
         <div class="container-fluid ps-5">  
         <h1 class="text-left txt fw-bold">Players</h1> 
                 
@@ -116,7 +128,8 @@
             <a href="adminDashboard.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
         </div>  
         <br/>
-        <form action="" method="POST" id="dataForm"> 
+        <form action="" method="POST" id="csrf_form">
+        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
         <div class="card shadow mb-4 txt">
             <!------Content Title------->
             <div class="card-header py-3">
