@@ -67,6 +67,15 @@
         <div class="container-fluid ps-5">
             <h1 class="text-left txt">Edit Question</h1> 
             <?php
+
+            // Generate a unique token for the user session
+            if (!isset($_SESSION['csrf_token'])) 
+            {
+                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+            }
+
+            $token = $_SESSION['csrf_token'];
+    
             //retrieve from db 
             if($_SERVER['REQUEST_METHOD'] == 'GET')
             { 
@@ -133,6 +142,13 @@
             } 
             elseif($_SERVER['REQUEST_METHOD'] == 'POST')
             { 
+                if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                { 
+                    die('CSRF attack detected!');
+                }
+                else
+                { 
+
                 //POST method for updating question form
                 //validation 
                 if(empty($_POST['category']))
@@ -184,6 +200,7 @@
                     
                     $con -> close();
                 }
+            }//csrf end 
             }
                 
             ?>
@@ -262,7 +279,7 @@
                         <option value="c" <?php if ($answer == 'c') echo 'selected'; ?>>Option C</option>
                         <option value="d" <?php if ($answer == 'd') echo 'selected'; ?>>Option D</option>
                     </select>
-
+                    <input type="hidden" name="csrf_token" value="<?php echo $token?>"/>
                     <br/>
                     <button type="submit" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg float-end" aria-pressed="true" id="update" name="update">Update</button>
                         

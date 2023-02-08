@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-
+<?php
+ob_start();
+?>
 <?php 
     include_once 'vendor/autoload.php';
     use PHPMailer\PHPMailer\PHPMailer; 
@@ -69,6 +71,14 @@
 
                     $exist = 0;
 
+                    // Generate a unique token for the user session
+                    if (!isset($_SESSION['csrf_token'])) 
+                    {
+                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                    }
+
+                    $token = $_SESSION['csrf_token']; 
+
                     function generateToken() 
                     {
                         return bin2hex(random_bytes(16));
@@ -122,6 +132,13 @@
                     //check if submit btn is pressed 
                     if(isset($_POST['submit']))
                     {  
+                        if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                        { 
+                            die('CSRF attack detected!');
+                        }
+                        else
+                        { 
+
                         $email = trim($_POST['email']);  
 
                         $error['email'] = validateEmailFormat($email);
@@ -250,7 +267,7 @@
                                 echo "</ul>";
                            }
                         }
-                        
+                    }//csrf end 
                         
                     } 
                 ?>
@@ -263,6 +280,7 @@ we’ll send you a link to reset your password</label></div><br/>
                         <input type="text" class="form-control txt" id="email" placeholder="Email" name="email" required="required">
                         <label for="email" class="txt">Email</label>
                     </div>
+                    <input type="hidden" name="csrf_token" value="<?php echo $token?>"/>
                     <div class="mb-3"> 
                         <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>
                     </div>

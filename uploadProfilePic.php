@@ -64,7 +64,14 @@
                 <h1 class="text-center txt">Upload Profile Picture</h1>
              
                 <?php  
- 
+                    // Generate a unique token for the user session
+                    if (!isset($_SESSION['csrf_token'])) 
+                    {
+                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                    }
+
+                    $token = $_SESSION['csrf_token']; 
+
                     if($_SERVER['REQUEST_METHOD'] == 'GET')
                     {
                         if(empty($_GET['id']))
@@ -129,64 +136,70 @@
                     {
                         if(isset($_POST['submit']))
                         { 
-                            $files = $_FILES['img']; 
-
-                            //img 
-                            $img = file_get_contents($files['tmp_name']); 
-                         
-                            //hashed_email 
-                            $hashed_email = hash('sha3-256', $email, true);
-                            //hashed_email_hex
-                            $hashed_email_hex = bin2hex($hashed_email);
-
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                            $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
-                            $result = $con -> query($sql); 
-                    
-                            if($row = $result -> fetch_object())
+                            if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
                             { 
-                              //get playerID 
-                              $playerID = $row -> playerID; 
+                                die('CSRF attack detected!');
+                            }
+                            else
+                            {
+                                $files = $_FILES['img']; 
+
+                                //img 
+                                $img = file_get_contents($files['tmp_name']); 
+                         
+                                //hashed_email 
+                                $hashed_email = hash('sha3-256', $email, true);
+                                //hashed_email_hex
+                                $hashed_email_hex = bin2hex($hashed_email);
+
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
+                                $result = $con -> query($sql); 
                     
-                              //get iv 
-                              $iv = hex2bin($row -> iv); 
+                                if($row = $result -> fetch_object())
+                                { 
+                                  //get playerID 
+                                  $playerID = $row -> playerID; 
+                    
+                                  //get iv 
+                                  $iv = hex2bin($row -> iv); 
 
-                              $_SESSION['iv'] = $iv;
+                                  $_SESSION['iv'] = $iv;
                              
-                            }
-                            $result->free();
-                            $con->close();
+                                }
+                                $result->free();
+                                $con->close();
 
-                            //update statement  
+                                //update statement  
                             
-                            $cipher = 'AES-128-CBC';
-                            $key = 'thebestsecretkey';
+                                $cipher = 'AES-128-CBC';
+                                $key = 'thebestsecretkey';
 
-                            $iv = $_SESSION['iv']; 
+                                $iv = $_SESSION['iv']; 
 
-                            //encryptedImg
-                            $encrypted_img = openssl_encrypt($img, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                            //encryptedImg_hex
-                            $encrypted_img_hex = bin2hex($encrypted_img);
+                                //encryptedImg
+                                $encrypted_img = openssl_encrypt($img, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                                //encryptedImg_hex
+                                $encrypted_img_hex = bin2hex($encrypted_img);
 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                 
-                            $sql = "UPDATE players SET  profilePic = ? WHERE email = ?";
+                                $sql = "UPDATE players SET  profilePic = ? WHERE email = ?";
                 
-                            $stmt = $con -> prepare($sql);  
+                                $stmt = $con -> prepare($sql);  
                 
-                            $stmt -> bind_param('ss', $encrypted_img_hex, $hashed_email_hex); 
+                                $stmt -> bind_param('ss', $encrypted_img_hex, $hashed_email_hex); 
                 
-                            if($stmt -> execute())
-                            {
-                                $location = "playerProfile.php"; 
-                                echo "<script type='text/javascript'>alert('Successfully update profile picture');window.location='$location'</script>";
-                            }
-                            else 
-                            {
-                                echo 'uh-oh' . $stmt->error;
-                            }
-                            
+                                if($stmt -> execute())
+                                {
+                                    $location = "playerProfile.php"; 
+                                    echo "<script type='text/javascript'>alert('Successfully update profile picture');window.location='$location'</script>";
+                                }
+                                else 
+                                {
+                                    echo 'uh-oh' . $stmt->error;
+                                }
+                            }//csrf end    
                         }
                     } 
                 ?> 
@@ -199,6 +212,7 @@
              <input type="file" class="txt" id="img" name="img" accept="image/*" required="required"/>
         </div> 
         <br/>
+        <input type="hidden" name="csrf_token" value="<?php echo $token?>"/>
         <div class="mb-3">
             <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>
         </div>

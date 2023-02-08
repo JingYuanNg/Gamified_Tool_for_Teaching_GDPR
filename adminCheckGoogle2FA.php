@@ -1,5 +1,7 @@
 <!DOCTYPE html>
- 
+<?php
+ob_start();
+?>
 <html>
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -76,6 +78,14 @@ Enter the 6-digit code from your Google Authentication App</label>
                 <?php 
                     $cipher = 'AES-128-CBC';
                     $key = 'thebestsecretkey'; 
+
+                    // Generate a unique token for the user session
+                    if (!isset($_SESSION['csrf_token'])) 
+                    {
+                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                        
+                    }
+                    $token = $_SESSION['csrf_token'];
  
                     if($_SERVER['REQUEST_METHOD'] == 'GET')
                     {
@@ -148,6 +158,12 @@ Enter the 6-digit code from your Google Authentication App</label>
                     } 
                     elseif($_SERVER['REQUEST_METHOD'] == 'POST')
                     { 
+                        if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                        { 
+                            die('CSRF attack detected!');
+                        }
+                        else
+                        { 
                         $secret_key = $_SESSION['secretKey']; 
 
                         $email = $_SESSION['email'];
@@ -203,7 +219,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                             // Code is NOT valid
                             echo "<script type='text/JavaScript'>alert('Code is invalid');</script>"; 
                         }
-                        
+                    }//csrf end 
                     }
                      
                 ?>
@@ -213,6 +229,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                         <input type="text" class="form-control txt fs-5" id="loginCode" placeholder="Login Code" name="loginCode" required="required">
                         <label for="loginCode" class="txt fs-5">Login Code</label>
                     </div> 
+                    <input type="hidden" name="csrf_token" value="<?php echo $token?>"/>
                     <div class="mb-3"> 
                         <input type="submit" class="btn btn-block btn-design font-weight-bold txt fs-5" aria-pressed="true" id="login" name="submit" value="submit"/>
                     </div>

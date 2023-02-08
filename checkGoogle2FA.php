@@ -69,6 +69,14 @@ Enter the 6-digit code from your Google Authentication App</label>
                     $cipher = 'AES-128-CBC';
                     $key = 'thebestsecretkey'; 
  
+                    // Generate a unique token for the user session
+                    if (!isset($_SESSION['csrf_token'])) 
+                    {
+                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                        
+                    }
+                    $token = $_SESSION['csrf_token']; 
+
                     if($_SERVER['REQUEST_METHOD'] == 'GET')
                     {
                         if(empty($_GET['email']))
@@ -324,6 +332,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                         <input type="text" class="form-control txt" id="loginCode" placeholder="Login Code" name="loginCode" required="required">
                         <label for="loginCode" class="txt">Login Code</label>
                     </div> 
+                    <input type="hidden" name="csrf_token" value="<?php echo $token?>"/>
                     <div class="mb-3"> 
                         <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="login" name="submit" value="submit"/>
                     </div>

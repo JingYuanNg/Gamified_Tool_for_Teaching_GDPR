@@ -69,6 +69,14 @@
                 <h1 class="text-center txt">Sign Up</h1>
                 <?php 
 
+                    // Generate a unique token for the user session
+                    if (!isset($_SESSION['csrf_token'])) 
+                    {
+                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                    }
+
+                    $token = $_SESSION['csrf_token']; 
+
                     function generateToken() 
                     {
                         return bin2hex(random_bytes(16));
@@ -120,7 +128,12 @@
 
                     if(isset($_POST['signUp']))
                     {
-
+                        if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                        { 
+                            die('CSRF attack detected!');
+                        }
+                        else
+                        {
                         $email = trim($_POST['email']); 
                         $password = trim($_POST['password']); 
                         $confirmPassword = trim($_POST['confirmPassword']); 
@@ -288,6 +301,8 @@
                            echo "</ul>";
                            }
                         }
+                    
+                        }//csrf end 
                     } 
                 ?> 
                 <form class="user" action="" method="post" enctype='multipart/form-data'>
@@ -303,7 +318,7 @@
                         <input type="password" class="form-control txt" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required="required">
                         <label for="signUpConfirmPassword" class="txt">Confirm Password</label>
                     </div>
-                         
+                    <input type="hidden" name="csrf_token" value="<?php echo $token?>"/>
                     <div class="mb-3"> 
                         <button type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="signUp" name="signUp">Sign Up</button>
                     </div>

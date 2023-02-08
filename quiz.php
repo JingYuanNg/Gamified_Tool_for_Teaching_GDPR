@@ -70,6 +70,15 @@
                 <h1 class="text-center txt">Quiz</h1>
                 
                 <?php
+
+                // Generate a unique token for the user session
+                if (!isset($_SESSION['csrf_token'])) 
+                {
+                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                    
+                }
+                $token = $_SESSION['csrf_token'];
+
                 $categoryLimit = 4; 
 
                 $ranking1 = 0; 
@@ -256,16 +265,24 @@
                 } 
                     // If the form has been submitted, check the answers
                     if (isset($_POST['submit'])) 
-                    { 
-                    
+                    {  
+                     if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                     {
+                         die('CSRF attack detected!');
+                     }
+                     else
+                     {
 
                       $score = 0;
                       for ($i = 0; $i < count($questions); $i++) 
                       {  
                         if(empty($_POST['answer'][$i]))
                         {
+                            
                             $location = "quiz.php";
                             echo "<script type='text/JavaScript'>alert('Please make sure all questions are selected with answer !');window.location='$location'</script>"; 
+
+                            
                         }
                         else
                         {
@@ -427,33 +444,33 @@
                         $encrypted_levels_new_hex = encrypting($levels_new, $iv);
                      }
 
-                     $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-                     $sql = "UPDATE players SET points = ?, ranking_category1 = ?, ranking_category2 = ?, ranking_category3 = ?, ranking_category4 = ? , levels = ? WHERE email = ?";
-                     $stmt = $con ->prepare($sql);
-                     $stmt -> bind_param('sssssss', $encrypted_points_new_hex, 
-                                                     $encrypted_ranking_category1_new_hex,
-                                                     $encrypted_ranking_category2_new_hex,
-                                                     $encrypted_ranking_category3_new_hex,
-                                                     $encrypted_ranking_category4_new_hex,
-                                                     $encrypted_levels_new_hex,
-                                                     $hashed_email_hex);
+                        $con =  new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                        $sql = "UPDATE players SET points = ?, ranking_category1 = ?, ranking_category2 = ?, ranking_category3 = ?, ranking_category4 = ? , levels = ? WHERE email = ?";
+                        $stmt = $con ->prepare($sql);
+                        $stmt -> bind_param('sssssss', $encrypted_points_new_hex, 
+                                                        $encrypted_ranking_category1_new_hex,
+                                                        $encrypted_ranking_category2_new_hex,
+                                                        $encrypted_ranking_category3_new_hex,
+                                                        $encrypted_ranking_category4_new_hex,
+                                                        $encrypted_levels_new_hex,
+                                                        $hashed_email_hex);
 
-                    if($stmt -> execute())
-                    {
-                        //update successful 
-                        echo '<div class="txt text-center fs-3 fw-semibold p-3">Congratulations !</div>';
-                        echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Score: ' . $score . '</div>';
-                        echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Points: ' . $points_new . '</div>';
-                    }
-                    else 
-                    {
-                        echo 'Uh-oh'. '<br/>'; 
-                    } 
+                        if($stmt -> execute())
+                        {
+                            //update successful 
+                            echo '<div class="txt text-center fs-3 fw-semibold p-3">Congratulations !</div>';
+                            echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Score: ' . $score . '</div>';
+                            echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Points: ' . $points_new . '</div>';
+                        }
+                        else 
+                        {
+                            echo 'Uh-oh'. '<br/>'; 
+                        } 
 
-                    $stmt -> close();
-                    $con -> close();
-                    exit;
-                     
+                        $stmt -> close();
+                        $con -> close();
+                        exit;
+                    }//csrf end 
                     }
 
                     
@@ -501,9 +518,9 @@
 
                             </div>';
  
-
+                            
                       echo '<div><input type="radio" name="quesID[' . $i . ']" value="' . $quesID[$i] . '" checked class="d-none"></div>';
-                      
+                      echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
                     //echo 'Answer(system): ' . $answers[$i] . '<br/>'; 
                       /*echo 'questionID: ' . $quesID[$i] . '<br />';  */
                       echo '</div>';

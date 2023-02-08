@@ -61,6 +61,14 @@
                     $key = 'thebestsecretkey';
                     $exist = 0; 
 
+                    // Generate a unique token for the user session
+                    if (!isset($_SESSION['csrf_token'])) 
+                    {
+                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); 
+                    }
+
+                    $csrf_token = $_SESSION['csrf_token'];  
+
                     if($_SERVER['REQUEST_METHOD'] == 'GET')
                     {
                         if(empty($_GET['token']))
@@ -150,6 +158,7 @@
                                         echo '    <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
                                         echo '    <label for="confirmPassword" class="txt">Confirm New Password</label>';
                                         echo '</div>';
+                                        echo '<input type="hidden" name="csrf_token" value="'.$csrf_token.'">';
                                         echo '<div class="mb-3">';
                                         echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                         echo '</div>';
@@ -170,6 +179,12 @@
                     {
                         if(isset($_POST['submit']))
                         {
+                            if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                            {  
+                                die('CSRF attack detected!');
+                            }
+                            else
+                            { 
                         //POST method to reset pass 
                         //trim 
                         $password = trim($_POST['password']); 
@@ -314,11 +329,13 @@
                            echo '    <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
                            echo '    <label for="confirmPassword" class="txt">Confirm New Password</label>';
                            echo '</div>';
+                           echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
                            echo '<div class="mb-3">';
                            echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                            echo '</div>';
                            echo '</form>';   
-                        } 
+                        }
+                        }//csrf end  
                         }
                         
                     }

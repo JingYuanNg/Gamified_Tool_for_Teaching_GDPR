@@ -76,8 +76,23 @@
             <div class="col-md-6">
                 <h1 class="text-center txt">Add Admin</h1> 
                 <?php 
+
+                    // Generate a unique token for the user session
+                    if (!isset($_SESSION['csrf_token'])) 
+                    {
+                        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                    }
+
+                    $token = $_SESSION['csrf_token'];
+
                     if(isset($_POST['addAdmin']))
                     {
+                        if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                        { 
+                            die('CSRF attack detected!');
+                        }
+                        else
+                        {
                         $email = trim($_POST['email']);
                         $password = trim($_POST['password']); 
                         $confirmPassword = trim($_POST['confirmPassword']); 
@@ -162,6 +177,8 @@
                                 echo "</ul>";
                             }
                         }
+
+                        }//csrf end 
                     }
                     
                 ?> 
@@ -178,6 +195,7 @@
                     <input type="password" class="form-control txt txt-resize" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required="required">
                     <label for="signUpConfirmPassword" class="txt txt-resize">Confirm Password</label>
                 </div>
+                <input type="hidden" name="csrf_token" value="<?php echo $token?>"/>
                 <div class="mb-3"> 
                     <button type="submit" class="btn btn-block btn-design txt txt-resize h-auto btn-txt" aria-pressed="true" id="addAdmin" name="addAdmin">Add Admin</button>
                 </div>

@@ -77,8 +77,23 @@
             </div>  
 
                 <?php 
+
+                // Generate a unique token for the user session
+                if (!isset($_SESSION['csrf_token'])) 
+                {
+                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                }
+
+                $token = $_SESSION['csrf_token'];
+
                     if(isset($_POST["addQuestion"]))
                     {
+                        if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                        { 
+                            die('CSRF attack detected!');
+                        }
+                        else
+                        { 
 
                         //validation 
                         if(empty($_POST['category']))
@@ -134,7 +149,7 @@
                             $stmt -> close(); 
                             $con -> close();
                         }
-                        
+                    }//csrf end 
                     }
                 ?> 
                 <br/>
@@ -183,6 +198,7 @@
                         <option value="d">Option D</option>
                         </select>
                         <br/>
+                        <input type="hidden" name="csrf_token" value="<?php echo $token?>"/>
                         <button type="submit" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg float-end" aria-pressed="true" id="addQuestion" name="addQuestion">Add</button>
                     </div>
                 </form>

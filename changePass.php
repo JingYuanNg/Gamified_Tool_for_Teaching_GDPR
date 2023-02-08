@@ -71,6 +71,7 @@
                         
                     }
                     $token = $_SESSION['csrf_token'];
+                    
                     if($_SERVER['REQUEST_METHOD'] == 'GET')
                     {
                         if(empty($_GET['id']))

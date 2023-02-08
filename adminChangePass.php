@@ -120,6 +120,7 @@
                                     echo '    <input type="password" class="form-control txt fs-5" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
                                     echo '    <label for="confirmPassword" class="txt fs-5">Confirm New Password</label>';
                                     echo '</div>';
+                                    echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
                                     echo '<div class="mb-3">';
                                     echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt fs-5" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                     echo '</div>';
@@ -146,7 +147,7 @@
                                     echo '    <input type="password" class="form-control txt fs-5" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
                                     echo '    <label for="confirmPassword" class="txt fs-5">Confirm New Password</label>';
                                     echo '</div>';
-                                     echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
+                                    echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
                                     echo '<div class="mb-3">';
                                     echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt fs-5" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
                                     echo '</div>';
@@ -160,6 +161,13 @@
                         {
                             if(isset($_POST['submit']))
                             {
+                                if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
+                                { 
+                                    die('CSRF attack detected!');
+                                }
+                                else
+                                { 
+
                                 //POST method to reset pass 
                                 //trim 
                                 $password = trim($_POST['password']); 
@@ -233,6 +241,8 @@
                                     echo '</div>';
                                     echo '</form>';   
                                 }
+                            
+                            }//csrf end 
                             }
                         } 
                     ?> 
