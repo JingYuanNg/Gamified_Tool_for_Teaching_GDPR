@@ -188,8 +188,14 @@
                         //hashed_password_hex 
                         $hashed_password_hex = bin2hex($hashed_password);
 
+                        //displayEmail 
+                        $displayEmail = $email; 
+                        $encrypted_displayEmail_hex = encrypting($displayEmail, $iv); 
+
                         //displayName
-                        $displayName = $email;  
+                        //explode - spilt the string into 2 parts, using @ as the separator 
+                        //list() - assign the 2 elements of the array to 2 separate variables 
+                        list($displayName, $domain) = explode('@', $email);
                         $encrypted_displayName_hex = encrypting($displayName, $iv); 
 
                         //points
@@ -242,12 +248,12 @@
                         {
                             $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                             
-                            $sql = "INSERT INTO players (playerID, iv, email, displayName, password, points, leaderboard_position, streak, last_login_time, latest_login_time, badge, ranking_category1, ranking_category2, ranking_category3, ranking_category4, levels) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            $sql = "INSERT INTO players (playerID, iv, email, displayEmail, displayName, password, points, leaderboard_position, streak, last_login_time, latest_login_time, badge, ranking_category1, ranking_category2, ranking_category3, ranking_category4, levels) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                             $stmt = $con -> prepare($sql); 
                             $playerID = NULL; 
                     
-                            $stmt -> bind_param('isssssssssssssss', $playerID, $iv_hex, $hashed_email_hex, $encrypted_displayName_hex, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_latest_login_time_hex,$encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex, $encrypted_levels_hex); 
+                            $stmt -> bind_param('issssssssssssssss', $playerID, $iv_hex, $hashed_email_hex, $encrypted_displayEmail_hex, $encrypted_displayName_hex, $hashed_password_hex, $encrypted_points_hex, $encrypted_leaderboard_position_hex, $encrypted_streak_hex, $encrypted_last_login_time_hex, $encrypted_latest_login_time_hex,$encrypted_badge_hex, $encrypted_ranking_category1_hex, $encrypted_ranking_category2_hex, $encrypted_ranking_category3_hex, $encrypted_ranking_category4_hex, $encrypted_levels_hex); 
                     
                             $stmt -> execute(); 
 

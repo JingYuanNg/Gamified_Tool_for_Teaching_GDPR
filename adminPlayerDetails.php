@@ -135,9 +135,9 @@
                             //email
                             $email = $row -> email;
 
-                            //displayName 
-                            $displayName_bin = hex2bin($row -> displayName);  
-                            $displayName = decrypting($displayName_bin, $iv);
+                            //displayEmail 
+                            $displayEmail_bin = hex2bin($row -> displayEmail);  
+                            $displayEmail = decrypting($displayEmail_bin, $iv);
 
                             //points
                             $points_bin = hex2bin($row -> points);  
@@ -184,7 +184,7 @@
                             $levels = decrypting($levels_bin , $iv);
 
                             echo '
-                            <h1 class="text-left txt fw-bold">'. $displayName .'</h1> 
+                            <h1 class="text-left txt fw-bold">'. $displayEmail .'</h1> 
                             <div class="d-flex flex-row-reverse">
                                 <a href="adminPlayers.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
                             </div>  

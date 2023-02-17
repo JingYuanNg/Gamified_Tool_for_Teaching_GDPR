@@ -162,9 +162,9 @@
                                         //get iv 
                                         $iv = hex2bin($row -> iv); 
  
-                                        //displayName 
-                                        $displayName_bin = hex2bin($row -> displayName);  
-                                        $displayName = decrypting($displayName_bin, $iv);
+                                        //displayEmail 
+                                        $displayEmail_bin = hex2bin($row -> displayEmail);  
+                                        $displayEmail = decrypting($displayEmail_bin, $iv);
 
                                         printf('
                                             <tr id="%s">
@@ -174,7 +174,7 @@
                                                     <a href="adminPlayerDetails.php?id=%d" class="edit-delete-btn fs-6">Details</a> 
                                                 </td>
                                             </tr>
-                                                 ', $row->playerID, $row->playerID, $displayName, $row->playerID);
+                                                 ', $row->playerID, $row->playerID, $displayEmail, $row->playerID);
                                     }
                                     
                                 $result->free();
