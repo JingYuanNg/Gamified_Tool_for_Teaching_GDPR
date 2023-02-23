@@ -116,7 +116,7 @@
                             $id = trim($_GET['id']);  
 
                             //Establish connection
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                             //SQL statement with placeholder
                             $sql = "SELECT COUNT(google2FA_secretKey) as count FROM admin WHERE adminID = ?";
@@ -148,7 +148,7 @@
                                 $exist = 0; 
 
                                 //connect db 
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                                 //SQL statement admin with placeholder
                                 $sql = "SELECT * from admin WHERE adminID = ?"; 
@@ -183,7 +183,7 @@
                                 $id = trim($_GET['id']);  
 
                                 //Establish connection
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                 //SQL statement
                                 $sql = "UPDATE admin SET google2FA_secretKey = '$encrypted_secret_key_hex' WHERE adminID = '$id'";
@@ -204,7 +204,7 @@
                                     echo 'uh-oh' . $stmt->error;
                                 }
                             
-                                $con -> close();
+                                //$con -> close();
                             }
 
                         }

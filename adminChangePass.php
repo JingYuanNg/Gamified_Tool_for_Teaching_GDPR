@@ -200,13 +200,13 @@
                                     $hashed_email_hex = bin2hex($hashed_email);
                             
                                     //player forgot pass 
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
     
                                     //SQL statement
                                     $sql = "UPDATE admin SET password = '$hashed_password_hex' WHERE email = '$hashed_email_hex'"; 
                                     if($con -> query($sql) === TRUE)
                                     { 
-                                        $location = "adminDetails.php";
+                                        $location = "logoutAdmin.php";
                                         echo "<script type='text/JavaScript'>alert('Password changed successfully');window.location='$location'</script>"; 
                                     }
                                     else 

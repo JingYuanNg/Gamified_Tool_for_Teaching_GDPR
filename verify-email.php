@@ -94,7 +94,7 @@
                             $_SESSION['token'] = $token;
 
                             //Establish connection
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                             //SQL statement
                             $stmt = $con->prepare("SELECT * FROM verify_email WHERE token = ?");
@@ -128,7 +128,7 @@
                                 {
                                     //delete from players 
                                         //Establish connection
-                                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                         //SQL statement
                                         $sql="DELETE FROM players WHERE email ='". $email . "'";
@@ -139,7 +139,7 @@
                                         { 
                                             // delete from verify_email so the player can reverify 
                                             //Establish connection
-                                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                             //SQL statement
                                             $sql="DELETE FROM verify_email WHERE token ='". $token . "'";
@@ -167,7 +167,7 @@
                                     {
                                         //delete from players 
                                         //Establish connection
-                                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                         //SQL statement
                                         $sql="DELETE FROM players WHERE email ='". $email . "'";
@@ -178,7 +178,7 @@
                                         { 
                                             // delete from verify_email so the player can reverify 
                                             //Establish connection
-                                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                             //SQL statement
                                             $sql="DELETE FROM verify_email WHERE token ='". $token . "'";
@@ -198,7 +198,7 @@
                                     {
                                         //delete record from verify_email
                                         //Establish connection
-                                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                         //SQL statement
                                         $sql="DELETE FROM verify_email WHERE token ='". $token . "'";

@@ -54,7 +54,7 @@
             $questionID = trim($_GET['id']); 
 
             //Establish connection
-            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
             //SQL statement with placeholder
             $sql = "DELETE FROM questions WHERE questionID = ?";
@@ -72,7 +72,7 @@
                 echo "<script type='text/JavaScript'>alert('Question with ID " . $questionID . " is deleted');window.location='$location'</script>";
             }
              
-            $con -> close();
+            //$con -> close();
         }
     }
 ?>

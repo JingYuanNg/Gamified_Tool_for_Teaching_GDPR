@@ -153,7 +153,7 @@ ob_start();
                             //hashed_email_hex
                             $hashed_email_hex = bin2hex($hashed_email);
  
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
                             $sql = "SELECT * from players WHERE email = '$hashed_email_hex'";
                             $result = mysqli_query($con, $sql); 
                             $num_rows = mysqli_num_rows($result); 
@@ -177,7 +177,7 @@ ob_start();
                                 $current_timestamp = date('d-F-Y H:i:s');  
                                 $encrypted_current_timestamp_hex = encrypting($current_timestamp, $iv);
                                 
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                 
                                 $sql = "INSERT INTO password_reset (eventID, iv, email, token, timestamp) values (?, ?, ?, ?, ?)";
     
@@ -196,13 +196,13 @@ ob_start();
                                 }
     
                                 $stmt -> close(); 
-                                $con -> close();
+                                //$con -> close();
                                 
                             } 
     
                             if($exist == 0)
                             {
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
                                $sql = "SELECT * from admin WHERE email = '$email'";
                                $result = mysqli_query($con, $sql); 
                                $num_rows = mysqli_num_rows($result); 
@@ -226,7 +226,7 @@ ob_start();
                                   $current_timestamp = date('d-F-Y H:i:s');   
                                   $encrypted_current_timestamp_hex = encrypting($current_timestamp, $iv);
         
-                                  $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                  //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                     
                                   $sql = "INSERT INTO password_reset (eventID, iv, email, token, timestamp) values (?, ?, ?, ?, ?)";
         
@@ -245,7 +245,7 @@ ob_start();
                                   }
                                 
                                   $stmt -> close(); 
-                                  $con -> close();
+                                  //$con -> close();
                                        
                               }
                             }

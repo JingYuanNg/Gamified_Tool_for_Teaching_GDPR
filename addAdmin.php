@@ -106,7 +106,7 @@
                         $cipher = 'AES-128-CBC';
                         $key = 'thebestsecretkey';
 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         //admin SQL statement 
                         $sql = "SELECT * FROM admin"; 
                     
@@ -147,7 +147,7 @@
 
                         if(empty($error))
                         {
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                             $sql = "INSERT INTO admin (adminID, iv, email, password) values (?, ?, ?, ?)"; 
 
@@ -165,7 +165,7 @@
                             }
 
                             $stmt -> close(); 
-                            $con -> close();
+                            //$con -> close();
                         }
                         else
                         {

@@ -95,7 +95,7 @@ ob_start();
             $hashed_email_hex = bin2hex($hashed_email);
 
             //Establish connection
-            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
             //SQL statement
             $sql = "SELECT * FROM verify_email WHERE email = '$hashed_email_hex'";
@@ -112,7 +112,7 @@ ob_start();
 
             //Close connection
             $result -> free();
-            $con -> close();
+            //$con -> close();
 
             //retrieve user input 
             $email = trim($_POST['email']); 
@@ -132,7 +132,7 @@ ob_start();
             $exist = 0; 
 
             //connect db 
-            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
             //SQL statement players
             $sql = "SELECT * from players"; 
@@ -155,7 +155,7 @@ ob_start();
                     $exist = 1; 
 
                     //Establish connection
-                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                     $query = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE email = '$hashed_email_hex'";
                 
@@ -179,7 +179,7 @@ ob_start();
                         $cipher = 'AES-128-CBC';
                         $key = 'thebestsecretkey';
 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
 
@@ -221,7 +221,7 @@ ob_start();
                             $cipher = 'AES-128-CBC';
                             $key = 'thebestsecretkey';
                 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                             $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                             $result = $con -> query($sql); 
                 
@@ -305,7 +305,7 @@ ob_start();
                     
                             }
                             $stmt -> close();
-                            $con -> close();
+                            //$con -> close();
                     
                     
                         }
@@ -350,7 +350,7 @@ ob_start();
                         $exist = 1; 
                         
                         //Establish connection
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                         $query = "SELECT COUNT(google2FA_secretKey) as count FROM admin WHERE email = '$hashed_email_hex'";
                 

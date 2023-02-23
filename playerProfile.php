@@ -102,7 +102,7 @@
     $cipher = 'AES-128-CBC';
     $key = 'thebestsecretkey';
 
-    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
     $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
     $result = $con -> query($sql); 
 
@@ -204,7 +204,7 @@
         echo 'Uh-oh'. '<br/>'; 
     }
 
-    $con -> close();
+    //$con -> close();
     }
     ?>
 <br/><br/>
@@ -237,7 +237,7 @@
                             <br/> 
                         <label for="profilePic" class="txt"> 
                         <?php 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                             $query = "SELECT COUNT(profilePic) as count FROM players WHERE email = '$hashed_email_hex'";
             
@@ -247,7 +247,7 @@
             
                             if ($row['count'] > 0) 
                             {
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                 
                                 $sql = "SELECT * FROM players WHERE email ='$hashed_email_hex'";
                 
@@ -286,7 +286,7 @@
                         <div class="text-center mb-5">
                             <?php  
                     
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                 $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                                 $result = $con -> query($sql); 
                     
@@ -301,7 +301,7 @@
                                   printf('<a href="uploadProfilePic.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">Upload New Profile Picture</a>', $row -> playerID);
                                 }
                                 $result->free();
-                                $con->close();
+                                //$con->close();
                             ?> 
                         </div>
                     </div>
@@ -363,7 +363,7 @@
                 <div class="text-center">
                     <?php  
                     
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
                     
@@ -375,7 +375,7 @@
                           printf('<a href="titleCollection.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">View Title Collection</a>', $row -> playerID);
                         }
                         $result->free();
-                        $con->close();
+                        //$con->close();
                     ?>
                     
                 </div>
@@ -385,7 +385,7 @@
                 <div class="text-center">
                     <?php  
                     
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
                     
@@ -397,7 +397,7 @@
                           printf('<a href="twoFactorAuth.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">Enable Google Two Factor Authentication</a>', $row -> playerID);
                         }
                         $result->free();
-                        $con->close();
+                        //$con->close();
                     ?>
                     
                 </div>
@@ -407,7 +407,7 @@
                 <div class="text-center">
                     <?php 
                     
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
                     
@@ -419,7 +419,7 @@
                           printf('<a href="changePass.php?id=%d" class="btn btn-block btn-design font-weight-bold txt txt-noDeco">Change Password</a>', $row -> playerID);
                         }
                         $result->free();
-                        $con->close();
+                        //$con->close();
                     ?>
                 </div>
                 <br/>

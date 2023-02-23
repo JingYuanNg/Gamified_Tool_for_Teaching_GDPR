@@ -114,7 +114,7 @@
                         //hashed_email_hex
                         $hashed_email_hex = bin2hex($hashed_email); 
 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         $sql = "SELECT * FROM admin WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
                     
@@ -129,7 +129,7 @@
                           printf('<a href="adminTwoFactorAuth.php?id=%d" class="btn btn-block btn-design txt fs-5 d-flex align-items-center justify-content-center">Enable Google Two Factor Authentication</a>', $row -> adminID);
                         }
                         $result->free();
-                        $con->close();
+                        //$con->close();
                     ?>
                     
                 </div>
@@ -145,7 +145,7 @@
                         //hashed_email_hex
                         $hashed_email_hex = bin2hex($hashed_email); 
 
-                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                         $sql = "SELECT * FROM admin WHERE email = '$hashed_email_hex'";
                         $result = $con -> query($sql); 
                     
@@ -160,7 +160,7 @@
                           printf('<a href="adminChangePass.php?id=%d" class="btn btn-block btn-design txt fs-5 d-flex align-items-center justify-content-center">Change Password</a>', $row -> adminID);
                         }
                         $result->free();
-                        $con->close();
+                        //$con->close();
                     ?>
                     </div> 
                 </div>

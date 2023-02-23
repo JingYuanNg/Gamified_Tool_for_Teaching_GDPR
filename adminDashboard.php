@@ -114,7 +114,7 @@
                                          <div class="h5 mb-0 fw-semibold text-gray-800">
                                             <?php
                                                 //Establish connection
-                                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                                 //SQL statement
                                                 $sql="SELECT COUNT(*) as total FROM players";
@@ -126,7 +126,7 @@
                                                 echo $data['total'];
                                                     
                                                 //Close connection
-                                                $con -> close();
+                                                //$con -> close();
                                             ?>
                                          </div>
                                     </div>
@@ -146,7 +146,7 @@
                                          <div class="h5 mb-0 fw-semibold text-gray-800">
                                             <?php
                                                 //Establish connection
-                                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                                 //SQL statement
                                                 $sql="SELECT COUNT(*) as total FROM questions";
@@ -158,7 +158,7 @@
                                                 echo $data['total'];
                                                     
                                                 //Close connection
-                                                $con -> close();
+                                                //$con -> close();
                                             ?>
                                          </div>
                                     </div>
@@ -186,7 +186,7 @@
             $key = 'thebestsecretkey';
 
             //connect db 
-            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
             //SQL statement players
             $sql = "SELECT * from players"; 
@@ -223,7 +223,7 @@
 
           foreach ($rank as $playerID => $points) 
           {  
-              $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+              //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
               $sql = "SELECT * FROM players WHERE playerID = '$playerID'";
               $result = $con -> query($sql); 
 
@@ -268,7 +268,7 @@
               } 
           } 
 
-          $con -> close();
+          //$con -> close();
         ?>
 
         <a href="adminLeaderboard.php" class="noDeco-txt">

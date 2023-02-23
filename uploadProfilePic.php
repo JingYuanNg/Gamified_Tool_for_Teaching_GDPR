@@ -152,7 +152,7 @@
                                 //hashed_email_hex
                                 $hashed_email_hex = bin2hex($hashed_email);
 
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                 $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                                 $result = $con -> query($sql); 
                     
@@ -168,7 +168,7 @@
                              
                                 }
                                 $result->free();
-                                $con->close();
+                                //$con->close();
 
                                 //update statement  
                             
@@ -182,7 +182,7 @@
                                 //encryptedImg_hex
                                 $encrypted_img_hex = bin2hex($encrypted_img);
 
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                 
                                 $sql = "UPDATE players SET  profilePic = ? WHERE email = ?";
                 

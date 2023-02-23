@@ -83,7 +83,7 @@
                             $_SESSION['token'] = $token;
 
                             //Establish connection
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                             //SQL statement
                             $sql = "SELECT * FROM password_reset WHERE token = '$token'";
@@ -116,7 +116,7 @@
                                 if($now->format('Y-m-d H') != $timestamp->format('Y-m-d H')) 
                                 {   
                                     //Establish connection
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                     //SQL statement
                                     $sql="DELETE FROM password_reset WHERE token ='". $token . "'";
@@ -219,7 +219,7 @@
 
                             //select from player table
                             //Establish connection
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                             //SQL statement
                             $sql = "SELECT * FROM players WHERE email = '$email'";
@@ -232,7 +232,7 @@
                                 $exist = 1; 
 
                                 //player forgot pass 
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                                 //SQL statement
                                 $sql = "UPDATE players SET password = '$hashed_password_hex' WHERE email = '$email'"; 
@@ -241,7 +241,7 @@
                                 if($con -> query($sql) === TRUE)
                                 {   
                                     //Establish connection
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                     //SQL statement
                                     $sql="DELETE FROM password_reset WHERE token ='". $token . "'";
@@ -264,7 +264,7 @@
                             {
                                 //select from admin table 
                                 //Establish connection
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                 //SQL statement
                                 $sql = "SELECT * FROM admin WHERE email = '$email'";
@@ -277,7 +277,7 @@
                                     $exist = 1; 
 
                                     //player forgot pass 
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                                     //SQL statement
                                     $sql = "UPDATE admin SET password = '$hashed_password_hex' WHERE email = '$email'"; 
@@ -286,7 +286,7 @@
                                     if($con -> query($sql) === TRUE)
                                     {   
                                         //Establish connection
-                                        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                         //SQL statement
                                         $sql="DELETE FROM password_reset WHERE token ='". $token . "'";
@@ -306,7 +306,7 @@
                                 }
                             } 
 
-                            $con -> close();
+                            //$con -> close();
                         }
                         elseif(!empty($error))
                         {

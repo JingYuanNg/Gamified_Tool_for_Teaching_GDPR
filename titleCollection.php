@@ -9,12 +9,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Strait">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
 <head>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() 
-    {
-      document.getElementById("myform").submit();
-    });
-  </script>
+<script> 
+      document.getElementById("csrf_form").submit(); 
+</script>
 </head>
 <style>   
 
@@ -88,7 +85,9 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h1 class="text-center txt">Title Collection</h1>
-             
+                <form id="csrf_form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                </form>
                 <br/>
                 <button type="button" class="btn btn-block btn-design font-weight-bold txt" data-toggle="modal" data-target="#myModal">How does Title Collection work?</button>
                 
@@ -261,7 +260,7 @@
                                 //hashed_email_hex
                                 $hashed_email_hex = bin2hex($hashed_email);
 
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                 $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                                 $result = $con -> query($sql); 
 

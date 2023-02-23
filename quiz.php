@@ -105,7 +105,7 @@
                     }
                     
                     mysqli_free_result($result);
-                    mysqli_close($con);
+                    //mysqli_close($con);
                 }
                 
                 //check player lvl 
@@ -119,7 +119,7 @@
                 $cipher = 'AES-128-CBC';
                 $key = 'thebestsecretkey';
 
-                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                 $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                 $result = $con -> query($sql); 
 
@@ -189,7 +189,7 @@
                     $weakestCategory = $vars[0];
                 }
                  
-                $con -> close(); 
+                //$con -> close(); 
                 
                 if($levels > 9)//highest lvl is 9 because only have 10 ques per category
                 { 
@@ -198,7 +198,7 @@
                     $cipher = 'AES-128-CBC';
                     $key = 'thebestsecretkey';
 
-                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                     $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                     $result = $con -> query($sql); 
 
@@ -218,7 +218,7 @@
                     $levels_reset = 1;  
                     $encrypted_levels_reset_hex = encrypting($levels_reset, $iv);
  
-                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                     $sql = "UPDATE players SET levels = ? WHERE email = ?";
                     $stmt = $con -> prepare($sql); 
                     $stmt -> bind_param('ss', $encrypted_levels_reset_hex, $hashed_email_hex);
@@ -237,7 +237,7 @@
                     } 
 
                     $stmt -> close();
-                    $con -> close();
+                    //$con -> close();
                     exit;
 
                 }
@@ -261,7 +261,7 @@
                     }
                     
                     mysqli_free_result($result);
-                    mysqli_close($con);
+                    //mysqli_close($con);
                 } 
                     // If the form has been submitted, check the answers
                     if (isset($_POST['submit'])) 
@@ -290,7 +290,7 @@
                             $id = $_POST['quesID'][$i]; 
                         
                             //connect db 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                             //SQL stat 
                             $sql = "SELECT * from questions WHERE questionID = '$id'"; 
@@ -388,7 +388,7 @@
                      } 
                       
 
-                     $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                     //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                      $sql = "SELECT * FROM players WHERE email = '$hashed_email_hex'";
                      $result = $con -> query($sql); 
 
@@ -468,7 +468,7 @@
                         } 
 
                         $stmt -> close();
-                        $con -> close();
+                        //$con -> close();
                         exit;
                     }//csrf end 
                     }

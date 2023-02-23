@@ -149,7 +149,7 @@
 
                         if($exist == 0)
                         {
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                             //admin SQL statement 
                             $sql = "SELECT * FROM admin"; 
                     
@@ -246,7 +246,7 @@
 
                         if(empty($error))
                         {
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                             
                             $sql = "INSERT INTO players (playerID, iv, email, displayEmail, displayName, password, points, leaderboard_position, streak, last_login_time, latest_login_time, badge, ranking_category1, ranking_category2, ranking_category3, ranking_category4, levels) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -273,7 +273,7 @@
                             $current_timestamp = date('d-F-Y H:i:s');    
                             $encrypted_current_timestamp_hex = encrypting($current_timestamp, $iv);
      
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                 
                             $sql = "INSERT INTO verify_email (eventID, iv, email, token, timestamp) values (?, ?, ?, ?, ?)";
     
@@ -292,7 +292,7 @@
                             }
 
                             $stmt -> close(); 
-                            $con -> close();
+                            //$con -> close();
                             } 
 
                                 

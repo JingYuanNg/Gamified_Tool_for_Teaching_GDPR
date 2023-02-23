@@ -149,7 +149,7 @@
                         <tbody>
                             <?php 
                                 //Establish connection
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);   
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);   
                                 //SQL statement
                                 $sql = "SELECT * FROM players";
 
@@ -178,7 +178,7 @@
                                     }
                                     
                                 $result->free();
-                                $con->close();
+                                //$con->close();
                             }
                             ?>
                         </tbody>

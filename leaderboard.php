@@ -80,7 +80,7 @@
     //display top 5  
 
     //connect db 
-    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
     //SQL statement players
     $sql = "SELECT * from players"; 
@@ -116,7 +116,7 @@
 
     foreach ($rank as $playerID => $points) 
     {  
-        $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+        //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
         $sql = "SELECT * FROM players WHERE playerID = '$playerID'";
         $result = $con -> query($sql); 
 
@@ -157,7 +157,7 @@
         } 
     } 
     
-    $con -> close();
+    //$con -> close();
     }
     ?>
 <br/><br/><br/> 

@@ -103,7 +103,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                                 //hashed_email_hex
                                 $hashed_email_hex = bin2hex($hashed_email);
                     
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                                 $sql = "SELECT * FROM players WHERE email = ?";
 
@@ -165,7 +165,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                             //hashed_email_hex
                             $hashed_email_hex = bin2hex($hashed_email);
 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                             $sql = "SELECT * FROM players WHERE email = ?";
 
                             //Prepare statement
@@ -214,7 +214,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                         
                                     }   
                 
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
                                     $sql = "SELECT * FROM players WHERE email = ?";
                                     
                                     //Prepare statement
@@ -312,7 +312,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                                   }
                                   
                                   $stmt -> close();
-                                  $con -> close();
+                                  //$con -> close();
                                 
                             }
 

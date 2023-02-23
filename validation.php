@@ -20,6 +20,8 @@ if (!$conn->query($sql) === TRUE) {
   die('Error using database: ' . $conn->error);
 }
 
+$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+
 /*admin 
 $sql = 'CREATE TABLE IF NOT EXISTS admin (
     adminID int NOT NULL AUTO_INCREMENT,

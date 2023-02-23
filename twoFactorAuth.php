@@ -108,7 +108,7 @@
                             if(empty($error))
                             {
                                 //Establish connection
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                 //SQL statement with placeholder
                                 $sql = "SELECT COUNT(google2FA_secretKey) as count FROM players WHERE playerID = ?";
@@ -139,7 +139,7 @@
                                     $exist = 0; 
 
                                     //connect db 
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                                     //SQL statement players
                                     $sql = "SELECT * from players WHERE playerID = '$id'"; 
@@ -165,7 +165,7 @@
                                     $id = trim($_GET['id']);  
 
                                     //Establish connection
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                     //SQL statement
                                     $sql = "UPDATE players SET google2FA_secretKey = '$encrypted_secret_key_hex' WHERE playerID = '$id'";
@@ -186,7 +186,7 @@
                                         echo 'uh-oh' . $stmt->error;
                                     }
                             
-                                    $con -> close();
+                                    //$con -> close();
                                 }
                             }
                             

@@ -100,7 +100,7 @@ require_once './validation.php';
                                 //hashed_email_hex
                                 $hashed_email_hex = bin2hex($hashed_email);
                                 
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
                                 $query = "SELECT COUNT(profilePic) as count FROM players WHERE email = '$hashed_email_hex'";
             
@@ -110,7 +110,7 @@ require_once './validation.php';
             
                                 if ($row['count'] > 0) 
                                 {
-                                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                 
                                     $sql = "SELECT * FROM players WHERE email ='$hashed_email_hex'";
                 

@@ -116,7 +116,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                                 $cipher = 'AES-128-CBC';
                                 $key = 'thebestsecretkey';
                     
-                                $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                                 //SQL statement with placeholder
                                 $sql = "SELECT * FROM admin WHERE email = ?";
@@ -188,7 +188,7 @@ Enter the 6-digit code from your Google Authentication App</label>
                             $cipher = 'AES-128-CBC';
                             $key = 'thebestsecretkey';
 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                             //SQL statement with placeholder
                             $sql = "SELECT * FROM admin WHERE email = ?";

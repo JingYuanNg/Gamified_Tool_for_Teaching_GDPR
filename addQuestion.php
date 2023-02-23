@@ -127,7 +127,7 @@
                             $optionD = trim($_POST['optionD']);
                             $answer = trim($_POST['answer']); 
 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                             $sql = "INSERT INTO questions (questionID, question, category, optionA, optionB, optionC, optionD, answer) values (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -147,7 +147,7 @@
                             }
                             
                             $stmt -> close(); 
-                            $con -> close();
+                            //$con -> close();
                         }
                     }//csrf end 
                     }
@@ -163,7 +163,7 @@
                         <select class="dropdown-toggle form-control txt txt-resize text-start btn-txt" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="category" name="category">
                         <option value="none" selected disabled hidden>Choose Category</option>
                         <?php 
-                            $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                            //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                             $sql = "SELECT * FROM question_category"; 
                             $result = $con -> query($sql);
                             foreach($result as $row)

@@ -90,7 +90,7 @@
                     $questionID = trim($_GET['id']); 
 
                     //Establish connection
-                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
  
                     //SQL statement with placeholder
                     $sql = "SELECT * FROM questions WHERE questionID = ?";
@@ -137,7 +137,7 @@
 
                     //Close connection
                     $result -> free();
-                    $con -> close();
+                    //$con -> close();
                 }
             } 
             elseif($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -182,7 +182,7 @@
                     $optionD = trim($_POST['optionD']);
                     $answer = trim($_POST['answer']); 
 
-                    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+                    //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 
                     //SQL statement
                     $sql = "UPDATE questions SET question = '$question', category = '$category', optionA = '$optionA', optionB = '$optionB', optionC = '$optionC', optionD = '$optionD', answer = '$answer' WHERE questionID = '$questionID'"; 
@@ -198,7 +198,7 @@
                         echo 'uh-oh' . $stmt->error;
                     }
                     
-                    $con -> close();
+                    //$con -> close();
                 }
             }//csrf end 
             }
@@ -234,7 +234,7 @@
                     <select class="dropdown-toggle form-control txt txt-resize text-start btn-txt" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="category" name="category">
                         <option value="none" disabled hidden>Choose Category</option>
                         <?php 
-                          $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                          //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                           $sql = "SELECT * FROM question_category"; 
                           $result = $con -> query($sql);
                           foreach($result as $row)
