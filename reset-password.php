@@ -80,18 +80,34 @@
                         {
                             //retrieve token from URL
                             $token = trim($_GET['token']);
-                            $_SESSION['token'] = $token;
 
+                            $error['token'] = validateString($token);
+
+                            //Remove null value in $error when there is no error
+                            $error = array_filter($error);
+        
+                            if(empty($error))
+                            {
+                                
+                            $_SESSION['token'] = $token;
                             //Establish connection
                             //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-                            //SQL statement
-                            $sql = "SELECT * FROM password_reset WHERE token = '$token'";
-                            
-                            //Execute SQL and store record in $result
-                            $result = $con -> query($sql);
+                            //SQL statement 
+                            $sql = "SELECT * FROM password_reset WHERE token = ?";
 
-                            if($row = $result -> fetch_object())
+                            // Create a prepared statement object
+                            $stmt = $con->prepare($sql);
+
+                            // Bind the token parameter to the prepared statement
+                            $stmt->bind_param("s", $token);
+
+                            // Execute the prepared statement and store the result in $result
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            // Check if there is a row in the result set
+                            if ($row = $result->fetch_object())
                             { 
                                 //eventID 
                                 //iv 
@@ -173,6 +189,19 @@
                                 $location = "home.php";
                                 echo "<script type='text/JavaScript'>alert('Invalid token');window.location='$location'</script>";
                             }
+
+                        }
+                        else
+                        {
+                            //display error msg 
+                            echo "<ul class=‘error’>";
+                            foreach ($error as $value)
+                            {
+                                echo "<li style='color: black;'>$value</li>";
+                                echo "</ul>";
+                                exit();
+                            } 
+                        }//end 
                         }
                     }
                     elseif($_SERVER['REQUEST_METHOD'] == 'POST')

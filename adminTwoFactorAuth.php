@@ -114,7 +114,13 @@
                         {
                             //retrieve id from URL
                             $id = trim($_GET['id']);  
+                            $error['id'] = validateInteger($id);
 
+                            //Remove null value in $error when there is no error
+                            $error = array_filter($error);
+        
+                            if(empty($error))
+                            { 
                             //Establish connection
                             //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
@@ -207,6 +213,19 @@
                                 //$con -> close();
                             }
 
+                        }
+                        else
+                        {
+                            //display error msg 
+                            echo "<ul class=‘error’>";
+                            foreach ($error as $value)
+                            {
+                                echo "<li style='color: black;'>$value</li>";
+                                echo "</ul>";
+                                exit();
+                            } 
+                        }//end 
+                        
                         }
                     }
                      

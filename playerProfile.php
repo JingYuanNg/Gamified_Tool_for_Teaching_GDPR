@@ -119,6 +119,10 @@
       $displayName_bin = hex2bin($row -> displayName);  
       $displayName = decrypting($displayName_bin, $iv);
 
+      //displayEmail 
+      $displayEmail_bin = hex2bin($row -> displayEmail);  
+      $displayEmail = decrypting($displayEmail_bin, $iv);
+
       //points 
       $points_bin = hex2bin($row -> points);  
       $points = decrypting($points_bin, $iv); 
@@ -224,7 +228,7 @@
                     </tr>
                     <tr>
                         <td><label for="email" class="txt">Email</label></td>
-                        <td style="height:100px;"><input type="email" class="form-control" id="email" value="<?php echo $displayName ?>" disabled/></td>
+                        <td style="height:100px;"><input type="email" class="form-control" id="email" value="<?php echo $displayEmail ?>" disabled/></td>
                     </tr>
                     <tr>
                         <td><label for="points" class="txt">Points</label></td>

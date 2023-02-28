@@ -98,6 +98,7 @@
                       <div class="modal-content txt">
 
                         <div class="modal-header">
+                        <h4 class="modal-title txt">How does Title Collection work?</h4>
                           <button type="button" class="close" data-dismiss="modal">&times;</button> 
                         </div>
 
@@ -176,27 +177,48 @@
  
                     function checkTitle($time_lvl_bin, $iv) 
                     {
-                        $time_lvl = decrypting($time_lvl_bin, $iv);
+                        $time_lvl = decrypting($time_lvl_bin, $iv); 
                                      
                         if (!isset($time_lvl) || empty($time_lvl) || $time_lvl == "")
                         {
                             $titleVar = 0; 
                         }
                         else 
-                        {
+                        { 
+                            $date_time_lvl = new DateTime($time_lvl);  
+                            $day_time_lvl = $date_time_lvl -> format('d');
+                            $month_time_lvl = $date_time_lvl -> format('m'); 
+                            $year_time_lvl = $date_time_lvl -> format('Y'); 
+
                             date_default_timezone_set('Europe/Dublin');
                             $date_now = date('d-F-Y H:i:s');
-                            $date1 = new DateTime($time_lvl);
-                            $date2 = new DateTime($date_now);  
-                            $interval = $date1->diff($date2);
-                            if($interval -> days <=5)
+                            $date_date_now = new DateTime($date_now);
+                            $day_date_now = $date_date_now -> format('d');
+                            $month_date_now = $date_date_now -> format('m'); 
+                            $year_date_now = $date_date_now -> format('Y'); 
+
+                            if($year_date_now == $year_time_lvl)
                             {
-                                $titleVar = 1;
+                                if($month_date_now == $month_time_lvl)
+                                {
+                                    if($day_date_now - $day_time_lvl <= 5)
+                                    {
+                                        $titleVar = 1;
+                                    }
+                                    else
+                                    { 
+                                        $titleVar = 0;
+                                    }
+                                }
+                                else
+                                { 
+                                    $titleVar = 0;
+                                }
                             }
-                            else 
-                            {
+                            else
+                            { 
                                 $titleVar = 0;
-                            }
+                            } 
                         } 
 
                         return $titleVar; 
@@ -351,6 +373,7 @@
                                 {
                                     echo "<li style='color: black;'>$value</li>";
                                     echo "</ul>";
+                                    exit();
                                 } 
                             }
                             

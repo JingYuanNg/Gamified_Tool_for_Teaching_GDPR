@@ -38,6 +38,11 @@
         font-size: 20px !important;
     }
 
+    .txt-resize-modal-content
+    {
+        font-size: 15px !important; 
+    }
+
     .btn-txt 
     {
         vertical-align: middle !important;
@@ -89,7 +94,8 @@
         
         <div class="container-fluid ps-5">  
         <h1 class="text-left txt fw-bold">Players</h1> 
-                
+        
+                       
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
         <script src="js/jquery.easing.min.js"></script>
@@ -123,7 +129,99 @@
                 });
             });
         </script>
+        <div class="d-flex flex-row-reverse">
+            <button type="button" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" data-toggle="modal" data-target="#myModal">Inactive players</button>
+        </div> 
 
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content txt">
+
+                <div class="modal-header">
+                  <h4 class="modal-title ">Inactive players</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button> 
+                </div>
+
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="bg-white rounded shadow table-bordered" >
+                            <thead> 
+                                <tr>
+                                    <th></th>
+                                    <th class="ps-2 w-100"><label for="user" class="txt txt-resize-modal-content">User</label></th>
+                                    <th class="pb-2 ps-2 pe-5"><label for="points" class="txt txt-resize-modal-content">Inactivity days</label></th>
+                                </tr> 
+                            </thead>     
+                            <?php  
+                                $sql = "SELECT * from players";
+                                $result = $con -> query($sql); 
+
+                                while($row = $result -> fetch_object())
+                                {
+                                    $playerID = $row -> playerID; 
+
+                                    $iv = hex2bin($row -> iv); 
+
+                                    $displayEmail_bin = hex2bin($row -> displayEmail); 
+                                    $displayEmail = decrypting($displayEmail_bin, $iv);
+ 
+                                    $latest_login_time_bin = hex2bin($row -> latest_login_time);  
+                                    $latest_login_time = decrypting($latest_login_time_bin, $iv);  
+                                    $date_latest_login_time = new DateTime($latest_login_time); 
+                                    $day_latest_login_time = $date_latest_login_time -> format('d');
+                                    $month_latest_login_time = $date_latest_login_time -> format('m'); 
+                                    $year_latest_login_time = $date_latest_login_time -> format('Y'); 
+                                     
+                                    date_default_timezone_set('Europe/Dublin');
+                                    $date_now = date('d-F-Y H:i:s');
+                                    $date_date_now = new DateTime($date_now);
+                                    $day_date_now = $date_date_now -> format('d');
+                                    $month_date_now = $date_date_now -> format('m'); 
+                                    $year_date_now = $date_date_now -> format('Y'); 
+
+                                    //if same year is same 
+                                    if($year_date_now == $year_latest_login_time)
+                                    {
+                                        //make sure month is same 
+                                        if($month_date_now == $month_latest_login_time)
+                                        {
+                                            if($day_date_now - $day_latest_login_time >= 10)
+                                            {
+                                                $interval = $day_date_now - $day_latest_login_time;
+                                                $idle[$playerID] = array( 
+                                                    'displayEmail' => $displayEmail, 
+                                                    'interval' => $interval
+                                                );
+                                            }
+                                        }
+                                    }
+ 
+                                }
+ 
+                                $displayIdleID = 1;
+                                foreach ($idle as $playerID => $values) 
+                                { 
+                                    echo '<tr>';
+                                    echo '<td class="p-2"><label for="rank" class="txt txt-resize-modal-content">'.$displayIdleID.'</label></td>';
+                                    echo '<td class="ps-2"><label for="user" class="txt txt-resize-modal-content">'.$values['displayEmail'].'</label></td>';
+                                    echo '<td class="pt-2 pb-2 ps-2 pe-5"><label for="points" class="txt txt-resize-modal-content">'.$values['interval'].'</label></td>';
+                                    echo '</tr>'; 
+                                    $displayIdleID++;
+                                }
+                            ?> 
+                            </table> 
+                        </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-design" data-dismiss="modal">Close</button>
+                </div>
+                </div> 
+            </div>
+        </div>
+
+        <br/>
         <div class="d-flex flex-row-reverse">
             <a href="adminDashboard.php" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" role="button">Back</a> 
         </div>  

@@ -91,6 +91,14 @@
                         {
                             //retrieve token from URL
                             $token = trim($_GET['token']);
+                            $error['token'] = validateString($token);
+
+                            //Remove null value in $error when there is no error
+                            $error = array_filter($error);
+        
+                            if(empty($error))
+                            {
+                                
                             $_SESSION['token'] = $token;
 
                             //Establish connection
@@ -218,6 +226,19 @@
                                 $location = "home.php";
                                 echo "<script type='text/JavaScript'>alert('Invalid token');window.location='$location'</script>";
                             }
+
+                        }
+                        else
+                        {
+                            //display error msg 
+                            echo "<ul class=‘error’>";
+                            foreach ($error as $value)
+                            {
+                                echo "<li style='color: black;'>$value</li>";
+                                echo "</ul>";
+                                exit();
+                            } 
+                        }//end 
                         }
                     }
                      

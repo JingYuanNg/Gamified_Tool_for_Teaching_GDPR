@@ -189,7 +189,17 @@
                                     //$con -> close();
                                 }
                             }
-                            
+                            else
+                            {
+                                //display error msg 
+                                echo "<ul class=‘error’>";
+                                foreach ($error as $value)
+                                {
+                                    echo "<li style='color: black;'>$value</li>";
+                                    echo "</ul>";
+                                    exit();
+                                } 
+                            }
 
                         }
                     } 

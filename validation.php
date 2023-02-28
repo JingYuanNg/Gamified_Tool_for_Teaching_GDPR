@@ -35,7 +35,7 @@ if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 } 
 
-/*players */
+/*players 
 $sql = 'CREATE TABLE IF NOT EXISTS players (
     playerID int NOT NULL AUTO_INCREMENT,
     iv varchar(32) NOT NULL,
@@ -110,7 +110,7 @@ if (!$conn->query($sql) === TRUE) {
 die('Error creating table: ' . $conn->error);
 }
 
-/* verify_email  */
+/* verify_email  
 $sql = 'CREATE TABLE IF NOT EXISTS verify_email (
   eventID int NOT NULL AUTO_INCREMENT,
   iv varchar(256) NOT NULL,
@@ -121,7 +121,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS verify_email (
 );';
 if (!$conn->query($sql) === TRUE) {
 die('Error creating table: ' . $conn->error);
-} 
+} */
 
 //email
 function validateEmail($email)
@@ -177,6 +177,15 @@ function validateInteger($inputInt)
     return "Invalid <strong>ID</strong>";
   } 
 }
+
+//string 
+function validateString($inputString)
+{
+  if(!is_string($inputString))
+  {
+    return "Invalid <strong>string</strong>";
+  }
+} 
 
 //password 
 function validatePassword($password)
