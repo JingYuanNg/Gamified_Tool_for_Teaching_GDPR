@@ -129,13 +129,13 @@
                 });
             });
         </script>
-        <div class="d-flex flex-row-reverse">
+       <!--  <div class="d-flex flex-row-reverse">
             <button type="button" class="btn btn-design txt txt-resize h-auto btn-txt btn-lg" data-toggle="modal" data-target="#myModal">Inactive players</button>
-        </div> 
+        </div> --> 
 
-        <div class="modal fade" id="myModal" role="dialog">
+        <!-- <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
-                <!-- Modal content-->
+                Modal content 
                 <div class="modal-content txt">
 
                 <div class="modal-header">
@@ -150,11 +150,11 @@
                                 <tr>
                                     <th></th>
                                     <th class="ps-2 w-100"><label for="user" class="txt txt-resize-modal-content">User</label></th>
-                                    <th class="pb-2 ps-2 pe-5"><label for="points" class="txt txt-resize-modal-content">Inactivity days</label></th>
+                                     <th class="pb-2 ps-2 pe-5"><label for="points" class="txt txt-resize-modal-content">Inactivity days</label></th>  
                                 </tr> 
-                            </thead>     
+                            </thead>   -->   
                             <?php  
-                                $sql = "SELECT * from players";
+                                /* $sql = "SELECT * from players";
                                 $result = $con -> query($sql); 
 
                                 while($row = $result -> fetch_object())
@@ -194,7 +194,24 @@
                                                     'interval' => $interval
                                                 );
                                             }
+                                            
                                         }
+                                        elseif ($month_date_now - $month_latest_login_time >= 1)
+                                        {
+                                            $interval = $day_date_now - $day_latest_login_time;
+                                            $idle[$playerID] = array( 
+                                                'displayEmail' => $displayEmail, 
+                                                'interval' => $interval
+                                            );
+                                        }
+                                    }
+                                    elseif($year_date_now - $year_latest_login_time >= 1)
+                                    {
+                                        $interval = $day_date_now - $day_latest_login_time;
+                                        $idle[$playerID] = array( 
+                                            'displayEmail' => $displayEmail, 
+                                            'interval' => $interval
+                                        );
                                     }
  
                                 }
@@ -205,12 +222,12 @@
                                     echo '<tr>';
                                     echo '<td class="p-2"><label for="rank" class="txt txt-resize-modal-content">'.$displayIdleID.'</label></td>';
                                     echo '<td class="ps-2"><label for="user" class="txt txt-resize-modal-content">'.$values['displayEmail'].'</label></td>';
-                                    echo '<td class="pt-2 pb-2 ps-2 pe-5"><label for="points" class="txt txt-resize-modal-content">'.$values['interval'].'</label></td>';
+                                    //echo '<td class="pt-2 pb-2 ps-2 pe-5"><label for="points" class="txt txt-resize-modal-content">'.$values['interval'].'</label></td>';
                                     echo '</tr>'; 
                                     $displayIdleID++;
-                                }
+                                } */
                             ?> 
-                            </table> 
+                            <!-- </table> 
                         </div>
                 </div>
 
@@ -219,7 +236,7 @@
                 </div>
                 </div> 
             </div>
-        </div>
+        </div> -->
 
         <br/>
         <div class="d-flex flex-row-reverse">
