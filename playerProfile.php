@@ -3,6 +3,7 @@
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
     <link rel="icon" href="img/icon.png" type="image/png" sizes="16x16">
     <title>INSHIELD | Player Profile</title>
     <link href="css/styles.css" rel="stylesheet" />
@@ -234,6 +235,25 @@
                         <td><label for="points" class="txt">Points</label></td>
                         <td style="height:100px;"><input type="points" class="form-control" id="points" value="<?php echo $points ?>" disabled/></td>
                     </tr> 
+                    <tr>
+                        <td><label for="share" class="txt">Share Points To Facebook</label></td>
+                        <td style="height:100px;">
+                            <!-- <button type="button" class="btn btn-block btn-design font-weight-bold txt form-control" onclick="window.location.href='http://www.facebook.com/sharer.php?u=https://inshield01.infinityfreeapp.com/points_I_have.html'">Share</button> -->
+                            <!-- <button type="button" class="btn btn-block btn-design font-weight-bold txt form-control" onclick="window.location.href='http://www.facebook.com/sharer.php?u=https://inshield01.infinityfreeapp.com/points_I_have.php?points=<?php echo urlencode($points); ?>'">Share</button> -->
+                            <?php 
+                               /* $url = 'https://inshield01.infinityfreeapp.com/points_I_have.php?points='.urlencode($points);
+                               $description = 'I have '.urlencode($points).' in Inshield';
+                               $image = 'https://inshield01.infinityfreeapp.com/img/logo-white-bg.jpg';
+                               $facebook_url = 'http://www.facebook.com/sharer.php?u='.urlencode($url).'&picture='.urlencode($image).'&description='.urlencode($description);
+                               */
+                            $url = 'https://inshield01.infinityfreeapp.com/points_I_have.php?points='.urlencode($points);
+                            ?>
+                            <meta property="og:url" content="<?php echo $url; ?>" />
+                            <meta property="og:title" content="Inshield Points" />
+                            <meta property="og:description" content="I have <?php echo urlencode($points); ?> in Inshield." />
+                            <button type="button" class="btn btn-block btn-design font-weight-bold txt txt-noDeco" onclick="window.location.href='http://www.facebook.com/sharer.php?u=<?php echo urlencode($url); ?>'">Share To Facebook</button> 
+                        </td> 
+                    </tr>
                     <tr>
                         <td><label for="profilePic" class="txt">Profile Picture</label></td>
                         <td class="text-center" style="height:100px;"> 
