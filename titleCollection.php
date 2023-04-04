@@ -383,57 +383,57 @@
                 ?> 
                 <br/> 
             <div class="container-fluid">
-                <div class="row bg-white shadow rounded p-2">
+                <div class="row bg-white shadow rounded p-2 container-fluid">
                     <label class="txt text-center font-weight-bold fs-4">Beginner</label>
                     <br/>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl1_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl1_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl1_displayName?></label>
                   </div>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl2_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl2_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl2_displayName?></label>
                   </div>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl3_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl3_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl3_displayName?></label>
                   </div>
                 </div>
 
                 <br/><br/>
 
-                <div class="row bg-white shadow rounded p-2">
+                <div class="row bg-white shadow rounded p-2 container-fluid">
                     <label class="txt text-center font-weight-bold fs-4">Intermediate</label>
                     <br/>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl4_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl4_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl4_displayName?></label>
                   </div>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl5_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl5_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl5_displayName?></label>
                   </div>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl6_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl6_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl6_displayName?></label>
                   </div>
                 </div>
 
                 <br/><br/>
 
-                <div class="row bg-white shadow rounded p-2">
+                <div class="row bg-white shadow rounded p-2 container-fluid">
                     <label class="txt text-center font-weight-bold fs-4">Advanced</label>
                     <br/>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl7_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl7_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl7_displayName?></label>
                   </div>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl8_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl8_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl8_displayName?></label>
                   </div>
                   <div class="col-4 text-center">
-                    <img src="<?php echo $title_lvl9_src?>" class="img-size"/>
+                    <img src="<?php echo $title_lvl9_src?>" class="img-size img-fluid"/>
                     <label class="txt fs-5"><?php echo $title_lvl9_displayName?></label>
                   </div>
                 </div>

@@ -128,6 +128,10 @@
       $points_bin = hex2bin($row -> points);  
       $points = decrypting($points_bin, $iv); 
 
+      //levels 
+      $level_bin = hex2bin($row -> levels); 
+      $levels = decrypting($level_bin, $iv); 
+
       //last_login_time 
       $last_login_time_bin = hex2bin($row -> last_login_time);  
       $last_login_time = decrypting($last_login_time_bin, $iv); 
@@ -234,6 +238,10 @@
                     <tr>
                         <td><label for="points" class="txt">Points</label></td>
                         <td style="height:100px;"><input type="points" class="form-control" id="points" value="<?php echo $points ?>" disabled/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="points" class="txt">Levels</label></td>
+                        <td style="height:100px;"><input type="levels" class="form-control" id="levels" value="<?php echo $levels ?>" disabled/></td>
                     </tr> 
                     <tr>
                         <td><label for="share" class="txt">Share Points To Facebook</label></td>

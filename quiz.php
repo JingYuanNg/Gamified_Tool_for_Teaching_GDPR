@@ -27,6 +27,12 @@
         color: #000000;
     }
  
+    .txt-title 
+    {
+        font-family: "Strait"; 
+        color: #ff0000;
+    }
+
     .btn-design
     { 
         border-color: #000000 !important;
@@ -67,7 +73,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
             
-                <h1 class="text-center txt">Quiz</h1>
+                <h1 class="text-center txt fs-1">Quiz</h1>
                 
                 <?php
 
@@ -281,7 +287,7 @@
                             
                             $location = "quiz.php";
                             echo "<script type='text/JavaScript'>alert('Please make sure all questions are selected with answer !');window.location='$location'</script>"; 
-
+                            
                             
                         }
                         else
@@ -299,9 +305,21 @@
 
                             if($row = $result -> fetch_object())
                             {
-                                $questionID = $row ->questionID;
-                                $answer = $row ->answer; 
-                                $category = $row ->category; 
+                                $questionID = $row ->questionID; 
+                                $question = $row -> question; 
+                                $optionA = $row -> optionA;
+                                $optionB = $row -> optionB; 
+                                $optionC = $row -> optionC;
+                                $optionC = $row -> optionC;
+                                $answer = $row ->answer;  
+                                $category = $row ->category;  
+
+                                $feedbackQues[$i] = $row -> question; 
+                                $feedbackOptionA[$i] = $row -> optionA; 
+                                $feedbackOptionB[$i] = $row -> optionB; 
+                                $feedbackOptionC[$i] = $row -> optionC; 
+                                $feedbackOptionD[$i] = $row -> optionD; 
+                                $feedbackAnswer[$i] = $row -> answer; 
                             
                                 if ($_POST['answer'][$i] == $answer) 
                                 {
@@ -440,7 +458,14 @@
                         $addLevel = 1;
                         $levels_bin = hex2bin($row -> levels); 
                         $levels = decrypting($levels_bin, $iv); 
-                        $levels_new = $levels + $addLevel;   
+                        if($score >= 5)
+                        {
+                            $levels_new = $levels + $addLevel;   
+                        } 
+                        else 
+                        {
+                            $levels_new = $levels;
+                        }
                         $encrypted_levels_new_hex = encrypting($levels_new, $iv);
                      }
 
@@ -460,7 +485,46 @@
                             //update successful 
                             echo '<div class="txt text-center fs-3 fw-semibold p-3">Congratulations !</div>';
                             echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Score: ' . $score . '</div>';
-                            echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Points: ' . $points_new . '</div>';
+                            echo '<div class="border border-dark shadow p-2 mb-1 bg-body rounded">Points: ' . $points_new . '</div>'; 
+
+                            echo '<br/><div class="text-center txt fs-2">Feedback</div>';
+                            for ($i = 0; $i < count($questions); $i++) 
+                            {
+                                $feedQuesNum = $i + 1;  
+
+                                echo '<div class="shadow p-3 mb-5 bg-body rounded bg-white txt"><div class="p-2 mb-2 bg-body rounded txt-ques">' . $feedQuesNum . '. ' . $feedbackQues[$i] . '</div>'; 
+                    
+                                echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans">
+                                      <label>(a)
+                                      ' . $feedbackOptionA[$i] . '
+                                      </label>
+          
+                                      </div><br>';
+          
+                                echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans">
+                                      <label>(b)
+                                      ' . $feedbackOptionB[$i] . '
+                                      </label>
+          
+                                      </div><br>';
+          
+                                echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans">
+                                      <label>(c)
+                                      ' . $feedbackOptionC[$i] . '
+                                      </label>
+          
+                                      </div><br>';
+          
+                                echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans">
+                                      <label>(d)
+                                      ' . $feedbackOptionD[$i] . '
+                                      </label>
+          
+                                      </div><br>';
+                                echo 'Your answer: ' . $_POST['answer'][$i] . '<br/>';
+                                echo 'Answer: ' . $feedbackAnswer[$i] . '<br/></div>'; 
+
+                            }
                         }
                         else 
                         {
@@ -473,10 +537,48 @@
                     }//csrf end 
                     }
 
-                    
                 ?>
-                  
-                    <div class="txt text-center fs-3 fw-semibold p-3">Level <?php echo $levels ?></div>
+
+                    <div class="txt-title text-center fs-1 fw-semibold p-3">Level <?php echo $levels ?></div>
+                    <?php 
+                        if($levels == 1)
+                        {
+                            $lvl_title = "Private"; 
+                        }
+                        elseif($levels == 2)
+                        {
+                            $lvl_title = "Private First Class"; 
+                        }
+                        elseif($levels == 3)
+                        {
+                            $lvl_title = "Specialist"; 
+                        }
+                        elseif($levels == 4)
+                        {
+                            $lvl_title = "Corporal"; 
+                        }
+                        elseif($levels == 5)
+                        {
+                            $lvl_title = "Sergeant"; 
+                        }
+                        elseif($levels == 6)
+                        {
+                            $lvl_title = "Staff Sergeant"; 
+                        }
+                        elseif($levels == 7)
+                        {
+                            $lvl_title = "Sergeant First Class"; 
+                        }
+                        elseif($levels == 8)
+                        {
+                            $lvl_title = "Master Sergeant"; 
+                        }
+                        elseif($levels == 9)
+                        {
+                            $lvl_title = "Sergeant Major"; 
+                        }
+                    ?>
+                    <div class="txt text-center fs-2 fw-semibold p-3">Get at least 5 in score to get the title <?php echo $lvl_title?></div>
                     <form method="post">
                     <?php 
                     for ($i = 0; $i < count($questions); $i++) 
@@ -487,7 +589,7 @@
                       echo '<div class="shadow p-3 mb-5 bg-body rounded bg-white txt"><div class="p-2 mb-2 bg-body rounded txt-ques">' . $quesNum . '. ' . $questions[$i] . '</div>'; 
                     
                       echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_a_' . $i . '\').checked = true;">
-                            <label for="answerRadio_a_' . $i . '">
+                            <label for="answerRadio_a_' . $i . '">(a)
                             <input type="radio" name="answer[' . $i . ']" id="answerRadio_a_' . $i . '" value="a">
                             ' . $optionA[$i] . '
                             </label>
@@ -495,7 +597,7 @@
                             </div><br>';
 
                        echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_b_' . $i . '\').checked = true;">
-                            <label for="answerRadio_b_' . $i . '">
+                            <label for="answerRadio_b_' . $i . '">(b)
                             <input type="radio" name="answer[' . $i . ']" id="answerRadio_b_' . $i . '" value="b">
                             ' . $optionB[$i] . '
                             </label>
@@ -503,7 +605,7 @@
                             </div><br>';
 
                        echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_c_' . $i . '\').checked = true;">
-                            <label for="answerRadio_c_' . $i . '">
+                            <label for="answerRadio_c_' . $i . '">(c)
                             <input type="radio" name="answer[' . $i . ']" id="answerRadio_c_' . $i . '" value="c">
                             ' . $optionC[$i] . '
                             </label>
@@ -511,7 +613,7 @@
                             </div><br>';
 
                         echo '<div class="border border-dark shadow p-1 mb-1 bg-body rounded txt-ans" onclick="document.getElementById(\'answerRadio_d_' . $i . '\').checked = true;">
-                            <label for="answerRadio_d_' . $i . '">
+                            <label for="answerRadio_d_' . $i . '">(d)
                             <input type="radio" name="answer[' . $i . ']" id="answerRadio_d_' . $i . '" value="d">
                             ' . $optionD[$i] . '
                             </label>

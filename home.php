@@ -67,7 +67,7 @@
     ?>
 
 <br/><br/><br/><br/>
-    <div class="container mt-5 display-top div-att border shadow rounded w-75">
+    <div class="container mt-5 pb-2 display-top div-att border shadow rounded w-75">
         <div class="row">
             <div class="col-md-12">
                 <img style="width: 500px;" class="img-fluid mx-auto d-block" src="img/logo.png">
@@ -75,14 +75,12 @@
         </div>  
         <div class="row display-inside">
             <div class="col-md-12">
-                <h1 class="text-center txt">Gamified Tool for Teaching GDPR</h1> 
+                <h1 class="text-center txt">Gamified Tool for Teaching GDPR</h1><br/>
+                <a href="quiz.php" class="btn btn-block btn-design position-absolute top-100 start-50 translate-middle mt-1 font-weight-bold txt" role="button"  aria-pressed="true">Start Quiz</a>
+                
             </div>
         </div> 
-        <div class="row display-inside">
-            <div class="col-md-12"> 
-                <a href="quiz.php" class="btn btn-block btn-design position-absolute top-100 start-50 translate-middle mt-1 font-weight-bold txt" role="button"  aria-pressed="true">Start Quiz</a>
-            </div>
-        </div>
+         
 
         <form id="csrf_form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
