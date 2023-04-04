@@ -1,4 +1,6 @@
 # JingYuanNg.github.io
 Gamified Tool for Teaching GDPR
-#create a database with name inshield
-#import inshield.sql from db_info folder into the database created 
+1. Visit https://c00278713.candept.com/ 
+2. Click login 
+3. Click create an account to register 
+4. Login using the same credentials to use the web application
