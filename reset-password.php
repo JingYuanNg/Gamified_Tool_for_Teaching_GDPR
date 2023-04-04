@@ -163,22 +163,7 @@
                                     }
                                     else
                                     {
-                                        echo '<form class="user" action="reset-password.php" method="post" enctype="multipart/form-data">';
-                                        echo '<br/>';
-                     
-                                        echo '<div class="mb-3 form-floating">';
-                                        echo '    <input type="password" class="form-control txt" id="password" placeholder="New Password" name="password" required="required">';
-                                        echo '    <label for="password" class="txt">New Password</label>';
-                                        echo '</div>';
-                                        echo '<div class="mb-3 form-floating">';
-                                        echo '    <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
-                                        echo '    <label for="confirmPassword" class="txt">Confirm New Password</label>';
-                                        echo '</div>';
-                                        echo '<input type="hidden" name="csrf_token" value="'.$csrf_token.'">';
-                                        echo '<div class="mb-3">';
-                                        echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
-                                        echo '</div>';
-                                        echo '</form>';
+                                        
                                     }
                                 }
                                  
@@ -346,30 +331,28 @@
                            echo "<li style='color: black;'>$value</li>";
                            echo "</ul>";
                            }
-
-                           echo '<form class="user" action="reset-password.php" method="post" enctype="multipart/form-data">';
-                           echo '<br/>';
-        
-                           echo '<div class="mb-3 form-floating">';
-                           echo '    <input type="password" class="form-control txt" id="password" placeholder="New Password" name="password" required="required">';
-                           echo '    <label for="password" class="txt">New Password</label>';
-                           echo '</div>';
-                           echo '<div class="mb-3 form-floating">';
-                           echo '    <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">';
-                           echo '    <label for="confirmPassword" class="txt">Confirm New Password</label>';
-                           echo '</div>';
-                           echo '<input type="hidden" name="csrf_token" value="'.$token.'">';
-                           echo '<div class="mb-3">';
-                           echo '    <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>';
-                           echo '</div>';
-                           echo '</form>';   
+ 
                         }
                         }//csrf end  
                         }
                         
                     }
                 ?>
-                 
+                 <form class="user" action="reset-password.php" method="post" enctype="multipart/form-data">
+                    <br/>
+                    <div class="mb-3 form-floating">
+                        <input type="password" class="form-control txt" id="password" placeholder="New Password" name="password" required="required">
+                        <label for="password" class="txt">New Password</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="password" class="form-control txt" id="confirmPassword" placeholder="Confirm New Password" name="confirmPassword" required="required">
+                        <label for="confirmPassword" class="txt">Confirm New Password</label>
+                    </div>
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-block btn-design font-weight-bold txt" aria-pressed="true" id="submit" name="submit" value="Submit"/>
+                    </div>
+                </form>
  
             </div>
         </div> 

@@ -104,6 +104,9 @@
     <div class="container mt-5 display-top">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <div class="container-fluid text-center pt-3">
+                    <label class="text-center txt">I challenge you to beat me</label>
+                </div>
                 <h1 class="text-center txt">Points I have</h1>
                 
                 <form id="csrf_form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">

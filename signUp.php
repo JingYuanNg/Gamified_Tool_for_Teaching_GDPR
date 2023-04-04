@@ -96,7 +96,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = ''; //password not upload to github for security purpose
+                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -109,10 +109,12 @@
                        // set the subject and message of the email
                        $mail->Subject = 'Verify Email';
                        $mail->Body = 'Click the link below to verify your email:<br><br>' .
-                                     'http://localhost/Inshield/verify-email.php?token=' . $token . '<br>'. 
+                                     //'http://localhost/Inshield/verify-email.php?token=' . $token . '<br>'.
+                                     'https://c00278713.candept.com/verify-email.php?token=' . $token . '<br>'. 
                                      'Please contact us immediately by replying to this email if you did not make this request';
                        $mail->AltBody = 'Click the link below to verify your email: ' .
-                                        'http://localhost/Inshield/verify-email.php?token=' . $token . '<br>'. 
+                                        //'http://localhost/Inshield/verify-email.php?token=' . $token . '<br>'. 
+                                        'https://c00278713.candept.com/verify-email.php?token=' . $token . '<br>'. 
                                         'Please contact us immediately by replying to this email if you did not make this request';
 
                        // send the email

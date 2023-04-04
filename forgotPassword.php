@@ -98,7 +98,7 @@ ob_start();
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = ''; //password not upload to github for security purpose
+                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
@@ -111,10 +111,12 @@ ob_start();
                        // set the subject and message of the email
                        $mail->Subject = 'Reset Your Password';
                        $mail->Body = 'Click the link below to reset your password:<br><br>' .
-                                     'http://localhost/Inshield/reset-password.php?token=' . $token . '<br>'. 
+                                    //  'http://localhost/Inshield/reset-password.php?token=' . $token . '<br>'. 
+                                     'https://c00278713.candept.com/reset-password.php?token=' . $token . '<br>'. 
                                      'Please contact us immediately by replying to this email if you did not make this request';
                        $mail->AltBody = 'Click the link below to reset your password: ' .
-                                        'http://localhost/Inshield/reset-password.php?token=' . $token . '<br>'. 
+                                        //'http://localhost/Inshield/reset-password.php?token=' . $token . '<br>'.
+                                        'https://c00278713.candept.com/reset-password.php?token=' . $token . '<br>'. 
                                         'Please contact us immediately by replying to this email if you did not make this request';
 
                        // send the email
@@ -131,7 +133,7 @@ ob_start();
 
                     //check if submit btn is pressed 
                     if(isset($_POST['submit']))
-                    {  
+                    {   
                         if ($_POST['csrf_token'] !== $_SESSION['csrf_token'])
                         { 
                             die('CSRF attack detected!');
@@ -146,12 +148,14 @@ ob_start();
                         //Remove null value in $error when there is no error
                         $error = array_filter($error);
 
+                        //hashed_email 
+                        $hashed_email = hash('sha3-256', $email, true);
+                        //hashed_email_hex
+                        $hashed_email_hex = bin2hex($hashed_email);
+
                         if(empty($error))
-                        {
-                            //hashed_email 
-                            $hashed_email = hash('sha3-256', $email, true);
-                            //hashed_email_hex
-                            $hashed_email_hex = bin2hex($hashed_email);
+                        { 
+                            
  
                             //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
                             $sql = "SELECT * from players WHERE email = '$hashed_email_hex'";
@@ -177,22 +181,27 @@ ob_start();
                                 $current_timestamp = date('d-F-Y H:i:s');  
                                 $encrypted_current_timestamp_hex = encrypting($current_timestamp, $iv);
                                 
-                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
-                                
+                                //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
                                 $sql = "INSERT INTO password_reset (eventID, iv, email, token, timestamp) values (?, ?, ?, ?, ?)";
     
                                 $stmt = $con -> prepare($sql); 
+
                                 $eventID = NULL; 
                         
                                 $stmt -> bind_param('issss', $eventID, $iv_hex, $hashed_email_hex, $token, $encrypted_current_timestamp_hex); 
-                        
+                                
                                 $stmt -> execute(); 
+
                                 if($stmt -> affected_rows > 0)
-                                {
+                                { 
                                     sendResetPasswordEmail($email, $token);
-                                    printf('<script>alert("Email with link to reset password sent.\nYou have 15 minutes to reset the password.")</script>');
-                                    $location = "forgotPassword.php";
-                                    echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
+                                      printf('<script>alert("Email with link to reset password sent.\nYou have 15 minutes to reset the password.")</script>');
+                                      $location = "forgotPassword.php";
+                                      echo "<script type='text/JavaScript'>window.location='$location'</script>"; 
+                                }
+                                else 
+                                { 
+                                    printf('<script>alert("Error: %s")</script>', $stmt->error);
                                 }
     
                                 $stmt -> close(); 
@@ -203,7 +212,7 @@ ob_start();
                             if($exist == 0)
                             {
                                 //$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);  
-                               $sql = "SELECT * from admin WHERE email = '$email'";
+                               $sql = "SELECT * from admin WHERE email = '$hashed_email_hex'";
                                $result = mysqli_query($con, $sql); 
                                $num_rows = mysqli_num_rows($result); 
                             

@@ -1,10 +1,10 @@
 <?php 
-define('DB_HOST', 'localhost'); 
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'inshield');
+define('DB_HOST', 'localhost:3306'); 
+define('DB_USER', 'dev_inshield');
+define('DB_PASS', 'uuu!!!wH0L1vEInAp1neEpPleUndeertHeC??');
+define('DB_NAME', 'c00278713_Inshield');
 
-$host = 'localhost';
+/* $host = 'localhost';
 $username = 'root';
 $password = '';
 $conn = new mysqli($host, $username, $password);
@@ -18,7 +18,7 @@ if (!$conn->query($sql) === TRUE)
 $sql = 'USE inshield;';
 if (!$conn->query($sql) === TRUE) {
   die('Error using database: ' . $conn->error);
-}
+} */
 
 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
 

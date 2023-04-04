@@ -65,7 +65,7 @@
 <body>
     <?php 
         
-    require_once './headerFooterClient.php'; 
+    require_once './headerFooterClient_Inactivity.php'; 
 
     if(empty($_SESSION["pName"]) || empty($_SESSION['aftLoggedIn']))
     {
@@ -254,7 +254,7 @@
                                $image = 'https://inshield01.infinityfreeapp.com/img/logo-white-bg.jpg';
                                $facebook_url = 'http://www.facebook.com/sharer.php?u='.urlencode($url).'&picture='.urlencode($image).'&description='.urlencode($description);
                                */
-                            $url = 'https://inshield01.infinityfreeapp.com/points_I_have.php?points='.urlencode($points);
+                            $url = 'https://c00278713.candept.com/points_I_have.php?points='.urlencode($points);
                             ?>
                             <meta property="og:url" content="<?php echo $url; ?>" />
                             <meta property="og:title" content="Inshield Points" />

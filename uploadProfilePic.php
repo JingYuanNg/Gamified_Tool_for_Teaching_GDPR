@@ -45,7 +45,7 @@
 <body>
     <?php 
         
-    require_once './headerFooterClient.php'; 
+    require_once './headerFooterClient_Inactivity.php'; 
     if(empty($_SESSION["pName"]) || empty($_SESSION['aftLoggedIn']))
     {
         $location = "login.php";

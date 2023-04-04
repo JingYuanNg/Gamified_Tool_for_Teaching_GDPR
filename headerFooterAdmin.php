@@ -135,6 +135,18 @@ require_once './validation.php';
                 echo '<a href="login.php" class="nav-link"><span class="navlink txt-sidebar">Login</span></a>';
                 
             } 
+
+            // check for inactivity
+	        if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 60)) 
+            {
+	        	session_unset();     // unset $_SESSION variable for this page
+	        	session_destroy();   // destroy session data
+	        	printf('<script>alert("Session Expired"); location.href="login.php"</script>');
+	        	exit;
+	        }
+
+	        // update last activity time
+	        $_SESSION['last_activity'] = time();
         ?> 
     </li> 
 </ul>

@@ -58,7 +58,7 @@
 <body>
     <?php 
         
-    require_once './headerFooterClient.php';   
+    require_once './headerFooterClient_Inactivity.php';   
     if(empty($_SESSION["pName"]) || empty($_SESSION['aftLoggedIn']))
     {
         $location = "login.php";
@@ -175,7 +175,7 @@
 
                 <?php  
  
-                    function checkTitle($time_lvl_bin, $iv) 
+                    function checkTitle($time_lvl_bin, $iv, $levelsFromDB, $lvlToCmp) 
                     {
                         $time_lvl = decrypting($time_lvl_bin, $iv); 
                                      
@@ -203,7 +203,14 @@
                                 {
                                     if($day_date_now - $day_time_lvl <= 5)
                                     {
-                                        $titleVar = 1;
+                                        if($levelsFromDB > $lvlToCmp)
+                                        {
+                                            $titleVar = 1; 
+                                        }
+                                        else
+                                        {
+                                            $titleVar = 0;
+                                        }
                                     }
                                     else
                                     { 
@@ -291,9 +298,14 @@
                                     //get iv 
                                     $iv = hex2bin($row -> iv);
 
+                                    //levels 
+                                    $level_bin = hex2bin($row -> levels); 
+                                    $levelsFromDB = decrypting($level_bin, $iv);  
+
                                     //time_lvl1 
                                     $time_lvl1_bin = hex2bin($row -> time_lvl1);
-                                    $title_lvl1 = checkTitle($time_lvl1_bin, $iv);  
+                                    $lvlToCmp1 = 1; 
+                                    $title_lvl1 = checkTitle($time_lvl1_bin, $iv, $levelsFromDB, $lvlToCmp1);  
                                     $title_lvl1_src_name = "private";
                                     $title_lvl1_src = picSelection($title_lvl1, $title_lvl1_src_name); 
                                     $title_lvl1_name = "Private"; 
@@ -301,7 +313,8 @@
 
                                     //time_lvl2
                                     $time_lvl2_bin = hex2bin($row -> time_lvl2);
-                                    $title_lvl2 = checkTitle($time_lvl2_bin, $iv);
+                                    $lvlToCmp2 = 2; 
+                                    $title_lvl2 = checkTitle($time_lvl2_bin, $iv, $levelsFromDB, $lvlToCmp2);
                                     $title_lvl2_src_name = "private_first_class";
                                     $title_lvl2_src = picSelection($title_lvl2, $title_lvl2_src_name); 
                                     $title_lvl2_name = "Private First Class"; 
@@ -309,7 +322,8 @@
                                      
                                     //time_lvl3 
                                     $time_lvl3_bin = hex2bin($row -> time_lvl3);
-                                    $title_lvl3 = checkTitle($time_lvl3_bin, $iv); 
+                                    $lvlToCmp3 = 3; 
+                                    $title_lvl3 = checkTitle($time_lvl3_bin, $iv, $levelsFromDB, $lvlToCmp3); 
                                     $title_lvl3_src_name = "specialist";
                                     $title_lvl3_src = picSelection($title_lvl3, $title_lvl3_src_name); 
                                     $title_lvl3_name = "Specialist"; 
@@ -317,7 +331,8 @@
 
                                     //time_lvl4 
                                     $time_lvl4_bin = hex2bin($row -> time_lvl4);
-                                    $title_lvl4 = checkTitle($time_lvl4_bin, $iv);  
+                                    $lvlToCmp4 = 4; 
+                                    $title_lvl4 = checkTitle($time_lvl4_bin, $iv, $levelsFromDB, $lvlToCmp4);  
                                     $title_lvl4_src_name = "corporal";
                                     $title_lvl4_src = picSelection($title_lvl4, $title_lvl4_src_name); 
                                     $title_lvl4_name = "Corporal"; 
@@ -325,7 +340,8 @@
 
                                     //time_lvl5
                                     $time_lvl5_bin = hex2bin($row -> time_lvl5);
-                                    $title_lvl5 = checkTitle($time_lvl5_bin, $iv); 
+                                    $lvlToCmp5 = 5; 
+                                    $title_lvl5 = checkTitle($time_lvl5_bin, $iv, $levelsFromDB, $lvlToCmp5); 
                                     $title_lvl5_src_name = "sergeant";
                                     $title_lvl5_src = picSelection($title_lvl5, $title_lvl5_src_name); 
                                     $title_lvl5_name = "Sergeant"; 
@@ -333,7 +349,8 @@
 
                                     //time_lvl6 
                                     $time_lvl6_bin = hex2bin($row -> time_lvl6);
-                                    $title_lvl6 = checkTitle($time_lvl6_bin, $iv);  
+                                    $lvlToCmp6 = 6; 
+                                    $title_lvl6 = checkTitle($time_lvl6_bin, $iv, $levelsFromDB, $lvlToCmp6);  
                                     $title_lvl6_src_name = "staff_sergeant";
                                     $title_lvl6_src = picSelection($title_lvl6, $title_lvl6_src_name); 
                                     $title_lvl6_name = "Staff Sergeant"; 
@@ -341,7 +358,8 @@
 
                                     //time_lvl7 
                                     $time_lvl7_bin = hex2bin($row -> time_lvl7);
-                                    $title_lvl7 = checkTitle($time_lvl7_bin, $iv);  
+                                    $lvlToCmp7 = 7; 
+                                    $title_lvl7 = checkTitle($time_lvl7_bin, $iv, $levelsFromDB, $lvlToCmp7);  
                                     $title_lvl7_src_name = "sergeant_first_class";
                                     $title_lvl7_src = picSelection($title_lvl7, $title_lvl7_src_name); 
                                     $title_lvl7_name = "Sergeant First Class"; 
@@ -349,7 +367,8 @@
 
                                     //time_lvl8 
                                     $time_lvl8_bin = hex2bin($row -> time_lvl8);
-                                    $title_lvl8 = checkTitle($time_lvl8_bin, $iv);  
+                                    $lvlToCmp8 = 8; 
+                                    $title_lvl8 = checkTitle($time_lvl8_bin, $iv, $levelsFromDB, $lvlToCmp8);  
                                     $title_lvl8_src_name = "master_sergeant";
                                     $title_lvl8_src = picSelection($title_lvl8, $title_lvl8_src_name); 
                                     $title_lvl8_name = "Master Sergeant"; 
@@ -357,7 +376,8 @@
 
                                     //time_lvl9 
                                     $time_lvl9_bin = hex2bin($row -> time_lvl9);
-                                    $title_lvl9 = checkTitle($time_lvl9_bin, $iv);  
+                                    $lvlToCmp9 = 9; 
+                                    $title_lvl9 = checkTitle($time_lvl9_bin, $iv, $levelsFromDB, $lvlToCmp9);  
                                     $title_lvl9_src_name = "sergeant_major";
                                     $title_lvl9_src = picSelection($title_lvl9, $title_lvl9_src_name); 
                                     $title_lvl9_name = "Sergeant Major"; 
