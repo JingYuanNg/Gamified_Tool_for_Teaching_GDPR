@@ -96,7 +96,7 @@
                        $mail->Host = 'smtp.gmail.com';
                        $mail->SMTPAuth = true;
                        $mail->Username = 'developerinshield@gmail.com';
-                       $mail->Password = 'subavgelgpjtqfjr'; //password not upload to github for security purpose
+                       $mail->Password = ''; //password not upload to github for security purpose
                        $mail->SMTPSecure = 'tls';
                        $mail->Port = 587;
 
