@@ -1,4 +1,4 @@
-# JingYuanNg.github.io
+# Gamified Tool for Teaching GDPR 
 Gamified Tool for Teaching GDPR
 1. Visit https://c00278713.candept.com/ 
 2. Click login 
